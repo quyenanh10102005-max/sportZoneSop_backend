@@ -264,7 +264,7 @@
       }
 
       container.innerHTML = products.map(sp => {
-        // ✅ Tự động nhận diện thương hiệu từ tên sản phẩm
+        //  Tự động nhận diện thương hiệu từ tên sản phẩm
         const brandName = detectBrand(sp.ten);
         
         return `
@@ -283,7 +283,7 @@
       }).join('');
     }
 
-    // ✅ Hàm nhận diện thương hiệu từ tên
+    //  Hàm nhận diện thương hiệu từ tên
     function detectBrand(productName) {
       const brands = ['Nike', 'Adidas', 'Puma', 'Mizuno', 'Kamito', 'Zocker'];
       const nameLower = productName.toLowerCase();
