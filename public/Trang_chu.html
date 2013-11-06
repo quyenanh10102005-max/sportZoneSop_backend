@@ -38,38 +38,38 @@
 </div>
     </header>
 
-    <nav>
-    <ul class="main_menu">
-      <li><a href="Trang_chu.html">Trang chủ</a></li>
+ <nav>
+  <ul class="main_menu">
+    <li><a href="Trang_chu.html">Trang chủ</a></li>
 
-      <li class="submenu">
-        <a href="#">Giày bóng đá</a>
-        <ul class="has_submenu">
-          <li><a href="#">Tất cả sản phẩm</a></li>
-          <li><a href="#">Giày sân cỏ nhân tạo</a></li>
-          <li><a href="#">Giày sân cỏ tự nhiên</a></li>
-          <li><a href="#">Giày sân Futsal</a></li>
-        </ul>
-      </li>
+    <li class="submenu">
+      <a href="#">Giày bóng đá</a>
+      <ul class="has_submenu">
+        <li><a href="Danh_Sach_San_Pham.html">Tất cả sản phẩm</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ nhân tạo">Giày sân cỏ nhân tạo</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ tự nhiên">Giày sân cỏ tự nhiên</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?loai=Sân Futsal">Giày sân Futsal</a></li>
+      </ul>
+    </li>
 
-      <li class="submenu">
-        <a href="#">Thương hiệu</a>
-        <ul class="has_submenu">
-          <li><a href="#">Nike</a></li>
-          <li><a href="#">Adidas</a></li>
-          <li><a href="#">Puma</a></li>
-          <li><a href="#">Mizuno</a></li>
-          <li><a href="#">Kamito</a></li>
-          <li><a href="#">Zocker</a></li>
-        </ul>
-      </li>
+    <li class="submenu">
+      <a href="#">Thương hiệu</a>
+      <ul class="has_submenu">
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Nike">Nike</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Adidas">Adidas</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Puma">Puma</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Mizuno">Mizuno</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Kamito">Kamito</a></li>
+        <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Zocker">Zocker</a></li>
+      </ul>
+    </li>
 
-      <li><a href="Phu_Kien.html">Phụ kiện</a></li>
-      <li><a href="Tin_Tuc_Giay.html">Tin tức giày</a></li>
-      <li><a href="Khuyen_Mai.html">Khuyến mãi</a></li>
-      <li><a href="Ve_chung_toi.html">Về chúng tôi</a></li>
-    </ul>
-  </nav>
+    <li><a href="Phu_Kien.html">Phụ kiện</a></li>
+    <li><a href="Tin_Tuc_Giay.html">Tin tức giày</a></li>
+    <li><a href="Khuyen_Mai.html">Khuyến mãi</a></li>
+    <li><a href="Ve_chung_toi.html">Về chúng tôi</a></li>
+  </ul>
+</nav>
 
 
     <main>
@@ -158,45 +158,60 @@
 
 
 
-     <script>
- 
-  const user = localStorage.getItem("user");
-
-  const userNameSpan = document.getElementById("userName");
-  const registerLi = document.getElementById("registerLi");
-  const loginLi = document.getElementById("loginLi");
-  const logoutLi = document.getElementById("logoutLi");
-
-  if (user) {
-    // Nếu đã đăng nhập
-    const userData = JSON.parse(user);
-    userNameSpan.textContent = userData.TenDangNhap;
-
-    registerLi.style.display = "none";
-    loginLi.style.display = "none";
-    logoutLi.style.display = "block";
-  } else {
-    // Nếu chưa đăng nhập
-    userNameSpan.textContent = "";
-    registerLi.style.display = "block";
-    loginLi.style.display = "block";
-    logoutLi.style.display = "none";
-  }
-
-  // Xử lý nút Đăng xuất
-  logoutLi.querySelector('a').addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = "Dang_nhap.html";
-  });
-</script>
-
+    
 
 
 
   <!-- Lấy thopon=tin sản phẩm -->
 <script>
+// ======================= TÌM KIẾM TỪ HEADER =======================
+const searchInput = document.querySelector('.header-search input');
+
+searchInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    const query = this.value.trim();
+    if (query) {
+      window.location.href = `Danh_Sach_San_Pham.html?q=${encodeURIComponent(query)}`;
+    }
+  }
+});
+
+// Thêm icon search có thể click
+document.querySelector('.header-search i').addEventListener('click', function() {
+  const query = searchInput.value.trim();
+  if (query) {
+    window.location.href = `Danh_Sach_San_Pham.html?q=${encodeURIComponent(query)}`;
+  }
+});
+
+// ======================= HIỂN THỊ NGƯỜI DÙNG =======================
+const user = localStorage.getItem("user");
+const userNameSpan = document.getElementById("userName");
+const registerLi = document.getElementById("registerLi");
+const loginLi = document.getElementById("loginLi");
+const logoutLi = document.getElementById("logoutLi");
+
+if (user) {
+  const userData = JSON.parse(user);
+  userNameSpan.textContent = userData.TenDangNhap;
+  registerLi.style.display = "none";
+  loginLi.style.display = "none";
+  logoutLi.style.display = "block";
+} else {
+  userNameSpan.textContent = "";
+  registerLi.style.display = "block";
+  loginLi.style.display = "block";
+  logoutLi.style.display = "none";
+}
+
+logoutLi.querySelector('a').addEventListener('click', function(e) {
+  e.preventDefault();
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = "Dang_nhap.html";
+});
+
+// ======================= LẤY DANH SÁCH SẢN PHẨM =======================
 fetch('/api/sanpham')
   .then(res => res.json())
   .then(data => {
@@ -208,25 +223,46 @@ fetch('/api/sanpham')
       return;
     }
 
-    container.innerHTML = validProducts.map(sp => `
-  <div class="col-md-3 mb-4">
-    <div class="card h-100 shadow-sm" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer;">
-      <img src="${sp.hinhAnh ? sp.hinhAnh : '/images/default-shoe.jpg'}" class="card-img-top" alt="${sp.ten}">
-      <div class="card-body text-center">
-        <h5 class="card-title">${sp.ten}</h5>
-        <p class="text-danger fw-bold">${Number(sp.gia).toLocaleString()}₫</p>
-      </div>
-    </div>
-  </div>
-`).join('');
+    container.innerHTML = validProducts.map(sp => {
+      //  Tự động nhận diện thương hiệu từ tên
+      const brandName = detectBrand(sp.ten);
+      
+      return `
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow-sm" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer;">
+            <img src="${sp.hinhAnh ? sp.hinhAnh : '/images/default-shoe.jpg'}" 
+                 class="card-img-top" 
+                 alt="${sp.ten}"
+                 style="height: 200px; object-fit: cover;">
+            <div class="card-body text-center">
+              <h5 class="card-title">${sp.ten}</h5>
+              ${brandName ? `<span class="badge bg-secondary">${brandName}</span>` : ''}
+              <p class="text-danger fw-bold mt-2">${Number(sp.gia).toLocaleString()}₫</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
   })
   .catch(err => {
     console.error('Lỗi khi tải sản phẩm:', err);
     document.getElementById('ds-sanpham').innerHTML =
       `<p class="text-center text-danger">Không thể tải danh sách sản phẩm.</p>`;
-
-      
   });
+
+// Hàm nhận diện thương hiệu từ tên
+function detectBrand(productName) {
+  const brands = ['Nike', 'Adidas', 'Puma', 'Mizuno', 'Kamito', 'Zocker'];
+  const nameLower = productName.toLowerCase();
+  
+  for (const brand of brands) {
+    if (nameLower.includes(brand.toLowerCase())) {
+      return brand;
+    }
+  }
+  return null;
+}
+
 
   async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));

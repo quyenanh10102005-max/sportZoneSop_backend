@@ -65,4 +65,58 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+
+//Tìm kiếm
+router.get('/search', async (req, res) => {
+  try {
+    const { q, thuongHieu, loai, minPrice, maxPrice } = req.query;
+    
+    let query = {};
+
+    // Tìm kiếm theo tên
+    if (q) {
+      query.ten = { $regex: q, $options: 'i' }; // Không phân biệt hoa thường
+    }
+
+   
+    if (thuongHieu) {
+ 
+      query.ten = { $regex: thuongHieu, $options: 'i' };
+    }
+
+    
+    if (loai) {
+      const loaiKeywords = {
+        'Sân cỏ nhân tạo': ['TF', 'turf', 'nhân tạo', 'AG'],
+        'Sân cỏ tự nhiên': ['FG', 'firm ground', 'tự nhiên'],
+        'Sân Futsal': ['IC', 'futsal', 'indoor']
+      };
+      
+      const keywords = loaiKeywords[loai] || [loai];
+      query.$or = keywords.map(keyword => ({
+        $or: [
+          { ten: { $regex: keyword, $options: 'i' } },
+          { moTa: { $regex: keyword, $options: 'i' } }
+        ]
+      }));
+    }
+
+    // Lọc theo giá
+    if (minPrice || maxPrice) {
+      query.gia = {};
+      if (minPrice) query.gia.$gte = Number(minPrice);
+      if (maxPrice) query.gia.$lte = Number(maxPrice);
+    }
+
+    const sanPhams = await SanPham.find(query).sort({ createdAt: -1 });
+    res.json(sanPhams);
+  } catch (err) {
+    console.error('❌ Lỗi tìm kiếm:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
 module.exports = router;
