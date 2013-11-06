@@ -203,6 +203,59 @@
     localStorage.removeItem('user');
     window.location.href = "Dang_nhap.html";
   });
+
+  async function updateCartCount() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || !user.MaTK) return;
+
+  try {
+    const res = await fetch(`/api/giohang/${user.MaTK}`);
+    if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
+    
+    const cart = await res.json();
+    const count = cart.length || 0;
+
+    // Hiển thị badge số lượng
+    const cartIcon = document.querySelector('.header_gio_hang i');
+    if (cartIcon) {
+      cartIcon.setAttribute('data-count', count);
+      
+      // Thêm CSS cho badge (chỉ thêm 1 lần)
+      if (!document.getElementById('cart-badge-style')) {
+        const style = document.createElement('style');
+        style.id = 'cart-badge-style';
+        style.textContent = `
+          .header_gio_hang {
+            position: relative;
+          }
+          .header_gio_hang i[data-count]:after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+          }
+          .header_gio_hang i[data-count="0"]:after {
+            display: none;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi cập nhật giỏ hàng:', err);
+  }
+}
+
+// Gọi khi load trang
+updateCartCount();
 </script>
 
 
