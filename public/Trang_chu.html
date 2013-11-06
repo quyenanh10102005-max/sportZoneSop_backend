@@ -38,7 +38,7 @@
 </div>
     </header>
 
- <nav>
+    <nav>
   <ul class="main_menu">
     <li><a href="Trang_chu.html">Trang chủ</a></li>
 
@@ -158,7 +158,40 @@
 
 
 
-    
+     <script>
+ 
+  const user = localStorage.getItem("user");
+
+  const userNameSpan = document.getElementById("userName");
+  const registerLi = document.getElementById("registerLi");
+  const loginLi = document.getElementById("loginLi");
+  const logoutLi = document.getElementById("logoutLi");
+
+  if (user) {
+    // Nếu đã đăng nhập
+    const userData = JSON.parse(user);
+    userNameSpan.textContent = userData.TenDangNhap;
+
+    registerLi.style.display = "none";
+    loginLi.style.display = "none";
+    logoutLi.style.display = "block";
+  } else {
+    // Nếu chưa đăng nhập
+    userNameSpan.textContent = "";
+    registerLi.style.display = "block";
+    loginLi.style.display = "block";
+    logoutLi.style.display = "none";
+  }
+
+  // Xử lý nút Đăng xuất
+  logoutLi.querySelector('a').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = "Dang_nhap.html";
+  });
+</script>
+
 
 
 
@@ -184,32 +217,6 @@ document.querySelector('.header-search i').addEventListener('click', function() 
   }
 });
 
-// ======================= HIỂN THỊ NGƯỜI DÙNG =======================
-const user = localStorage.getItem("user");
-const userNameSpan = document.getElementById("userName");
-const registerLi = document.getElementById("registerLi");
-const loginLi = document.getElementById("loginLi");
-const logoutLi = document.getElementById("logoutLi");
-
-if (user) {
-  const userData = JSON.parse(user);
-  userNameSpan.textContent = userData.TenDangNhap;
-  registerLi.style.display = "none";
-  loginLi.style.display = "none";
-  logoutLi.style.display = "block";
-} else {
-  userNameSpan.textContent = "";
-  registerLi.style.display = "block";
-  loginLi.style.display = "block";
-  logoutLi.style.display = "none";
-}
-
-logoutLi.querySelector('a').addEventListener('click', function(e) {
-  e.preventDefault();
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  window.location.href = "Dang_nhap.html";
-});
 
 // ======================= LẤY DANH SÁCH SẢN PHẨM =======================
 fetch('/api/sanpham')
@@ -224,7 +231,7 @@ fetch('/api/sanpham')
     }
 
     container.innerHTML = validProducts.map(sp => {
-      //  Tự động nhận diện thương hiệu từ tên
+      // Tự động nhận diện thương hiệu từ tên
       const brandName = detectBrand(sp.ten);
       
       return `
@@ -236,7 +243,6 @@ fetch('/api/sanpham')
                  style="height: 200px; object-fit: cover;">
             <div class="card-body text-center">
               <h5 class="card-title">${sp.ten}</h5>
-              ${brandName ? `<span class="badge bg-secondary">${brandName}</span>` : ''}
               <p class="text-danger fw-bold mt-2">${Number(sp.gia).toLocaleString()}₫</p>
             </div>
           </div>
@@ -250,7 +256,7 @@ fetch('/api/sanpham')
       `<p class="text-center text-danger">Không thể tải danh sách sản phẩm.</p>`;
   });
 
-// Hàm nhận diện thương hiệu từ tên
+//  Hàm nhận diện thương hiệu từ tên
 function detectBrand(productName) {
   const brands = ['Nike', 'Adidas', 'Puma', 'Mizuno', 'Kamito', 'Zocker'];
   const nameLower = productName.toLowerCase();
@@ -263,24 +269,22 @@ function detectBrand(productName) {
   return null;
 }
 
-
-  async function updateCartCount() {
+// ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
+async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.MaTK) return;
+  if (!user || !user._id) return;
 
   try {
-    const res = await fetch(`/api/giohang/${user.MaTK}`);
+    const res = await fetch(`/api/giohang/${user._id}`);
     if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
     
     const cart = await res.json();
     const count = cart.length || 0;
 
-    // Hiển thị badge số lượng
     const cartIcon = document.querySelector('.header_gio_hang i');
     if (cartIcon) {
       cartIcon.setAttribute('data-count', count);
       
-      // Thêm CSS cho badge (chỉ thêm 1 lần)
       if (!document.getElementById('cart-badge-style')) {
         const style = document.createElement('style');
         style.id = 'cart-badge-style';
@@ -314,7 +318,6 @@ function detectBrand(productName) {
   }
 }
 
-// Gọi khi load trang
 updateCartCount();
 </script>
 </body>
