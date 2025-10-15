@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/ảnh', express.static(path.join(__dirname, 'public/ảnh')));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 
 // Connect to Database
