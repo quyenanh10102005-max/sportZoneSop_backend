@@ -233,7 +233,6 @@ fetch('/api/sanpham')
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById('ds-sanpham');
-    // Lọc bỏ các sản phẩm không hợp lệ (không có tên hoặc giá)
     const validProducts = data.filter(sp => sp.ten && sp.gia);
 
     if (validProducts.length === 0) {
@@ -241,11 +240,11 @@ fetch('/api/sanpham')
       return;
     }
 
-    // Hiển thị sản phẩm
     container.innerHTML = validProducts.map(sp => `
       <div class="col-md-3 mb-4">
         <div class="card h-100 shadow-sm">
-          <img src="/images/default-shoe.jpg" class="card-img-top" alt="${sp.ten}">
+          <img src="${sp.hinhAnh ? sp.hinhAnh : '/images/default-shoe.jpg'}"
+               class="card-img-top" alt="${sp.ten}">
           <div class="card-body text-center">
             <h5 class="card-title">${sp.ten}</h5>
             <p class="text-danger fw-bold">${Number(sp.gia).toLocaleString()}₫</p>
