@@ -24,4 +24,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// 🟣 Cập nhật sản phẩm theo ID
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedSanPham = await SanPham.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedSanPham) {
+      return res.status(404).json({ message: 'Không tìm thấy sản phẩm để cập nhật' });
+    }
+    res.json({ message: 'Sản phẩm đã được cập nhật', sanPham: updatedSanPham });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
