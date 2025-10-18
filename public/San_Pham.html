@@ -19,6 +19,29 @@
     .product-price { color: #d32f2f; font-size: 1.6rem; font-weight: bold; margin-bottom: 20px; }
     .size-select { margin-bottom: 20px; }
     .btn-buy, .btn-cart { margin-right: 10px; }
+
+    .size-box {
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  transition: 0.2s;
+}
+
+.size-box:hover {
+  border-color: #007bff;
+}
+
+.size-box.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
   </style>
 
 <body>
@@ -199,48 +222,67 @@
 
 
  <script>
-    // Lấy id sản phẩm từ URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+   // Lấy id sản phẩm từ URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
 
-    fetch(`/api/sanpham/${id}`)
-      .then(res => res.json())
-      .then(sp => {
-        if (!sp.ten) {
-          document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
-          return;
-        }
+  fetch(`/api/sanpham/${id}`)
+    .then(res => res.json())
+    .then(sp => {
+      if (!sp.ten) {
+        document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
+        return;
+      }
 
-        document.getElementById('product-detail').innerHTML = `
-          <div class="product-image">
-            <img src="${sp.hinhAnh}" alt="${sp.ten}">
-          </div>
-          <div class="product-info">
-            <div class="product-name">${sp.ten}</div>
-            <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
-            <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
+      // Hiển thị sản phẩm
+      document.getElementById('product-detail').innerHTML = `
+        <div class="product-image">
+          <img src="${sp.hinhAnh}" alt="${sp.ten}">
+        </div>
+        <div class="product-info">
+          <div class="product-name">${sp.ten}</div>
+          <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
+          <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
 
-            <div class="size-select">
-              <label for="size" class="form-label">Chọn size:</label>
-              <select id="size" class="form-select" style="width:150px;">
-                <option>37</option>
-                <option>38</option>
-                <option>39</option>
-                <option>40</option>
-                <option>41</option>
-                <option>42</option>
-                <option>43</option>
-              </select>
+          <div class="size-select mb-3">
+            <label class="form-label">Chọn size:</label>
+            <div id="size-options" class="d-flex flex-wrap gap-2">
+              ${[37, 38, 39, 40, 41, 42, 43]
+                .map(size => `<div class="size-box" data-size="${size}">${size}</div>`)
+                .join('')}
             </div>
-
-            <button class="btn btn-success btn-buy">Mua ngay</button>
-            <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
           </div>
-        `;
-      })
-      .catch(err => {
-        document.getElementById('product-detail').innerHTML = `<p>Lỗi khi tải sản phẩm: ${err}</p>`;
+
+          <button class="btn btn-success btn-buy">Mua ngay</button>
+          <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
+        </div>
+      `;
+
+      // chọn size
+      let selectedSize = null;
+      document.querySelectorAll('.size-box').forEach(box => {
+        box.addEventListener('click', () => {
+          document.querySelectorAll('.size-box').forEach(b => b.classList.remove('selected'));
+          box.classList.add('selected');
+          selectedSize = box.dataset.size;
+        });
       });
+
+      // Nút mua
+      document.querySelector('.btn-buy').addEventListener('click', () => {
+        if (!selectedSize) return alert('Vui lòng chọn size trước khi mua!');
+        alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
+      });
+
+      // Nút giỏ hàng
+      document.querySelector('.btn-cart').addEventListener('click', () => {
+        if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ!');
+        alert(`Đã thêm ${sp.ten} (Size ${selectedSize}) vào giỏ hàng!`);
+      });
+    })
+    .catch(err => {
+      document.getElementById('product-detail').innerHTML = `<p>Lỗi khi tải sản phẩm: ${err}</p>`;
+    });
   </script>
 </body>
 </html>
