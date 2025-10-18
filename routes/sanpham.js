@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 🔵 Lấy danh sách sản phẩm
+//  Lấy danh sách sản phẩm
 router.get('/', async (req, res) => {
   try {
     const sanPhams = await SanPham.find();
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 🟣 Lấy chi tiết sản phẩm theo ID
+//  Lấy chi tiết sản phẩm theo ID
 router.get('/:id', async (req, res) => {
   try {
     const sanPham = await SanPham.findById(req.params.id);
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 🟠 Cập nhật sản phẩm theo ID
+//  Cập nhật sản phẩm theo ID
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -45,6 +45,21 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Không tìm thấy sản phẩm để cập nhật' });
     }
     res.json({ message: 'Sản phẩm đã được cập nhật', sanPham: updatedSanPham });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+//  Xóa sản phẩm theo ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedSanPham = await SanPham.findByIdAndDelete(id);
+    if (!deletedSanPham) {
+      return res.status(404).json({ message: 'Không tìm thấy sản phẩm để xóa' });
+    }
+    res.json({ message: 'Xóa sản phẩm thành công', sanPham: deletedSanPham });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
