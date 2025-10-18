@@ -4,6 +4,7 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const connectDB = require('./db');
 const sanPhamRoutes = require('./routes/sanpham');
+const danhGiaRoutes = require('./routes/danhgia');
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ connectDB();
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/sanpham', sanPhamRoutes)
-
+app.use('/api/danhgia', danhGiaRoutes);
 
 
 // Serve HTML files
@@ -50,5 +51,5 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

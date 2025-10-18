@@ -19,6 +19,10 @@
     .product-price { color: #d32f2f; font-size: 1.6rem; font-weight: bold; margin-bottom: 20px; }
     .size-select { margin-bottom: 20px; }
     .btn-buy, .btn-cart { margin-right: 10px; }
+    btn-cart { background-color: #007bff; color: white; font-weight: bold; }
+    .rating i { color: #ccc; cursor: pointer; font-size: 1.5rem; }
+    .rating i.active { color: #f7b500; }
+    .review-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 60px; }
 
     .size-box {
   width: 45px;
@@ -174,9 +178,30 @@
    
 
 
+<!-- Phần đánh giá -->
+    <div class="review-box" id="review-box">
+      <h3 class="mb-4"><i class="fa-solid fa-star text-warning"></i> Đánh giá sản phẩm</h3>
 
+      <!-- Danh sách đánh giá -->
+      <div id="danhSachDanhGia" class="mb-4"></div>
 
+      <hr>
+      <h5>Gửi đánh giá của bạn</h5>
 
+      <div class="rating mb-3" id="rating-stars">
+        <i class="fa-solid fa-star" data-value="1"></i>
+        <i class="fa-solid fa-star" data-value="2"></i>
+        <i class="fa-solid fa-star" data-value="3"></i>
+        <i class="fa-solid fa-star" data-value="4"></i>
+        <i class="fa-solid fa-star" data-value="5"></i>
+      </div>
+
+      <input type="text" id="tieuDe" class="form-control mb-2" placeholder="Tiêu đề đánh giá">
+      <textarea id="noiDung" class="form-control mb-2" rows="3" placeholder="Nhập nội dung đánh giá..."></textarea>
+      <button id="btnGuiDanhGia" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Gửi đánh giá</button>
+    </div>
+
+</main>
 
     <footer>
       <div class="hotline">
@@ -278,6 +303,11 @@
             </div>
           </div>
 
+          <div class="quantity-select mb-3">
+          <label class="form-label">Số lượng:</label>
+          <input id="soLuong" type="number" min="1" max="${sp.soLuong || 10}" value="1" class="form-control" style="width:120px;">
+        </div>
+
           <button class="btn btn-success btn-buy">Mua ngay</button>
           <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
         </div>
@@ -308,6 +338,82 @@
     .catch(err => {
       document.getElementById('product-detail').innerHTML = `<p>Lỗi khi tải sản phẩm: ${err}</p>`;
     });
+
+
+
+    //PHẦN ĐÁNH GIÁ 
+  let selectedRating = 0;
+
+  //   chọn sao
+  document.querySelectorAll('#rating-stars i').forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.value);
+      document.querySelectorAll('#rating-stars i').forEach(s => s.classList.remove('active'));
+      for (let i = 0; i < selectedRating; i++) {
+        document.querySelectorAll('#rating-stars i')[i].classList.add('active');
+      }
+    });
+  });
+
+  //  Gửi đánh giá
+  document.getElementById('btnGuiDanhGia').addEventListener('click', () => {
+    const tieuDe = document.getElementById('tieuDe').value.trim();
+    const noiDung = document.getElementById('noiDung').value.trim();
+
+    if (!selectedRating) return alert('Vui lòng chọn số sao!');
+    if (!tieuDe || !noiDung) return alert('Vui lòng nhập tiêu đề và nội dung!');
+
+    const danhGia = {
+      MaDanhGia: Date.now().toString(),
+      TieuDe: tieuDe,
+      NoiDung: noiDung,
+      TrangThai: 1,
+      NgayTao: new Date(),
+      MaSanPham: id,
+      MaThuongHieu: "TH001",
+      MaKhachHang: "KH001",
+      SoSao: selectedRating
+    };
+
+    fetch('/api/danhgia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(danhGia)
+    })
+      .then(res => res.json())
+      .then(() => {
+        alert('Đã gửi đánh giá thành công!');
+        document.getElementById('tieuDe').value = '';
+        document.getElementById('noiDung').value = '';
+        selectedRating = 0;
+        document.querySelectorAll('#rating-stars i').forEach(s => s.classList.remove('active'));
+      })
+      .catch(err => alert('Lỗi khi gửi đánh giá: ' + err));
+  });
   </script>
+
+
+
+// Tải danh sách đánh giá theo sản phẩm
+  fetch(`/api/danhgia/${id}`)
+    .then(res => res.json())
+    .then(danhGiaList => {
+      const container = document.getElementById('danhSachDanhGia');
+      if (!danhGiaList.length) {
+        container.innerHTML = '<p>Chưa có đánh giá nào.</p>';
+        return;
+      }
+
+      container.innerHTML = danhGiaList.map(dg => `
+        <div class="border p-3 mb-2 rounded">
+          <div class="d-flex align-items-center mb-1">
+            ${'<i class="fa-solid fa-star text-warning"></i>'.repeat(dg.SoSao)}
+          </div>
+          <strong>${dg.TieuDe}</strong>
+          <p>${dg.NoiDung}</p>
+          <small class="text-muted">Ngày: ${new Date(dg.NgayTao).toLocaleDateString()}</small>
+        </div>
+      `).join('');
+    });
 </body>
 </html>
