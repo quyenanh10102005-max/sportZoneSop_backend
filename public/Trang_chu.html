@@ -186,26 +186,7 @@
 
 
     
-  <!-- Lấy thopon=tin sản phẩm -->
-<script>
-fetch('/api/sanpham')
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('ds-sanpham');
-    container.innerHTML = data.map(sp => `
-      <div class="col-md-3 mb-4">
-        <div class="card h-100 shadow-sm">
-          <img src="/images/default-shoe.jpg" class="card-img-top" alt="${sp.ten}">
-          <div class="card-body text-center">
-            <h5 class="card-title">${sp.ten}</h5>
-            <p class="text-danger fw-bold">${sp.gia.toLocaleString()}₫</p>
-            <p>${sp.moTa}</p>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  });
-</script>
+
 
 
 
@@ -240,6 +221,44 @@ fetch('/api/sanpham')
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = "Dang_nhap.html";
+  });
+</script>
+
+
+
+
+  <!-- Lấy thopon=tin sản phẩm -->
+<script>
+fetch('/api/sanpham')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('ds-sanpham');
+    // Lọc bỏ các sản phẩm không hợp lệ (không có tên hoặc giá)
+    const validProducts = data.filter(sp => sp.ten && sp.gia);
+
+    if (validProducts.length === 0) {
+      container.innerHTML = `<p class="text-center text-muted">Chưa có sản phẩm nào để hiển thị.</p>`;
+      return;
+    }
+
+    // Hiển thị sản phẩm
+    container.innerHTML = validProducts.map(sp => `
+      <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="/images/default-shoe.jpg" class="card-img-top" alt="${sp.ten}">
+          <div class="card-body text-center">
+            <h5 class="card-title">${sp.ten}</h5>
+            <p class="text-danger fw-bold">${Number(sp.gia).toLocaleString()}₫</p>
+            <p class="small">${sp.moTa || ''}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  })
+  .catch(err => {
+    console.error('Lỗi khi tải sản phẩm:', err);
+    document.getElementById('ds-sanpham').innerHTML =
+      `<p class="text-center text-danger">Không thể tải danh sách sản phẩm.</p>`;
   });
 </script>
 </body>
