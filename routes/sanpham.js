@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 🟣 Cập nhật sản phẩm theo ID
+//  Cập nhật sản phẩm theo ID
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
