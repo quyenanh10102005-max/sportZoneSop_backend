@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const SanPham = require('../models/SanPham');
 
-
-//  Thêm sản phẩm mới
+// 🟢 Thêm sản phẩm mới
 router.post('/', async (req, res) => {
   try {
     const sanPham = new SanPham(req.body);
@@ -14,7 +13,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-//  Lấy danh sách sản phẩm
+// 🔵 Lấy danh sách sản phẩm
 router.get('/', async (req, res) => {
   try {
     const sanPhams = await SanPham.find();
@@ -24,7 +23,20 @@ router.get('/', async (req, res) => {
   }
 });
 
-//  Cập nhật sản phẩm theo ID
+// 🟣 Lấy chi tiết sản phẩm theo ID
+router.get('/:id', async (req, res) => {
+  try {
+    const sanPham = await SanPham.findById(req.params.id);
+    if (!sanPham) {
+      return res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+    }
+    res.json(sanPham);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 🟠 Cập nhật sản phẩm theo ID
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
