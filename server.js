@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const connectDB = require('./db');
+const sanPhamRoutes = require('./routes/sanpham');
 
 dotenv.config();
 
@@ -24,6 +25,9 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/sanpham', sanPhamRoutes)
+
+
 
 // Serve HTML files
 app.get('/', (req, res) => {

@@ -147,6 +147,16 @@
     </main>
     
 
+    <div>
+           <section class="container mt-5">
+  <h2 class="mb-4 text-center">SẢN PHẨM MỚI NHẤT</h2>
+  <div class="row" id="ds-sanpham"></div>
+</section>
+    </div>
+
+
+
+
 
 
     <footer>
@@ -175,6 +185,27 @@
      <div class="gb">SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
 
 
+    
+  <!-- Lấy thopon=tin sản phẩm -->
+<script>
+fetch('/api/sanpham')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('ds-sanpham');
+    container.innerHTML = data.map(sp => `
+      <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="/images/default-shoe.jpg" class="card-img-top" alt="${sp.ten}">
+          <div class="card-body text-center">
+            <h5 class="card-title">${sp.ten}</h5>
+            <p class="text-danger fw-bold">${sp.gia.toLocaleString()}₫</p>
+            <p>${sp.moTa}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  });
+</script>
 
 
 
