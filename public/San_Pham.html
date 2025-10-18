@@ -42,6 +42,27 @@
   color: white;
   border-color: #007bff;
 }
+
+.back-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 2px solid #007bff;
+  border-radius: 30px;
+  color: #eceef0;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back-home-btn:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
   </style>
 
 <body>
@@ -142,7 +163,9 @@
 
     
     <div class="container">
-       <a href="/" class="btn btn-link mt-3">&larr; Quay lại trang chủ</a>
+       <a href="/" class="back-home-btn">
+  <i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ
+</a>
 
   <div id="product-detail" class="product-container"></div>
     </div>
