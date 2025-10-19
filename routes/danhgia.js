@@ -37,4 +37,20 @@ router.get('/:MaSanPham', async (req, res) => {
   }
 });
 
+
+// Tính trung bình sao theo sản phẩm
+router.get('/trungbinh/:MaSanPham', async (req, res) => {
+  try {
+    const danhGiaList = await DanhGia.find({ MaSanPham: req.params.MaSanPham });
+    if (!danhGiaList.length) {
+      return res.json({ avg: 0, count: 0 });
+    }
+
+    const total = danhGiaList.reduce((sum, dg) => sum + (dg.SoSao || 0), 0);
+    const avg = total / danhGiaList.length;
+    res.json({ avg, count: danhGiaList.length });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 module.exports = router;

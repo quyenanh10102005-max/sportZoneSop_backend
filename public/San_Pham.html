@@ -111,6 +111,7 @@
     <!-- Phần đánh giá -->
     <div class="review-box" id="review-box">
       <h3 class="mb-4"><i class="fa-solid fa-star text-warning"></i> Đánh giá sản phẩm</h3>
+      <h5 id="trungBinhSao" class="mb-4 text-secondary"></h5>
       <div id="danhSachDanhGia" class="mb-4"></div>
       <hr>
       <h5>Gửi đánh giá của bạn</h5>
@@ -283,34 +284,54 @@
           document.getElementById('noiDung').value = '';
           selectedRating = 0;
           document.querySelectorAll('#rating-stars i').forEach(s => s.classList.remove('active'));
-          loadDanhGia(); // load lại danh sách
+          loadDanhGia(); 
         })
         .catch(err => alert('Lỗi khi gửi đánh giá: ' + err));
     });
 
     function loadDanhGia() {
-      fetch(`/api/danhgia/${id}`)
-        .then(res => res.json())
-        .then(danhGiaList => {
-          const container = document.getElementById('danhSachDanhGia');
-          if (!danhGiaList.length) {
-            container.innerHTML = '<p>Chưa có đánh giá nào.</p>';
-            return;
-          }
-          container.innerHTML = danhGiaList.map(dg => `
-            <div class="border p-3 mb-2 rounded">
-              <div class="d-flex align-items-center mb-1">
-                ${'<i class="fa-solid fa-star text-warning"></i>'.repeat(dg.SoSao)}
-              </div>
-              <strong>${dg.TieuDe}</strong>
-              <p>${dg.NoiDung}</p>
-              <small class="text-muted">Ngày: ${new Date(dg.NgayTao).toLocaleDateString()}</small>
+  fetch(`/api/danhgia/${id}`)
+    .then(res => res.json())
+    .then(danhGiaList => {
+      const container = document.getElementById('danhSachDanhGia');
+      if (!danhGiaList.length) {
+        container.innerHTML = '<p>Chưa có đánh giá nào.</p>';
+      } else {
+        container.innerHTML = danhGiaList.map(dg => `
+          <div class="border p-3 mb-2 rounded">
+            <div class="d-flex align-items-center mb-1">
+              ${'<i class="fa-solid fa-star text-warning"></i>'.repeat(dg.SoSao)}
             </div>
-          `).join('');
-        });
-    }
+            <strong>${dg.TieuDe}</strong>
+            <p>${dg.NoiDung}</p>
+            <small class="text-muted">Ngày: ${new Date(dg.NgayTao).toLocaleDateString()}</small>
+          </div>
+        `).join('');
+      }
 
-    loadDanhGia();
+      //  Sau khi tải đánh giá xong, tính trung bình sao
+      loadTrungBinhSao();
+    });
+}
+
+//  Hàm tính trung bình sao
+function loadTrungBinhSao() {
+  fetch(`/api/danhgia/trungbinh/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      const trungBinh = data.avg ? data.avg.toFixed(1) : '0.0';
+      const soDanhGia = data.count || 0;
+      const trungBinhElem = document.getElementById('trungBinhSao');
+      trungBinhElem.innerHTML = `
+        <span class="fw-bold text-warning">${'★'.repeat(Math.round(data.avg))}</span>
+        <span class="text-secondary">(${trungBinh}/5 từ ${soDanhGia} đánh giá)</span>
+      `;
+    })
+    .catch(() => {
+      document.getElementById('trungBinhSao').textContent = 'Chưa có đánh giá nào.';
+    });
+}
+    
   </script>
 </body>
 </html>
