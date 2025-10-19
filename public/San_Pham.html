@@ -70,33 +70,34 @@
 
   <nav>
     <ul class="main_menu">
-      <li><a href="">Trang chủ</a></li>
+      <li><a href="Trang_chu.html">Trang chủ</a></li>
+
       <li class="submenu">
-        <a href="">Giày bóng đá</a>
+        <a href="#">Giày bóng đá</a>
         <ul class="has_submenu">
-          <li><a href="">Tất cả sản phẩm</a></li>
-          <li><a href="">Giày sân cỏ nhân tạo</a></li>
-          <li><a href="">Giày sân cỏ tự nhiên</a></li>
-          <li><a href="">Giày sân Futsal</a></li>
+          <li><a href="#">Tất cả sản phẩm</a></li>
+          <li><a href="#">Giày sân cỏ nhân tạo</a></li>
+          <li><a href="#">Giày sân cỏ tự nhiên</a></li>
+          <li><a href="#">Giày sân Futsal</a></li>
         </ul>
       </li>
 
       <li class="submenu">
-        <a href="">Thương hiệu</a>
+        <a href="#">Thương hiệu</a>
         <ul class="has_submenu">
-          <li><a href="">Nike</a></li>
-          <li><a href="">Adidas</a></li>
-          <li><a href="">Puma</a></li>
-          <li><a href="">Mizuno</a></li>
-          <li><a href="">Kamito</a></li>
-          <li><a href="">Zocker</a></li>
+          <li><a href="#">Nike</a></li>
+          <li><a href="#">Adidas</a></li>
+          <li><a href="#">Puma</a></li>
+          <li><a href="#">Mizuno</a></li>
+          <li><a href="#">Kamito</a></li>
+          <li><a href="#">Zocker</a></li>
         </ul>
       </li>
 
-      <li><a href="">Phụ kiện</a></li>
-      <li><a href="">Tin tức giày</a></li>
-      <li><a href="">Khuyến mãi</a></li>
-      <li><a href="">Về chúng tôi</a></li>
+      <li><a href="Phu_Kien.html">Phụ kiện</a></li>
+      <li><a href="Tin_Tuc_Giay.html">Tin tức giày</a></li>
+      <li><a href="Khuyen_Mai.html">Khuyến mãi</a></li>
+      <li><a href="Ve_chung_toi.html">Về chúng tôi</a></li>
     </ul>
   </nav>
 
@@ -150,7 +151,7 @@
 
   <div class="gb">SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
 
-  <!-- ✅ TOÀN BỘ SCRIPT Ở DƯỚI CÙNG BODY -->
+ 
   <script>
     const user = localStorage.getItem("user");
     const userNameSpan = document.getElementById("userName");
@@ -232,10 +233,59 @@
           alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
         });
 
-        document.querySelector('.btn-cart').addEventListener('click', () => {
-          if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ!');
-          alert(`Đã thêm ${sp.ten} (Size ${selectedSize}) vào giỏ hàng!`);
-        });
+      document.querySelector('.btn-cart').addEventListener('click', async () => {
+  if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ!');
+
+  const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
+
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  // Kiểm tra nếu sản phẩm cùng ID và size đã tồn tại -> cộng thêm số lượng
+  const existing = cart.find(item => item.id === id && item.size === selectedSize);
+  if (existing) {
+    existing.soLuong += soLuong;
+  } else {
+    cart.push({
+      id,
+      ten: sp.ten,
+      gia: sp.gia,
+      size: selectedSize,
+      soLuong,
+      hinhAnh: sp.hinhAnh
+    });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount(); 
+  alert(`Đã thêm ${sp.ten} (Size ${selectedSize}) vào giỏ hàng!`);
+
+  // === GỌI API LƯU VÀO DATABASE ===
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      console.warn('Chưa đăng nhập, không lưu DB.');
+      return;
+    }
+
+    const data = {
+      MaKhachHang: user._id || user.MaKhachHang,
+      MaSanPham: id,
+      SoLuong: soLuong,
+      Size: selectedSize
+    };
+
+    const res = await fetch('/api/giohang', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    console.log('Kết quả lưu DB:', result);
+  } catch (err) {
+    console.error('Lỗi khi gọi API /api/giohang:', err);
+  }
+});
       })
       .catch(err => {
         document.getElementById('product-detail').innerHTML = `<p>Lỗi khi tải sản phẩm: ${err}</p>`;
@@ -331,6 +381,36 @@ function loadTrungBinhSao() {
       document.getElementById('trungBinhSao').textContent = 'Chưa có đánh giá nào.';
     });
 }
+
+// update giỏ hàng
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const totalItems = cart.reduce((sum, item) => sum + item.soLuong, 0);
+  const cartIcon = document.querySelector('.header_gio_hang i');
+
+  // Thêm số nhỏ hiển thị tổng sản phẩm
+  let badge = document.getElementById('cartCount');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.id = 'cartCount';
+    badge.style.position = 'absolute';
+    badge.style.top = '-8px';
+    badge.style.right = '-10px';
+    badge.style.background = 'red';
+    badge.style.color = 'white';
+    badge.style.fontSize = '12px';
+    badge.style.padding = '2px 6px';
+    badge.style.borderRadius = '50%';
+    badge.style.fontWeight = 'bold';
+    cartIcon.parentElement.style.position = 'relative';
+    cartIcon.parentElement.appendChild(badge);
+  }
+
+  badge.textContent = totalItems > 0 ? totalItems : '';
+}
+
+
+updateCartCount();
     loadDanhGia();
 loadTrungBinhSao();
   </script>

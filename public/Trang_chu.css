@@ -766,6 +766,23 @@ footer
                 margin: 10px 0;
                 max-width: 100%;
             }
+
+
+            .header_gio_hang {
+  position: relative;
+}
+
+.header_gio_hang i::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  padding: 2px 5px;
+}
         }
 
 

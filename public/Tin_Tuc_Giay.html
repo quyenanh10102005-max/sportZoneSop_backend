@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportZoneVN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Trang_chu.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<style>
+  .main{
+    font-family: 'Times New Roman', Times, serif;
+    letter-spacing: 10px;
+  }
+
+  body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .page-title {
+            text-align: center;
+            color: #1a1a1a;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+        }
+        .category-intro {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 40px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
+        }
+        article {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        article:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        article h2 {
+            font-size: 2em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+        article h3 {
+            font-size: 1.5em;
+            color: #2a2a2a;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        article p {
+            margin-bottom: 20px;
+            color: #444;
+        }
+        article ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        article li {
+            margin-bottom: 10px;
+        }
+        article strong {
+            color: #000;
+        }
+</style>
+<body>
+    <div class="welcome">Chào mừng đến với SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
+
+
+    <header>
+<!-- #Phần header : logo,tìm kiếm, Người dùng , giỏ hàng -->
+    <div class="header-logo"><img src="/images/Logo_.png" alt=""></div>
+   <div class="header-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+     <input  type="text" placeholder="Tìm kiếm sản phẩm ...">
+     </div> 
+
+  <div class="header_menu">
+       <i class="fa-solid fa-user" id="userIcon"></i>
+    <span id="userName" style="margin-left: 8px; font-weight: bold;"></span>
+    <ul class="header_main_menu" id="menuList">
+        <li id="registerLi"><a href="./Dang_ky.html">Đăng ký</a></li>
+        <li id="loginLi"><a href="./Dang_nhap.html">Đăng nhập</a></li>
+        <li id="logoutLi"><a href="./Dang_nhap.html">Đăng xuất</a></li>
+    </ul>
+  </div>
+  <div class="header_gio_hang">
+    <i class="fa-solid fa-cart-shopping"></i>
+  </div>
+    </header>
+
+     <nav>
+    <ul class="main_menu">
+      <li><a href="Trang_chu.html">Trang chủ</a></li>
+
+      <li class="submenu">
+        <a href="#">Giày bóng đá</a>
+        <ul class="has_submenu">
+          <li><a href="#">Tất cả sản phẩm</a></li>
+          <li><a href="#">Giày sân cỏ nhân tạo</a></li>
+          <li><a href="#">Giày sân cỏ tự nhiên</a></li>
+          <li><a href="#">Giày sân Futsal</a></li>
+        </ul>
+      </li>
+
+      <li class="submenu">
+        <a href="#">Thương hiệu</a>
+        <ul class="has_submenu">
+          <li><a href="#">Nike</a></li>
+          <li><a href="#">Adidas</a></li>
+          <li><a href="#">Puma</a></li>
+          <li><a href="#">Mizuno</a></li>
+          <li><a href="#">Kamito</a></li>
+          <li><a href="#">Zocker</a></li>
+        </ul>
+      </li>
+
+      <li><a href="Phu_Kien.html">Phụ kiện</a></li>
+      <li><a href="Tin_Tuc_Giay.html">Tin tức giày</a></li>
+      <li><a href="Khuyen_Mai.html">Khuyến mãi</a></li>
+      <li><a href="Ve_chung_toi.html">Về chúng tôi</a></li>
+    </ul>
+  </nav>
+
+<main>
+
+
+<div class="container">
+        <h1 class="page-title">TIN TỨC GIÀY</h1>
+        
+        <div class="category-intro">
+            <p>Chào mừng bạn đến với chuyên mục Tin tức Giày của SportZoneVN!</p>
+            <p>Đây không chỉ là nơi bạn cập nhật những thông tin mới nhất về các bộ sưu tập giày đá bóng vừa ra mắt. Đây là nơi chúng tôi chia sẻ cùng bạn niềm đam mê, kiến thức chuyên sâu và những phân tích chi tiết nhất để giúp bạn tìm ra "người đồng hành" hoàn hảo trên sân cỏ.</p>
+            <p>Chúng tôi hiểu rằng, một đôi giày không chỉ là một món đồ - nó là một lời tuyên bố, một công cụ, và là một phần của chính bạn khi bước vào trận đấu. Bạn đang tìm kiếm sự bứt tốc của dòng Mercurial? Khả năng kiểm soát thượng thừa của Predator? Hay sự êm ái, tinh tế của Tiempo?</p>
+            <p>Tại đây, chúng tôi sẽ "mổ xẻ" mọi thứ: từ những công nghệ mới nhất, những đánh giá chân thực (review) sau khi trải nghiệm, đến các bài tư vấn chuyên sâu giúp bạn chọn giày phù hợp với phom chân và loại mặt sân bạn thường xuyên thi đấu. Hãy cùng SportZoneVN khám phá thế giới giày bóng đá. Vì chúng tôi tin rằng, chọn đúng giày, là bạn đã thắng một nửa trận đấu.</p>
+        </div>
+
+        <article>
+            <h2>Chọn Giày Sân Cỏ Nhân Tạo: Đinh TF (Đinh Dăm) vs Đinh AG - Đâu là 'Chân Ái' cho Phủi Thủ Việt?</h2>
+            
+            <p>Nếu là một người thường xuyên chơi bóng ở Việt Nam, 9/10 trận đấu của bạn có lẽ là trên mặt sân cỏ nhân tạo. Nhưng câu hỏi muôn thuở vẫn là: nên chọn giày đinh dăm (TF - Turf) hay giày đinh AG (Artificial Grass)?</p>
+            
+            <p>Rất nhiều anh em vẫn còn nhầm lẫn hoặc chọn giày theo... sở thích mà chưa hiểu rõ công dụng của từng loại. Điều này không chỉ ảnh hưởng đến hiệu suất thi đấu mà còn có thể gây ra chấn thương.</p>
+            
+            <p>Hãy cùng SportZoneVN phân tích chi tiết để bạn tìm ra "chân ái" thực sự của mình nhé!</p>
+
+            <h3>1. Giày Đinh Dăm (TF - Turf Floor)</h3>
+            <ul>
+                <li><strong>Nhận diện:</strong> Đây là loại đế phổ biến nhất. Đế giày được làm bằng cao su, có rất nhiều đinh nhỏ, ngắn, phân bổ đều khắp bề mặt.</li>
+                <li><strong>Ưu điểm:</strong>
+                    <ul>
+                        <li><strong>Độ bám đa dụng:</strong> Hoạt động cực tốt trên các mặt sân cỏ nhân tạo có chất lượng trung bình đến kém (cỏ thấp, mòn, ít cao su).</li>
+                        <li><strong>Êm ái & Thăng bằng:</strong> Do có nhiều đinh nhỏ, áp lực được phân bổ đều lên lòng bàn chân, tạo cảm giác rất êm ái và thăng bằng, đặc biệt khi di chuyển hoặc xoay xở.</li>
+                        <li><strong>Độ bền:</strong> Đế cao su thường rất bền bỉ, "cày ải" tốt.</li>
+                    </ul>
+                </li>
+                <li><strong>Nhược điểm:</strong>
+                    <ul>
+                        <li>Trên các mặt sân cỏ nhân tạo mới, xịn (cỏ cao, dày, nhiều cao su), đinh TF có thể hơi "trơn" vì đinh không cắm đủ sâu xuống bề mặt.</li>
+                    </ul>
+                </li>
+                <li><strong>Kết luận:</strong> Giày đinh TF là lựa chọn <strong>an toàn, linh hoạt và phù hợp nhất</strong> với đại đa số các mặt sân cỏ nhân tạo tại Việt Nam. Nếu bạn không chắc mặt sân mình chơi sắp tới chất lượng thế nào, một đôi TF sẽ không bao giờ làm bạn thất vọng.</li>
+            </ul>
+
+            <h3>2. Giày Đinh AG (Artificial Grass)</h3>
+            <ul>
+                <li><strong>Nhận diện:</strong> Đế giày thường làm bằng nhựa (TPU), có các đinh cao hơn, ít hơn và có hình dạng đặc biệt (thường là hình nón hoặc hình chữ V rỗng ruột) để tối ưu cho cỏ nhân tạo. *Lưu ý: Đừng nhầm lẫn với đinh FG (sân cỏ tự nhiên) vốn rất cao và cứng.*</li>
+                <li><strong>Ưu điểm:</strong>
+                    <ul>
+                        <li><strong>Bám sân vượt trội:</strong> Trên các mặt sân cỏ nhân tạo đạt chuẩn (cỏ cao, dày), đinh AG cắm sâu xuống lớp cỏ, mang lại độ bám tuyệt vời, giúp bạn thực hiện các pha bứt tốc và đổi hướng đột ngột tốt hơn.</li>
+                        <li><strong>Thiết kế chuyên biệt:</strong> Các hãng (như Nike, Adidas) thiết kế đinh AG rỗng ruột để giảm áp lực và tăng độ êm ái, tránh các chấn thương khớp gối.</li>
+                    </ul>
+                </li>
+                <li><strong>Nhược điểm:</strong>
+                    <ul>
+                        <li><strong>Rất kén sân:</strong> Nếu dùng trên sân quá "trơ", cỏ mòn, đinh AG sẽ không cắm xuống được, gây cảm giác chênh vênh, mất thăng bằng và rất dễ lật cổ chân (sơ mi).</li>
+                        <li>Áp lực lên lòng bàn chân sẽ cao hơn đinh TF một chút.</li>
+                    </ul>
+                </li>
+                <li><strong>Kết luận:</strong> Giày đinh AG là lựa chọn <strong>chuyên nghiệp, hiệu suất cao</strong>, nhưng CHỈ nên sử dụng nếu bạn chắc chắn mình chơi trên các mặt sân cỏ nhân tạo chất lượng tốt, cỏ cao và được bảo dưỡng thường xuyên.</li>
+            </ul>
+
+            <h3>Tổng kết từ SportZoneVN:</h3>
+            <ul>
+                <li><strong>Bạn chơi ở nhiều sân, không rõ chất lượng?</strong> &rarr; Chọn <strong>TF</strong>.</li>
+                <li><strong>Bạn ưu tiên sự êm ái, an toàn và bền bỉ?</strong> &rarr; Chọn <strong>TF</strong>.</li>
+                <li><strong>Bạn là "gà" của một cụm sân xịn, cỏ cao, cần bứt tốc tối đa?</strong> &rarr; Hãy đầu tư một đôi <strong>AG</strong>.</li>
+            </ul>
+
+            <p>Hy vọng bài viết này đã giúp bạn có cái nhìn rõ ràng hơn. Nếu còn bất kỳ thắc mắc nào, đừng ngần ngại nhắn tin cho đội ngũ chuyên gia của chúng tôi để được tư vấn chi tiết hơn nhé!</p>
+        </article>
+        
+        <article>
+            <h2>[ĐÁNH GIÁ NÓNG] Adidas Predator 24: Sự trở lại của 'Lưỡi Gà' Huyền Thoại và Cảm Giác 'Thuần Chủng'</h2>
+            
+            <p>Kể từ cuối năm 2023, thế giới giày đá bóng đã "sốt xình xịch" với sự trở lại của một biểu tượng. Và hôm nay, Adidas Predator 24 đã chính thức lên kệ, mang theo không chỉ công nghệ hiện đại mà cả một trời hoài niệm với chi tiết <strong>lưỡi gà gập (Fold-over Tongue)</strong> huyền thoại.</p>
+            
+            <p>Đây có phải là một chiêu trò "Marketing hoài niệm" của Adidas, hay thực sự là một siêu phẩm kiểm soát thế hệ mới? Hãy cùng SportZoneVN đánh giá nhanh phiên bản mới nhất này.</p>
+
+            <h3>1. Thiết Kế: Cổ Điển Gặp Hiện Đại</h3>
+            <p>Điều đập vào mắt đầu tiên chính là chiếc lưỡi gà. Đây là chi tiết làm nên tên tuổi của thế hệ Predator Mania (2002) hay Absolute (2006) trên chân các huyền thoại như Zidane, Beckham. Phiên bản 2024 mang chiếc lưỡi gà này trở lại một cách đầy tinh tế, vừa vặn và cố định bằng một dây thun co giãn.</p>
+            <p>Adidas tung ra 3 phiên bản: có lưỡi gà (Fold-over Tongue), không dây (Laceless) và có dây truyền thống (Laced). Phiên bản có lưỡi gà chắc chắn là ngôi sao của bộ sưu tập.</p>
+            <p>Phối màu ra mắt (đen-trắng-đỏ) cũng là phối màu "Predator" kinh điển, gợi nhớ về lịch sử hào hùng của dòng giày này.</p>
+
+            <h3>2. Công Nghệ và Cảm Giác Chạm Bóng</h3>
+            <p>Adidas đã loại bỏ lớp phủ cao su hầm hố của các thế hệ trước. Thay vào đó, Predator 24 sử dụng vật liệu tổng hợp siêu mềm <strong>HybridTouch 2.0</strong>. Trên bề mặt này là các "vảy rồng" <strong>Strikeskin</strong> – những vân cao su nhỏ, được đặt chiến lược ở các vùng tiếp xúc bóng chủ đạo.</p>
+            <p><strong>Cảm nhận thực tế:</strong> Cảm giác chạm bóng trở nên "thật" hơn, thuần khiết hơn. Bạn không còn cảm thấy lớp cao su dày cộm, mà thay vào đó là sự kết hợp hoàn hảo giữa độ mềm của upper và độ bám dính vừa phải từ các vảy Strikeskin. Các pha đỡ bước một (first touch) trở nên gọn gàng, và các cú sút (đặc biệt là cứa lòng) có độ xoáy rất "uy tín".</p>
+
+            <h3>3. Đế Giày (ControlFrame 2.0) và Độ Ổn Định</h3>
+            <p>Đây là một nâng cấp lớn. Đế ControlFrame 2.0 nhẹ hơn đáng kể so với người tiền nhiệm. Sự ổn định vẫn được đảm bảo, nhưng cảm giác thanh thoát và linh hoạt đã được cải thiện rõ rệt. Giờ đây, Predator không chỉ dành cho các tiền vệ "chia bài", mà các tiền đạo cơ động (như Gabriel Jesus) cũng hoàn toàn có thể sử dụng.</p>
+
+            <h3>4. Phom Dáng và Cảm Giác Mang</h3>
+            <p>Predator 24 mang lại cảm giác ôm chân đáng ngạc nhiên. So với các đời trước, phom giày có vẻ thon gọn hơn một chút nhưng vẫn rất thoải mái, đặc biệt là ở phần mũi. Anh em có phom chân bè trung bình hoàn toàn có thể tự tin "chiến" sau 1-2 trận thuần giày (break-in).</p>
+
+            <h3>Kết Luận</h3>
+            <p>Adidas Predator 24 không phải là một chiêu trò hoài niệm. Đây là một bước tiến thực sự, đưa Predator trở về với bản chất cốt lõi của nó: một đôi giày <strong>kiểm soát thuần túy</strong>, nhẹ nhàng, linh hoạt và mang lại cảm giác bóng chân thật nhất.</p>
+            <p>Sự trở lại của lưỡi gà là một điểm nhấn ngọt ngào, nhưng giá trị thực sự nằm ở cảm giác thi đấu xuất sắc mà nó mang lại. Đây chắc chắn là một trong những ứng cử viên nặng ký cho "Đôi giày của năm 2024".</p>
+            <p>SportZoneVN đã chính thức mở bán siêu phẩm Adidas Predator 24 (cả bản đinh TF và FG). Hãy liên hệ ngay để trở thành một trong những người đầu tiên sở hữu biểu tượng trở lại này!</p>
+        </article>
+
+    </div>
+</main>
+   
+
+
+    <footer>
+      <div class="hotline">
+        <h2>THÔNG TIN LIÊN HỆ</h2>
+        <h1>SportZoneVN - Giày bóng đá</h1>
+        <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
+        <p><i class="fa-solid fa-phone"></i> Hotline:0329127111</p>
+        <p><i class="fa-solid fa-envelope"></i> Email:Doaducthiendeptrai@gmail.com</p>
+      </div>
+
+      <div class="lien_ket">
+         <a href="https://www.facebook.com/thien.uc.609096">
+          <i class="fa-brands fa-facebook"></i>
+         </a>
+
+         <a href="https://www.instagram.com/qanh1010/">
+          <i class="fa-brands fa-instagram"></i>
+         </a>
+
+         <a href="https://www.youtube.com/@quyenanh8600">
+          <i class="fa-brands fa-youtube"></i>
+         </a>
+      </div>
+    </footer>
+     <div class="gb">SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
+
+
+    
+
+
+
+
+     <script>
+ 
+  const user = localStorage.getItem("user");
+
+  const userNameSpan = document.getElementById("userName");
+  const registerLi = document.getElementById("registerLi");
+  const loginLi = document.getElementById("loginLi");
+  const logoutLi = document.getElementById("logoutLi");
+
+  if (user) {
+    // Nếu đã đăng nhập
+    const userData = JSON.parse(user);
+    userNameSpan.textContent = userData.TenDangNhap;
+
+    registerLi.style.display = "none";
+    loginLi.style.display = "none";
+    logoutLi.style.display = "block";
+  } else {
+    // Nếu chưa đăng nhập
+    userNameSpan.textContent = "";
+    registerLi.style.display = "block";
+    loginLi.style.display = "block";
+    logoutLi.style.display = "none";
+  }
+
+  // Xử lý nút Đăng xuất
+  logoutLi.querySelector('a').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = "Dang_nhap.html";
+  });
+</script>
+
+
+
+
+ 
+
+</html>
