@@ -45,7 +45,11 @@ app.get('/dang-nhap', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Dang_nhap.html'));
 });
 
-// Health check
+app.get('/gio-hang', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Gio_hang.html'));
+});
+
+
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });

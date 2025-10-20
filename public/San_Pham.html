@@ -20,7 +20,7 @@
   .product-price { color: #d32f2f; font-size: 1.6rem; font-weight: bold; margin-bottom: 20px; }
   .size-select { margin-bottom: 20px; }
   .btn-buy, .btn-cart { margin-right: 10px; }
-  btn-cart { background-color: #007bff; color: white; font-weight: bold; }
+  .btn-cart { background-color: #007bff; color: white; font-weight: bold; }
   .rating i { color: #ccc; cursor: pointer; font-size: 1.5rem; }
   .rating i.active { color: #f7b500; }
   .review-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 60px; }
@@ -232,65 +232,109 @@
           if (!selectedSize) return alert('Vui lòng chọn size trước khi mua!');
           alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
         });
-
-      document.querySelector('.btn-cart').addEventListener('click', async () => {
-  if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ!');
+// ==================== PHẦN THÊM VÀO GIỎ HÀNG ====================
+document.querySelector('.btn-cart').addEventListener('click', async () => {
+  if (!selectedSize) {
+    return alert('Vui lòng chọn size trước khi thêm vào giỏ!');
+  }
 
   const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
+  const user = JSON.parse(localStorage.getItem('user'));
 
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-  // Kiểm tra nếu sản phẩm cùng ID và size đã tồn tại -> cộng thêm số lượng
-  const existing = cart.find(item => item.id === id && item.size === selectedSize);
-  if (existing) {
-    existing.soLuong += soLuong;
-  } else {
-    cart.push({
-      id,
-      ten: sp.ten,
-      gia: sp.gia,
-      size: selectedSize,
-      soLuong,
-      hinhAnh: sp.hinhAnh
-    });
+  // ===== TRƯỜNG HỢP 1: CHƯA ĐĂNG NHẬP =====
+  if (!user) {
+    alert('Vui lòng đăng nhập để thêm vào giỏ hàng!');
+    window.location.href = '/dang-nhap';
+    return;
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount(); 
-  alert(`Đã thêm ${sp.ten} (Size ${selectedSize}) vào giỏ hàng!`);
-
-  // === GỌI API LƯU VÀO DATABASE ===
   try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      console.warn('Chưa đăng nhập, không lưu DB.');
-      return;
+    // ===== GỌI API LƯU VÀO DATABASE =====
+    const response = await fetch('/api/giohang', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // Thêm token nếu cần
+      },
+      body: JSON.stringify({
+        MaKhachHang: user._id || user.MaKhachHang, 
+        MaSanPham: id,
+        SoLuong: soLuong,
+        Size: selectedSize
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Không thể thêm vào giỏ hàng');
     }
 
-    const data = {
-      MaKhachHang: user._id || user.MaKhachHang,
-      MaSanPham: id,
-      SoLuong: soLuong,
-      Size: selectedSize
-    };
+    const result = await response.json();
+    console.log('✅ Đã lưu vào database:', result);
 
-    const res = await fetch('/api/giohang', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
+    // ===== CẬP NHẬT BADGE SỐ LƯỢNG =====
+    await updateCartCount();
 
-    const result = await res.json();
-    console.log('Kết quả lưu DB:', result);
-  } catch (err) {
-    console.error('Lỗi khi gọi API /api/giohang:', err);
+    alert(`✅ Đã thêm "${sp.ten}" (Size ${selectedSize}) vào giỏ hàng!`);
+
+    // Reset số lượng về 1
+    document.getElementById('soLuong').value = 1;
+
+  } catch (error) {
+    console.error('❌ Lỗi:', error);
+    alert('⚠️ Có lỗi xảy ra. Vui lòng thử lại!');
   }
 });
-      })
-      .catch(err => {
-        document.getElementById('product-detail').innerHTML = `<p>Lỗi khi tải sản phẩm: ${err}</p>`;
-      });
 
+// ==================== CẬP NHẬT BADGE GIỎ HÀNG ====================
+async function updateCartCount() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) return;
+
+  try {
+    const res = await fetch(`/api/giohang/${user._id}`);
+    const cartItems = await res.json();
+
+    // Tính tổng số lượng sản phẩm
+    const totalItems = cartItems.reduce((sum, item) => sum + item.SoLuong, 0);
+
+    // Hiển thị badge
+    const cartIcon = document.querySelector('.header_gio_hang');
+    let badge = document.getElementById('cartCount');
+
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'cartCount';
+      badge.style.cssText = `
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: red;
+        color: white;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        font-weight: bold;
+        min-width: 20px;
+        text-align: center;
+      `;
+      cartIcon.style.position = 'relative';
+      cartIcon.appendChild(badge);
+    }
+
+    badge.textContent = totalItems > 0 ? totalItems : '';
+    badge.style.display = totalItems > 0 ? 'block' : 'none';
+
+  } catch (error) {
+    console.error('❌ Lỗi khi cập nhật badge:', error);
+  }
+    alert(`Đã thêm ${sp.ten} (Size ${selectedSize}) vào giỏ hàng!`);
+}
+
+// Gọi khi tải trang
+updateCartCount();
+
+
+ 
     // ---------------- PHẦN ĐÁNH GIÁ ----------------
     let selectedRating = 0;
     document.querySelectorAll('#rating-stars i').forEach(star => {
@@ -381,38 +425,15 @@ function loadTrungBinhSao() {
       document.getElementById('trungBinhSao').textContent = 'Chưa có đánh giá nào.';
     });
 }
-
-// update giỏ hàng
-function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const totalItems = cart.reduce((sum, item) => sum + item.soLuong, 0);
-  const cartIcon = document.querySelector('.header_gio_hang i');
-
-  // Thêm số nhỏ hiển thị tổng sản phẩm
-  let badge = document.getElementById('cartCount');
-  if (!badge) {
-    badge = document.createElement('span');
-    badge.id = 'cartCount';
-    badge.style.position = 'absolute';
-    badge.style.top = '-8px';
-    badge.style.right = '-10px';
-    badge.style.background = 'red';
-    badge.style.color = 'white';
-    badge.style.fontSize = '12px';
-    badge.style.padding = '2px 6px';
-    badge.style.borderRadius = '50%';
-    badge.style.fontWeight = 'bold';
-    cartIcon.parentElement.style.position = 'relative';
-    cartIcon.parentElement.appendChild(badge);
-  }
-
-  badge.textContent = totalItems > 0 ? totalItems : '';
-}
+});
 
 
-updateCartCount();
+
+
     loadDanhGia();
 loadTrungBinhSao();
   </script>
+
 </body>
 </html>
+    
