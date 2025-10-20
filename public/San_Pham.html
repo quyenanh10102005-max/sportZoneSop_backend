@@ -63,9 +63,11 @@
         <li id="logoutLi"><a href="./Dang_nhap.html">Đăng xuất</a></li>
       </ul>
     </div>
-    <div class="header_gio_hang">
+   <div class="header_gio_hang">
+    <a href="Gio_hang.html" style="color: inherit; text-decoration: none;"> 
       <i class="fa-solid fa-cart-shopping"></i>
-    </div>
+    </a>
+  </div>
   </header>
 
   <nav>
@@ -153,35 +155,36 @@
 
  
   <script>
-    const user = localStorage.getItem("user");
-    const userNameSpan = document.getElementById("userName");
-    const registerLi = document.getElementById("registerLi");
-    const loginLi = document.getElementById("loginLi");
-    const logoutLi = document.getElementById("logoutLi");
+    // =============== PHẦN SCRIPT CẬP NHẬT CHO SAN_PHAM.HTML ===============
+// Thay thế toàn bộ script hiện tại bằng code này
 
-    if (user) {
-      const userData = JSON.parse(user);
-      userNameSpan.textContent = userData.TenDangNhap;
-      registerLi.style.display = "none";
-      loginLi.style.display = "none";
-      logoutLi.style.display = "block";
-    } else {
-      userNameSpan.textContent = "";
-      registerLi.style.display = "block";
-      loginLi.style.display = "block";
-      logoutLi.style.display = "none";
-    }
+const user = localStorage.getItem("user");
+const userNameSpan = document.getElementById("userName");
+const registerLi = document.getElementById("registerLi");
+const loginLi = document.getElementById("loginLi");
+const logoutLi = document.getElementById("logoutLi");
 
-    logoutLi.querySelector('a').addEventListener('click', e => {
-      e.preventDefault();
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = "Dang_nhap.html";
-    });
-  </script>
+if (user) {
+  const userData = JSON.parse(user);
+  userNameSpan.textContent = userData.TenDangNhap;
+  registerLi.style.display = "none";
+  loginLi.style.display = "none";
+  logoutLi.style.display = "block";
+} else {
+  userNameSpan.textContent = "";
+  registerLi.style.display = "block";
+  loginLi.style.display = "block";
+  logoutLi.style.display = "none";
+}
 
-  <script>
-    // ------------------- HIỂN THỊ CHI TIẾT SẢN PHẨM -------------------
+logoutLi.querySelector('a').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = "Dang_nhap.html";
+});
+
+// ------------------- HIỂN THỊ CHI TIẾT SẢN PHẨM -------------------
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
@@ -236,36 +239,84 @@ fetch(`/api/sanpham/${id}`)
       alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
     });
 
-    // ✅ Nút "Thêm vào giỏ hàng"
-    document.querySelector('.btn-cart').addEventListener('click', () => {
-      if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
-      const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-      // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
-      const existing = cart.find(item => item.id === sp.id && item.size === selectedSize);
-      if (existing) {
-        existing.soLuong += soLuong;
-      } else {
-        cart.push({
-          id: sp.id,
-          ten: sp.ten,
-          gia: sp.gia,
-          hinhAnh: sp.hinhAnh,
-          size: selectedSize,
-          soLuong: soLuong
-        });
+    // ✅ NÚT "THÊM VÀO GIỎ HÀNG" - GỌI API
+    document.querySelector('.btn-cart').addEventListener('click', async () => {
+      // Kiểm tra đăng nhập
+      const user = localStorage.getItem('user');
+      if (!user) {
+        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+        window.location.href = 'Dang_nhap.html';
+        return;
       }
 
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert('Đã thêm vào giỏ hàng!');
+      if (!selectedSize) {
+        alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+        return;
+      }
+
+      const userData = JSON.parse(user);
+      const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
+
+      try {
+        const response = await fetch('/api/giohang', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            MaKhachHang: userData._id,  // Hoặc userData.MaKhachHang
+            MaSanPham: sp._id,
+            SoLuong: soLuong,
+            Size: selectedSize
+          })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('✅ Đã thêm vào giỏ hàng thành công!');
+          // Cập nhật số lượng giỏ hàng ở header
+          updateCartCount();
+        } else {
+          alert('❌ Lỗi: ' + result.error);
+        }
+      } catch (err) {
+        console.error('Lỗi khi thêm vào giỏ hàng:', err);
+        alert('❌ Không thể kết nối đến server!');
+      }
     });
 
-    // ✅ Gọi hiển thị đánh giá và trung bình sao ngay sau khi có sản phẩm
+    // Gọi hiển thị đánh giá và trung bình sao
     loadDanhGia();
     loadTrungBinhSao();
+  })
+  .catch(err => {
+    console.error('Lỗi khi tải sản phẩm:', err);
+    document.getElementById('product-detail').innerHTML = '<p class="text-danger">Không thể tải sản phẩm!</p>';
   });
 
+// ------------------- CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG Ở HEADER -------------------
+async function updateCartCount() {
+  const user = localStorage.getItem('user');
+  if (!user) return;
+
+  try {
+    const userData = JSON.parse(user);
+    const res = await fetch(`/api/giohang/${userData._id}`);
+    const data = await res.json();
+    
+    // Hiển thị số lượng sản phẩm trong giỏ
+    const cartIcon = document.querySelector('.header_gio_hang i');
+    if (cartIcon && data.length > 0) {
+      cartIcon.setAttribute('data-count', data.length);
+    }
+  } catch (err) {
+    console.error('Lỗi khi cập nhật số lượng giỏ hàng:', err);
+  }
+}
+
+// Gọi khi tải trang
+updateCartCount();
 
 // ------------------- PHẦN ĐÁNH GIÁ -------------------
 let selectedRating = 0;

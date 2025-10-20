@@ -785,7 +785,34 @@ footer
 }
         }
 
+.header_gio_hang {
+  position: relative;
+  cursor: pointer;
+}
 
+.header_gio_hang i[data-count]:after {
+  content: attr(data-count);
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ff0000;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Ẩn badge khi không có sản phẩm */
+.header_gio_hang i[data-count="0"]:after {
+  display: none;
+}
 
 
 
