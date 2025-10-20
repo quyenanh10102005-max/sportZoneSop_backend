@@ -181,61 +181,93 @@
   </script>
 
   <script>
-    // ---------------- HIỂN THỊ SẢN PHẨM ----------------
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    // ------------------- HIỂN THỊ CHI TIẾT SẢN PHẨM -------------------
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
 
-    fetch(`/api/sanpham/${id}`)
-      .then(res => res.json())
-      .then(sp => {
-        if (!sp.ten) {
-          document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
-          return;
-        }
+fetch(`/api/sanpham/${id}`)
+  .then(res => res.json())
+  .then(sp => {
+    if (!sp.ten) {
+      document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
+      return;
+    }
 
-        document.getElementById('product-detail').innerHTML = `
-          <div class="product-image">
-            <img src="${sp.hinhAnh}" alt="${sp.ten}">
+    // Hiển thị sản phẩm
+    document.getElementById('product-detail').innerHTML = `
+      <div class="product-image">
+        <img src="${sp.hinhAnh}" alt="${sp.ten}">
+      </div>
+      <div class="product-info">
+        <div class="product-name">${sp.ten}</div>
+        <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
+        <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
+
+        <div class="size-select mb-3">
+          <label class="form-label">Chọn size:</label>
+          <div id="size-options" class="d-flex flex-wrap gap-2">
+            ${[37,38,39,40,41,42,43].map(size => `<div class="size-box" data-size="${size}">${size}</div>`).join('')}
           </div>
-          <div class="product-info">
-            <div class="product-name">${sp.ten}</div>
-            <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
-            <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
+        </div>
 
-            <div class="size-select mb-3">
-              <label class="form-label">Chọn size:</label>
-              <div id="size-options" class="d-flex flex-wrap gap-2">
-                ${[37,38,39,40,41,42,43].map(size => `<div class="size-box" data-size="${size}">${size}</div>`).join('')}
-              </div>
-            </div>
+        <div class="quantity-select mb-3">
+          <label class="form-label">Số lượng:</label>
+          <input id="soLuong" type="number" min="1" max="${sp.soLuong || 10}" value="1" class="form-control" style="width:120px;">
+        </div>
 
-            <div class="quantity-select mb-3">
-              <label class="form-label">Số lượng:</label>
-              <input id="soLuong" type="number" min="1" max="${sp.soLuong || 10}" value="1" class="form-control" style="width:120px;">
-            </div>
+        <button class="btn btn-success btn-buy">Mua ngay</button>
+        <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
+      </div>
+    `;
 
-            <button class="btn btn-success btn-buy">Mua ngay</button>
-            <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
-          </div>
-        `;
+    // Chọn size
+    let selectedSize = null;
+    document.querySelectorAll('.size-box').forEach(box => {
+      box.addEventListener('click', () => {
+        document.querySelectorAll('.size-box').forEach(b => b.classList.remove('selected'));
+        box.classList.add('selected');
+        selectedSize = box.dataset.size;
+      });
+    });
 
-        let selectedSize = null;
-        document.querySelectorAll('.size-box').forEach(box => {
-          box.addEventListener('click', () => {
-            document.querySelectorAll('.size-box').forEach(b => b.classList.remove('selected'));
-            box.classList.add('selected');
-            selectedSize = box.dataset.size;
-          });
+    // Nút "Mua ngay"
+    document.querySelector('.btn-buy').addEventListener('click', () => {
+      if (!selectedSize) return alert('Vui lòng chọn size trước khi mua!');
+      alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
+    });
+
+    // ✅ Nút "Thêm vào giỏ hàng"
+    document.querySelector('.btn-cart').addEventListener('click', () => {
+      if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+      const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+      const existing = cart.find(item => item.id === sp.id && item.size === selectedSize);
+      if (existing) {
+        existing.soLuong += soLuong;
+      } else {
+        cart.push({
+          id: sp.id,
+          ten: sp.ten,
+          gia: sp.gia,
+          hinhAnh: sp.hinhAnh,
+          size: selectedSize,
+          soLuong: soLuong
         });
+      }
 
-        document.querySelector('.btn-buy').addEventListener('click', () => {
-          if (!selectedSize) return alert('Vui lòng chọn size trước khi mua!');
-          alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
-        });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Đã thêm vào giỏ hàng!');
+    });
+
+    // ✅ Gọi hiển thị đánh giá và trung bình sao ngay sau khi có sản phẩm
+    loadDanhGia();
+    loadTrungBinhSao();
+  });
 
 
- 
-   // ---------------- PHẦN ĐÁNH GIÁ ----------------
+// ------------------- PHẦN ĐÁNH GIÁ -------------------
 let selectedRating = 0;
 document.querySelectorAll('#rating-stars i').forEach(star => {
   star.addEventListener('click', () => {
@@ -278,8 +310,8 @@ document.getElementById('btnGuiDanhGia').addEventListener('click', () => {
       document.getElementById('noiDung').value = '';
       selectedRating = 0;
       document.querySelectorAll('#rating-stars i').forEach(s => s.classList.remove('active'));
-      loadDanhGia(); // load lại danh sách
-      loadTrungBinhSao(); // ✅ cập nhật trung bình luôn sau khi gửi
+      loadDanhGia();
+      loadTrungBinhSao();
     })
     .catch(err => alert('Lỗi khi gửi đánh giá: ' + err));
 });
@@ -317,7 +349,7 @@ function loadTrungBinhSao() {
       const soDanhGia = data.count || 0;
       const trungBinhElem = document.getElementById('trungBinhSao');
       trungBinhElem.innerHTML = `
-        <span class="fw-bold text-warning">${'★'.repeat(Math.round(data.avg))}</span>
+        <span class="fw-bold text-warning">${'★'.repeat(Math.round(data.avg || 0))}</span>
         <span class="text-secondary">(${trungBinh}/5 từ ${soDanhGia} đánh giá)</span>
       `;
     })
@@ -325,11 +357,6 @@ function loadTrungBinhSao() {
       document.getElementById('trungBinhSao').textContent = 'Chưa có đánh giá nào.';
     });
 }
-    });
-
-// ✅ Gọi ngay khi vào trang:
-loadDanhGia();
-loadTrungBinhSao();
   </script>
 
 </body>
