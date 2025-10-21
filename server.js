@@ -18,9 +18,9 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/images', express.static(path.join(__dirname, '..', 'public/images')));
 
 
 // Connect to Database
@@ -33,21 +33,13 @@ app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
 
 // Serve HTML files
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Trang_chu.html'));
-});
+app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '..', 'public', 'Trang_chu.html')); });
 
-app.get('/dang-ky', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Dang_ky.html'));
-});
+app.get('/dang-ky', (req, res) => { res.sendFile(path.join(__dirname, '..', 'public', 'Dang_ky.html')); });
 
-app.get('/dang-nhap', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Dang_nhap.html'));
-});
+app.get('/dang-nhap', (req, res) => { res.sendFile(path.join(__dirname, '..', 'public', 'Dang_nhap.html')); });
 
-app.get('/gio-hang', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Gio_hang.html'));
-});
+app.get('/gio-hang', (req, res) => { res.sendFile(path.join(__dirname, '..', 'public', 'Gio_hang.html')); });
 
 
 app.get('/health', (req, res) => {
