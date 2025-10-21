@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 // Thêm vào giỏ hàng
 router.post('/', async (req, res) => {
   try {
+    console.log("SERVER ĐÃ NHẬN POST, BODY:", JSON.stringify(req.body));
     const { MaKhachHang, MaSanPham, SoLuong, Size } = req.body;
 
     // Validate dữ liệu đầu vào
