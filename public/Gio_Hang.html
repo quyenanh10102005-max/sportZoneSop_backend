@@ -162,116 +162,171 @@
   <div class="gb">SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
 
   <script>
-    // Xử lý hiển thị người dùng đăng nhập
-    const user = localStorage.getItem("user");
-    const userNameSpan = document.getElementById("userName");
-    const registerLi = document.getElementById("registerLi");
-    const loginLi = document.getElementById("loginLi");
-    const logoutLi = document.getElementById("logoutLi");
+  // Xử lý hiển thị người dùng đăng nhập
+  const user = localStorage.getItem("user");
+  const userNameSpan = document.getElementById("userName");
+  const registerLi = document.getElementById("registerLi");
+  const loginLi = document.getElementById("loginLi");
+  const logoutLi = document.getElementById("logoutLi");
+  let currentUserId = null; // Lưu ID người dùng
 
-    if (user) {
-      const userData = JSON.parse(user);
-      userNameSpan.textContent = userData.TenDangNhap;
-      registerLi.style.display = "none";
-      loginLi.style.display = "none";
-      logoutLi.style.display = "block";
-    } else {
-      userNameSpan.textContent = "";
-      registerLi.style.display = "block";
-      loginLi.style.display = "block";
-      logoutLi.style.display = "none";
-    }
-
-    logoutLi.querySelector('a').addEventListener('click', function(e) {
-      e.preventDefault();
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = "Dang_nhap.html";
-    });
-
-    // Hiển thị giỏ hàng
-   async function renderCart() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const container = document.getElementById("cartItems");
-  const totalEl = document.getElementById("cartTotal");
-
-  if (!user) {
-    container.innerHTML = '<p class="text-center text-muted">Vui lòng đăng nhập để xem giỏ hàng.</p>';
-    totalEl.textContent = "";
-    return;
+  if (user) {
+    const userData = JSON.parse(user);
+    currentUserId = userData._id; // Lưu lại _id
+    userNameSpan.textContent = userData.TenDangNhap;
+    registerLi.style.display = "none";
+    loginLi.style.display = "none";
+    logoutLi.style.display = "block";
+  } else {
+    userNameSpan.textContent = "";
+    registerLi.style.display = "block";
+    loginLi.style.display = "block";
+    logoutLi.style.display = "none";
   }
 
-  try {
-    const res = await fetch(`/api/giohang/${user._id}`); // hoặc user.MaKhachHang
-    const cart = await res.json();
+  logoutLi.querySelector('a').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = "Dang_nhap.html";
+  });
 
-    if (!cart.length) {
-      container.innerHTML = '<p class="text-center text-muted">Giỏ hàng trống.</p>';
+  // ✅ [ĐÃ SỬA] Hiển thị giỏ hàng từ API
+  async function renderCart() {
+    const container = document.getElementById("cartItems");
+    const totalEl = document.getElementById("cartTotal");
+
+    if (!currentUserId) {
+      container.innerHTML = '<p class="text-center text-muted">Vui lòng đăng nhập để xem giỏ hàng.</p>';
       totalEl.textContent = "";
       return;
     }
 
-    let total = 0;
-    container.innerHTML = cart
-      .map((item) => {
-        const sp = item.MaSanPham; // vì đã populate trong API
-        const thanhTien = sp.gia * item.SoLuong;
-        total += thanhTien;
+    try {
+      const res = await fetch(`/api/giohang/${currentUserId}`); 
+      const cart = await res.json();
 
-        return `
-          <div class="cart-item">
-            <img src="${sp.hinhAnh}" alt="${sp.ten}">
-            <div class="cart-info">
-              <h5>${sp.ten}</h5>
-              <p>Size: ${item.Size} | Số lượng: ${item.SoLuong}</p>
-              <strong>${sp.gia.toLocaleString()}₫</strong>
-            </div>
-            <button class="btn-remove" onclick="removeItem('${item._id}')"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      })
-      .join("");
-
-    totalEl.textContent = `Tổng cộng: ${total.toLocaleString()}₫`;
-
-  } catch (err) {
-    container.innerHTML = `<p class="text-danger text-center">Lỗi khi tải giỏ hàng: ${err}</p>`;
-  }
-}
-
-    function removeItem(index) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCart();
-    }
-
-    // Xử lý thanh toán 
-    document.getElementById('checkoutBtn').addEventListener('click', () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      if (cart.length === 0) {
-        alert("Giỏ hàng trống, không thể thanh toán!");
+      if (!cart.length) {
+        container.innerHTML = '<p class="text-center text-muted">Giỏ hàng trống.</p>';
+        totalEl.textContent = "";
         return;
       }
-      alert("Thanh toán thành công! Cảm ơn bạn đã mua hàng ❤️");
-      localStorage.removeItem('cart');
-      renderCart();
-    });
 
-    renderCart();
+      let total = 0;
+      container.innerHTML = cart
+        .map((item) => {
+          // item.MaSanPham đã được 'populate' từ API
+          if (!item.MaSanPham) {
+            // Xử lý trường hợp sản phẩm đã bị xóa khỏi DB
+            return `<div class="cart-item text-danger">Một sản phẩm không còn tồn tại.</div>`;
+          }
+          const sp = item.MaSanPham;
+          const thanhTien = sp.gia * item.SoLuong;
+          total += thanhTien;
 
-//GIOT HÀNG
-    async function updateCartCount() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user) return;
+          return `
+            <div class="cart-item">
+              <img src="${sp.hinhAnh}" alt="${sp.ten}">
+              <div class="cart-info">
+                <h5>${sp.ten}</h5>
+                <p>Size: ${item.Size} | Số lượng: ${item.SoLuong}</p>
+                <strong>${sp.gia.toLocaleString()}₫</strong>
+              </div>
+              <button class="btn-remove" onclick="removeItem('${item._id}')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          `;
+        })
+        .join("");
 
-  const res = await fetch(`/api/giohang/${user._id}`);
-  const data = await res.json();
-  document.querySelector('.header_gio_hang i').setAttribute('data-count', data.length);
-}
+      totalEl.textContent = `Tổng cộng: ${total.toLocaleString()}₫`;
 
+    } catch (err) {
+      container.innerHTML = `<p class="text-danger text-center">Lỗi khi tải giỏ hàng: ${err}</p>`;
+    }
+  }
 
-updateCartCount();
-  </script>
+  // ✅ [ĐÃ SỬA] Hàm xóa sản phẩm khỏi giỏ hàng (Gọi API DELETE)
+  async function removeItem(itemId) {
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/giohang/${itemId}`, {
+        method: 'DELETE'
+      });
+
+      if (res.ok) {
+        alert('Đã xóa sản phẩm thành công.');
+        renderCart(); // Tải lại giỏ hàng
+        updateCartCount(); // Cập nhật lại số lượng ở header
+      } else {
+        const errData = await res.json();
+        alert('Lỗi khi xóa: ' + (errData.error || 'Lỗi không xác định'));
+      }
+    } catch (err) {
+      alert('Lỗi kết nối: ' + err);
+    }
+  }
+
+  // ✅ [ĐÃ SỬA] Xử lý thanh toán (Gọi API xóa giỏ hàng)
+  document.getElementById('checkoutBtn').addEventListener('click', async () => {
+    const totalText = document.getElementById('cartTotal').textContent;
+    
+    if (!totalText || totalText === "") {
+      alert("Giỏ hàng trống, không thể thanh toán!");
+      return;
+    }
+    
+    if (!currentUserId) {
+       alert("Lỗi: Không tìm thấy người dùng!");
+       return;
+    }
+
+    // [TƯƠNG LAI] Đây là nơi bạn sẽ thêm logic tạo Đơn Hàng
+    // ...
+
+    alert("Thanh toán thành công! Cảm ơn bạn đã mua hàng ❤️");
+
+    // Xóa toàn bộ giỏ hàng của khách hàng sau khi thanh toán thành công
+    try {
+      await fetch(`/api/giohang/clear/${currentUserId}`, { 
+        method: 'DELETE' 
+      });
+      renderCart(); // Tải lại (sẽ thấy giỏ trống)
+      updateCartCount(); // Cập nhật header về 0
+    } catch (err) {
+      console.error('Lỗi khi xóa giỏ hàng:', err);
+    }
+  });
+
+  // ✅ [ĐÃ SỬA] Hàm cập nhật số lượng ở icon giỏ hàng (Header)
+  async function updateCartCount() {
+    if (!currentUserId) {
+      document.querySelector('.header_gio_hang i').removeAttribute('data-count');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/giohang/${currentUserId}`);
+      const data = await res.json();
+      const cartIcon = document.querySelector('.header_gio_hang i');
+      
+      if (data.length > 0) {
+        cartIcon.setAttribute('data-count', data.length);
+      } else {
+        cartIcon.removeAttribute('data-count');
+      }
+    } catch (err) {
+       console.error('Lỗi khi cập nhật số lượng giỏ hàng:', err);
+    }
+  }
+
+  // Tải giỏ hàng và cập nhật số lượng khi trang được mở
+  renderCart();
+  updateCartCount();
+</script>
 </body>
 </html>

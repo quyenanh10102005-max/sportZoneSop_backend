@@ -155,7 +155,7 @@
 
  
   <script>
-    // =============== PHẦN SCRIPT CẬP NHẬT CHO SAN_PHAM.HTML ===============
+   // =============== PHẦN SCRIPT CẬP NHẬT CHO SAN_PHAM.HTML ===============
 // Thay thế toàn bộ script hiện tại bằng code này
 
 const user = localStorage.getItem("user");
@@ -257,6 +257,19 @@ fetch(`/api/sanpham/${id}`)
       const userData = JSON.parse(user);
       const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
 
+      // Validate số lượng
+      if (soLuong < 1) {
+        alert('Số lượng phải lớn hơn 0!');
+        return;
+      }
+
+      console.log('Dữ liệu gửi đi:', {
+        MaKhachHang: userData._id,
+        MaSanPham: sp._id,
+        SoLuong: soLuong,
+        Size: selectedSize
+      });
+
       try {
         const response = await fetch('/api/giohang', {
           method: 'POST',
@@ -264,7 +277,7 @@ fetch(`/api/sanpham/${id}`)
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            MaKhachHang: userData._id,  // Hoặc userData.MaKhachHang
+            MaKhachHang: userData._id,
             MaSanPham: sp._id,
             SoLuong: soLuong,
             Size: selectedSize
@@ -272,17 +285,19 @@ fetch(`/api/sanpham/${id}`)
         });
 
         const result = await response.json();
+        console.log('Kết quả từ server:', result);
 
         if (response.ok) {
           alert('✅ Đã thêm vào giỏ hàng thành công!');
           // Cập nhật số lượng giỏ hàng ở header
           updateCartCount();
         } else {
-          alert('❌ Lỗi: ' + result.error);
+          console.error('Lỗi từ server:', result);
+          alert('❌ Lỗi: ' + (result.error || 'Không thể thêm vào giỏ hàng'));
         }
       } catch (err) {
         console.error('Lỗi khi thêm vào giỏ hàng:', err);
-        alert('❌ Không thể kết nối đến server!');
+        alert('❌ Không thể kết nối đến server! Vui lòng kiểm tra console để biết chi tiết.');
       }
     });
 
