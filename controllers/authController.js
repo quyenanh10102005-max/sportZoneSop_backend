@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
       message: 'Đăng nhập thành công',
       token,
       user: {
-        MaTK: user._id,
+        _id: user._id,
         TenDangNhap: user.TenDangNhap,
         Email: user.Email
       }
