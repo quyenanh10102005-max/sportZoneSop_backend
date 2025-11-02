@@ -205,7 +205,7 @@
     }
 
     try {
-      const res = await fetch(`/api/giohang/${currentUserId}`); 
+      const res = await fetch(`https://sportzoneshop.onrender.com/api/giohang/${currentUserId}`); 
       const cart = await res.json();
 
       if (!cart.length) {
@@ -256,7 +256,7 @@
     }
 
     try {
-      const res = await fetch(`/api/giohang/${itemId}`, {
+      const res = await fetch(`https://sportzoneshop.onrender.com/api/giohang/${itemId}`, {
         method: 'DELETE'
       });
 
@@ -294,7 +294,7 @@
 
     // Xóa toàn bộ giỏ hàng của khách hàng sau khi thanh toán thành công
     try {
-      await fetch(`/api/giohang/clear/${currentUserId}`, { 
+      await fetch(`https://sportzoneshop.onrender.com/api/giohang/clear/${currentUserId}`, { 
         method: 'DELETE' 
       });
       renderCart(); // Tải lại (sẽ thấy giỏ trống)
@@ -312,7 +312,7 @@
     }
 
     try {
-      const res = await fetch(`/api/giohang/${currentUserId}`);
+      const res = await fetch(`https://sportzoneshop.onrender.com/api/giohang/${currentUserId}`);
       const data = await res.json();
       const cartIcon = document.querySelector('.header_gio_hang i');
       
