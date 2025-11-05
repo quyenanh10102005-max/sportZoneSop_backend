@@ -200,7 +200,7 @@ async function renderCart() {
   const checkoutBtn = document.getElementById("checkoutBtn");
 
   // Kiểm tra đăng nhập
-  if (!user || !user.TaiKhoan) {
+  if (!user || !user.MaTK) {
     container.innerHTML = `
       <p class="text-center text-muted">
         Vui lòng <a href="Dang_nhap.html">đăng nhập</a> để xem giỏ hàng.
