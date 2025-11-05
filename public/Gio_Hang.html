@@ -200,7 +200,7 @@ async function renderCart() {
   const checkoutBtn = document.getElementById("checkoutBtn");
 
   // Kiểm tra đăng nhập
-  if (!user || !user._id) {
+  if (!user || !user.TaiKhoan) {
     container.innerHTML = `
       <p class="text-center text-muted">
         Vui lòng <a href="Dang_nhap.html">đăng nhập</a> để xem giỏ hàng.
@@ -216,7 +216,7 @@ async function renderCart() {
 
   try {
     // ✅ Gọi API lấy giỏ hàng
-    const res = await fetch(`/api/giohang/${user._id}`);
+    const res = await fetch(`/api/giohang/${user.MaTK}`);
     
     if (!res.ok) {
       throw new Error('Không thể tải giỏ hàng');
@@ -331,7 +331,7 @@ async function removeItem(itemId) {
 // ======================= THANH TOÁN =======================
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user._id) {
+  if (!user || !user.MaTK) {
     alert('Vui lòng đăng nhập!');
     window.location.href = 'Dang_nhap.html';
     return;
@@ -339,7 +339,7 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
 
   try {
     // Lấy giỏ hàng hiện tại
-    const res = await fetch(`/api/giohang/${user._id}`);
+    const res = await fetch(`/api/giohang/${user.MaTK}`);
     const cart = await res.json();
     
     if (!cart || cart.length === 0) {
@@ -379,10 +379,10 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
 // ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
 async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user._id) return;
+  if (!user || !user.MaTK) return;
 
   try {
-    const res = await fetch(`/api/giohang/${user._id}`);
+    const res = await fetch(`/api/giohang/${user.MaTK}`);
     const cart = await res.json();
     const count = cart.length || 0;
     
