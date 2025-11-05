@@ -16,6 +16,55 @@
     font-family: 'Times New Roman', Times, serif;
     letter-spacing: 10px;
   }
+
+  .promo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+    background: url('https://images.unsplash.com/photo-1518081461904-9d8f136351c5?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+    min-height: 70vh;
+}
+
+.promo-box {
+    background: rgba(0, 0, 0, 0.65);
+    padding: 40px 50px;
+    border-radius: 18px;
+    text-align: center;
+    color: #fff;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 35px rgba(0,0,0,0.3);
+}
+
+.promo-box h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.promo-box p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 22px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    background: #007bff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
 </style>
 <body>
     <div class="welcome">Chào mừng đến với SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
@@ -79,9 +128,14 @@
   </nav>
 
 <main>
-
-
-<h1>HIỆN TẠI SHOP CHƯA CÓ KHUYẾN MÃI NÀO!!</h1>
+<div class="promo-container">
+        <div class="promo-box">
+            <h1>⚽ HIỆN TẠI CHƯA CÓ KHUYẾN MÃI</h1>
+            <p>Nhưng đừng lo! Những ưu đãi cực cháy đang được chuẩn bị...</p>
+            <p><strong>Hãy quay lại vào thời gian tới hoặc theo dõi Fanpage để cập nhật nhanh nhất!</strong></p>
+            <a href="Trang_chu.html" class="back-btn">QUAY LẠI TRANG CHỦ</a>
+        </div>
+    </div>
 </main>
    
 
