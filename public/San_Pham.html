@@ -259,7 +259,7 @@ if (!id) {
 
         // Kiểm tra đăng nhập
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || !user._id) {
+        if (!user || !user.id) {
           alert('Vui lòng đăng nhập để thêm vào giỏ hàng!');
           window.location.href = 'Dang_nhap.html';
           return;
@@ -273,8 +273,8 @@ if (!id) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              MaKhachHang: user._id,  // ✅ Sửa từ user.id → user._id
-              MaSanPham: sp._id,      // ✅ Sửa từ sp.id → sp._id
+              MaKhachHang: user.id,  // ✅ Sửa từ user.id → user.id
+              MaSanPham: sp.id,      // ✅ Sửa từ sp.id → sp.id
               SoLuong: soLuong,
               Size: selectedSize
             })
@@ -308,10 +308,10 @@ if (!id) {
 // ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
 async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user._id) return;
+  if (!user || !user.id) return;
 
   try {
-    const res = await fetch(`/api/giohang/${user._id}`);
+    const res = await fetch(`/api/giohang/${user.id}`);
     if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
     
     const cart = await res.json();
