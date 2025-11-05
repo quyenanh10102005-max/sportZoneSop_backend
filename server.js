@@ -31,6 +31,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sanpham', sanPhamRoutes)
 app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
+app.use('/api/giohang', require('./routes/giohang'));
 
 // Serve HTML files
 app.get('/', (req, res) => {
@@ -57,5 +58,6 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("✅ Server đang chạy...");
+  console.log(`✅ PORT: ${PORT}`);
 });

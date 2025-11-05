@@ -181,91 +181,185 @@
   </script>
 
   <script>
-    // ------------------- HIỂN THỊ CHI TIẾT SẢN PHẨM -------------------
+    // ======================= HIỂN THỊ CHI TIẾT SẢN PHẨM =======================
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
-fetch(`/api/sanpham/${id}`)
-  .then(res => res.json())
-  .then(sp => {
-    if (!sp.ten) {
-      document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
-      return;
-    }
-
-    // Hiển thị sản phẩm
-    document.getElementById('product-detail').innerHTML = `
-      <div class="product-image">
-        <img src="${sp.hinhAnh}" alt="${sp.ten}">
-      </div>
-      <div class="product-info">
-        <div class="product-name">${sp.ten}</div>
-        <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
-        <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
-
-        <div class="size-select mb-3">
-          <label class="form-label">Chọn size:</label>
-          <div id="size-options" class="d-flex flex-wrap gap-2">
-            ${[37,38,39,40,41,42,43].map(size => `<div class="size-box" data-size="${size}">${size}</div>`).join('')}
-          </div>
-        </div>
-
-        <div class="quantity-select mb-3">
-          <label class="form-label">Số lượng:</label>
-          <input id="soLuong" type="number" min="1" max="${sp.soLuong || 10}" value="1" class="form-control" style="width:120px;">
-        </div>
-
-        <button class="btn btn-success btn-buy">Mua ngay</button>
-        <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
-      </div>
-    `;
-
-    // Chọn size
-    let selectedSize = null;
-    document.querySelectorAll('.size-box').forEach(box => {
-      box.addEventListener('click', () => {
-        document.querySelectorAll('.size-box').forEach(b => b.classList.remove('selected'));
-        box.classList.add('selected');
-        selectedSize = box.dataset.size;
-      });
-    });
-
-    // Nút "Mua ngay"
-    document.querySelector('.btn-buy').addEventListener('click', () => {
-      if (!selectedSize) return alert('Vui lòng chọn size trước khi mua!');
-      alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
-    });
-
-    // ✅ Nút "Thêm vào giỏ hàng"
-    document.querySelector('.btn-cart').addEventListener('click', () => {
-      if (!selectedSize) return alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
-      const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-      // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
-      const existing = cart.find(item => item.id === sp.id && item.size === selectedSize);
-      if (existing) {
-        existing.soLuong += soLuong;
-      } else {
-        cart.push({
-          id: sp.id,
-          ten: sp.ten,
-          gia: sp.gia,
-          hinhAnh: sp.hinhAnh,
-          size: selectedSize,
-          soLuong: soLuong
-        });
+if (!id) {
+  document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
+} else {
+  fetch(`/api/sanpham/${id}`)
+    .then(res => {
+      if (!res.ok) throw new Error('Không tìm thấy sản phẩm');
+      return res.json();
+    })
+    .then(sp => {
+      if (!sp.ten) {
+        document.getElementById('product-detail').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
+        return;
       }
 
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert('Đã thêm vào giỏ hàng!');
+      // ✅ Hiển thị sản phẩm
+      document.getElementById('product-detail').innerHTML = `
+        <div class="product-image">
+          <img src="${sp.hinhAnh || '/images/default.jpg'}" alt="${sp.ten}">
+        </div>
+        <div class="product-info">
+          <div class="product-name">${sp.ten}</div>
+          <div class="product-price">${Number(sp.gia).toLocaleString()}₫</div>
+          <p>${sp.moTa || 'Không có mô tả chi tiết.'}</p>
+
+          <div class="size-select mb-3">
+            <label class="form-label">Chọn size:</label>
+            <div id="size-options" class="d-flex flex-wrap gap-2">
+              ${[37,38,39,40,41,42,43].map(size => 
+                `<div class="size-box" data-size="${size}">${size}</div>`
+              ).join('')}
+            </div>
+          </div>
+
+          <div class="quantity-select mb-3">
+            <label class="form-label">Số lượng:</label>
+            <input id="soLuong" type="number" min="1" max="${sp.soLuong || 10}" value="1" 
+                   class="form-control" style="width:120px;">
+          </div>
+
+          <button class="btn btn-success btn-buy">Mua ngay</button>
+          <button class="btn btn-primary btn-cart">Thêm vào giỏ hàng</button>
+        </div>
+      `;
+
+      // ======================= CHỌN SIZE =======================
+      let selectedSize = null;
+      document.querySelectorAll('.size-box').forEach(box => {
+        box.addEventListener('click', () => {
+          document.querySelectorAll('.size-box').forEach(b => b.classList.remove('selected'));
+          box.classList.add('selected');
+          selectedSize = box.dataset.size;
+        });
+      });
+
+      // ======================= NÚT "MUA NGAY" =======================
+      document.querySelector('.btn-buy').addEventListener('click', () => {
+        if (!selectedSize) {
+          alert('Vui lòng chọn size trước khi mua!');
+          return;
+        }
+        alert(`Bạn đã chọn mua ${sp.ten} - Size ${selectedSize}`);
+        // TODO: Chuyển đến trang thanh toán
+      });
+
+      // ======================= NÚT "THÊM VÀO GIỎ HÀNG" =======================
+      document.querySelector('.btn-cart').addEventListener('click', async () => {
+        // Kiểm tra đã chọn size chưa
+        if (!selectedSize) {
+          alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+          return;
+        }
+
+        // Kiểm tra đăng nhập
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || !user._id) {
+          alert('Vui lòng đăng nhập để thêm vào giỏ hàng!');
+          window.location.href = 'Dang_nhap.html';
+          return;
+        }
+
+        const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
+
+        // ✅ Gửi request lên server
+        try {
+          const response = await fetch('/api/giohang', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              MaKhachHang: user._id,  // ✅ Sửa từ user.id → user._id
+              MaSanPham: sp._id,      // ✅ Sửa từ sp.id → sp._id
+              SoLuong: soLuong,
+              Size: selectedSize
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert('✅ Đã thêm vào giỏ hàng!');
+            updateCartCount(); // Cập nhật số lượng icon giỏ hàng
+          } else {
+            alert('❌ Lỗi: ' + (data.error || 'Không thể thêm vào giỏ hàng'));
+          }
+        } catch (error) {
+          console.error('Lỗi kết nối:', error);
+          alert('❌ Không thể kết nối server! Vui lòng kiểm tra server đã chạy chưa.');
+        }
+      });
+
+      // Gọi hàm hiển thị đánh giá (nếu có)
+      if (typeof loadDanhGia === 'function') loadDanhGia();
+      if (typeof loadTrungBinhSao === 'function') loadTrungBinhSao();
+    })
+    .catch(err => {
+      console.error('Lỗi:', err);
+      document.getElementById('product-detail').innerHTML = 
+        `<p class="text-danger">Lỗi: ${err.message}</p>`;
     });
+}
 
-    // ✅ Gọi hiển thị đánh giá và trung bình sao ngay sau khi có sản phẩm
-    loadDanhGia();
-    loadTrungBinhSao();
-  });
+// ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
+async function updateCartCount() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || !user._id) return;
 
+  try {
+    const res = await fetch(`/api/giohang/${user._id}`);
+    if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
+    
+    const cart = await res.json();
+    const count = cart.length || 0;
+
+    // Hiển thị badge số lượng
+    const cartIcon = document.querySelector('.header_gio_hang i');
+    if (cartIcon) {
+      cartIcon.setAttribute('data-count', count);
+      
+      // Thêm CSS cho badge (chỉ thêm 1 lần)
+      if (!document.getElementById('cart-badge-style')) {
+        const style = document.createElement('style');
+        style.id = 'cart-badge-style';
+        style.textContent = `
+          .header_gio_hang {
+            position: relative;
+          }
+          .header_gio_hang i[data-count]:after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+          }
+          .header_gio_hang i[data-count="0"]:after {
+            display: none;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi cập nhật giỏ hàng:', err);
+  }
+}
+
+// Gọi khi load trang
+updateCartCount();
+loadDanhGia();
+loadTrungBinhSao();
 
 // ------------------- PHẦN ĐÁNH GIÁ -------------------
 let selectedRating = 0;
