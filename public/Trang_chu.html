@@ -272,19 +272,21 @@ function detectBrand(productName) {
 // ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
 async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user._id) return;
+  if (!user || !user.MaTK) return;
 
   try {
-    const res = await fetch(`/api/giohang/${user._id}`);
+    const res = await fetch(`/api/giohang/${user.MaTK}`);
     if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
     
     const cart = await res.json();
     const count = cart.length || 0;
 
+    // Hiển thị badge số lượng
     const cartIcon = document.querySelector('.header_gio_hang i');
     if (cartIcon) {
       cartIcon.setAttribute('data-count', count);
       
+      // Thêm CSS cho badge (chỉ thêm 1 lần)
       if (!document.getElementById('cart-badge-style')) {
         const style = document.createElement('style');
         style.id = 'cart-badge-style';
@@ -318,6 +320,7 @@ async function updateCartCount() {
   }
 }
 
+// Gọi khi load trang
 updateCartCount();
 </script>
 </body>

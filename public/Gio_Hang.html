@@ -140,7 +140,7 @@
       <div id="cartItems"></div>
       <div id="cartTotal" class="cart-total"></div>
       <div class="text-end mt-3">
-        <button class="btn-checkout" id="checkoutBtn">Thanh toán</button>
+        <button  class="btn-checkout" id="checkoutBtn" >Thanh toán</button>
       </div>
     </div>
   </main>
@@ -358,7 +358,8 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
     });
 
     // Xác nhận thanh toán
-    if (!confirm(`Xác nhận thanh toán ${total.toLocaleString()}₫?`)) return;
+    if (!confirm(`Xác nhận thanh toán`)) window.location.href='Thanh_Toan.html' ;
+     return;
 
     // TODO: Gọi API tạo đơn hàng ở đây
     // await fetch('/api/donhang', { method: 'POST', ... });
@@ -368,7 +369,6 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
       await fetch(`/api/giohang/${item._id}`, { method: 'DELETE' });
     }
 
-    alert("✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng ❤️");
     renderCart();
     updateCartCount();
 
