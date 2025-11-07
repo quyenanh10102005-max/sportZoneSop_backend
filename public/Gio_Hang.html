@@ -358,8 +358,11 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
     });
 
     // Xác nhận thanh toán
-    if (!confirm(`Xác nhận thanh toán`)) window.location.href='Thanh_Toan.html' ;
-     return;
+    if (!confirm("Xác nhận thanh toán?")) {
+  return; // Người dùng bấm Hủy → thoát
+}
+
+window.location.href = 'Thanh_Toan.html';
 
     // TODO: Gọi API tạo đơn hàng ở đây
     // await fetch('/api/donhang', { method: 'POST', ... });
