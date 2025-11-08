@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Trang_chu.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <style>
         body {
             background-color: #f5f5f5;
             font-family: 'Times New Roman', Times, serif;
         }
-
         .checkout-container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
-
         .checkout-header {
             text-align: center;
             margin-bottom: 40px;
@@ -29,13 +25,11 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
         .checkout-header h2 {
             color: #333;
             font-weight: bold;
             margin-bottom: 10px;
         }
-
         .checkout-steps {
             display: flex;
             justify-content: center;
@@ -44,13 +38,11 @@
             margin-top: 20px;
             flex-wrap: wrap;
         }
-
         .step {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .step-number {
             width: 35px;
             height: 35px;
@@ -62,39 +54,26 @@
             justify-content: center;
             font-weight: bold;
         }
-
         .step-number.active {
             background: #28a745;
             animation: pulse 1.5s infinite;
         }
-
         @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
-
         .checkout-content {
             display: grid;
             grid-template-columns: 1fr 400px;
             gap: 30px;
             margin-bottom: 40px;
         }
-
-        .form-section,
-        .summary-section {
+        .form-section, .summary-section {
             background: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
         .section-title {
             font-size: 1.5rem;
             font-weight: bold;
@@ -103,21 +82,16 @@
             border-bottom: 2px solid #f0f0f0;
             color: #333;
         }
-
         .form-group {
             margin-bottom: 20px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
-font-weight: 600;
+            font-weight: 600;
             color: #555;
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e1e5e9;
@@ -125,27 +99,21 @@ font-weight: 600;
             font-size: 15px;
             transition: all 0.3s;
         }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-
         .payment-methods {
             display: grid;
             gap: 15px;
             margin-bottom: 20px;
         }
-
         .payment-method {
             border: 2px solid #e1e5e9;
             border-radius: 8px;
@@ -156,73 +124,60 @@ font-weight: 600;
             align-items: center;
             gap: 15px;
         }
-
         .payment-method:hover {
             border-color: #007bff;
             background: #f8f9fa;
         }
-
         .payment-method input[type="radio"] {
             width: 20px;
             height: 20px;
             cursor: pointer;
         }
-
         .payment-method.selected {
             border-color: #007bff;
             background: #e7f3ff;
         }
-
         .payment-icon {
             font-size: 24px;
             color: #007bff;
         }
-
         .product-item {
             display: flex;
             gap: 15px;
             padding: 15px 0;
             border-bottom: 1px solid #f0f0f0;
         }
-
         .product-item:last-child {
             border-bottom: none;
         }
-
         .product-img {
             width: 80px;
             height: 80px;
             object-fit: cover;
             border-radius: 8px;
         }
-
         .product-info {
             flex: 1;
         }
-
         .product-name {
             font-weight: 600;
             margin-bottom: 5px;
             color: #333;
         }
-
         .product-details {
             font-size: 14px;
             color: #666;
         }
-
         .product-price {
             font-weight: bold;
             color: #dc3545;
         }
-
         .summary-row {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
             font-size: 15px;
         }
-
         .summary-row.total {
             border-top: 2px solid #f0f0f0;
             margin-top: 15px;
@@ -231,26 +186,27 @@ font-weight: 600;
             font-weight: bold;
             color: #dc3545;
         }
-
         .btn-checkout {
             width: 100%;
             padding: 15px;
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
             border: none;
-border-radius: 8px;
+            border-radius: 8px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 20px;
         }
-
-        .btn-checkout:hover {
+        .btn-checkout:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
         }
-
+        .btn-checkout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .btn-back {
             width: 100%;
             padding: 12px;
@@ -264,12 +220,10 @@ border-radius: 8px;
             transition: all 0.3s;
             margin-top: 10px;
         }
-
         .btn-back:hover {
             background: #007bff;
             color: white;
         }
-
         .alert-info {
             background: #e7f3ff;
             border-left: 4px solid #007bff;
@@ -277,16 +231,13 @@ border-radius: 8px;
             border-radius: 5px;
             margin-bottom: 20px;
         }
-
         @media (max-width: 992px) {
             .checkout-content {
                 grid-template-columns: 1fr;
             }
-
             .form-row {
                 grid-template-columns: 1fr;
             }
-
             .checkout-steps {
                 flex-direction: column;
                 align-items: flex-start;
@@ -304,7 +255,6 @@ border-radius: 8px;
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" placeholder="Tìm kiếm sản phẩm ...">
         </div>
-
         <div class="header_menu">
             <i class="fa-solid fa-user" id="userIcon"></i>
             <span id="userName" style="margin-left: 8px; font-weight: bold;"></span>
@@ -314,7 +264,6 @@ border-radius: 8px;
                 <li id="logoutLi"><a href="./Dang_nhap.html">Đăng xuất</a></li>
             </ul>
         </div>
-
         <div class="header_gio_hang">
             <a href="Gio_Hang.html">
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -333,7 +282,7 @@ border-radius: 8px;
                     <li><a href="#">Giày sân cỏ tự nhiên</a></li>
                     <li><a href="#">Giày sân Futsal</a></li>
                 </ul>
-</li>
+            </li>
             <li class="submenu">
                 <a href="#">Thương hiệu</a>
                 <ul class="has_submenu">
@@ -374,7 +323,6 @@ border-radius: 8px;
         </div>
 
         <div class="checkout-content">
-            <!-- Form thông tin -->
             <div class="form-section">
                 <div class="section-title">
                     <i class="fa-solid fa-user"></i> Thông tin người nhận
@@ -399,7 +347,7 @@ border-radius: 8px;
 
                     <div class="form-group">
                         <label>Địa chỉ nhận hàng <span class="text-danger">*</span></label>
-<input type="text" id="address" placeholder="Số nhà, tên đường" required>
+                        <input type="text" id="address" placeholder="Số nhà, tên đường" required>
                     </div>
 
                     <div class="form-row">
@@ -416,15 +364,13 @@ border-radius: 8px;
                         </div>
                         <div class="form-group">
                             <label>Quận/Huyện <span class="text-danger">*</span></label>
-                            <input type="text" id="district" class="form-control" placeholder="Nhập Quận/Huyện"
-                                required>
+                            <input type="text" id="district" placeholder="Nhập Quận/Huyện" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Ghi chú đơn hàng</label>
-                        <textarea id="notes" rows="3"
-                            placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn"></textarea>
+                        <textarea id="notes" rows="3" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn"></textarea>
                     </div>
 
                     <div class="section-title mt-4">
@@ -451,7 +397,7 @@ border-radius: 8px;
                             <div>
                                 <strong>Chuyển khoản ngân hàng</strong>
                                 <div class="text-muted small">Chuyển khoản qua tài khoản ngân hàng</div>
-</div>
+                            </div>
                         </label>
 
                         <label class="payment-method" data-method="momo">
@@ -473,10 +419,17 @@ border-radius: 8px;
                         Chủ TK: Nguyễn Tùng Lâm<br>
                         Nội dung: [Số điện thoại] - [Họ tên]
                     </div>
+
+                    <button type="submit" class="btn-checkout">
+                        <i class="fa-solid fa-check-circle"></i> Đặt hàng
+                    </button>
                 </form>
+
+                <button type="button" class="btn-back" onclick="window.location.href='Gio_Hang.html'">
+                    <i class="fa-solid fa-arrow-left"></i> Quay lại giỏ hàng
+                </button>
             </div>
 
-            <!-- Tóm tắt đơn hàng -->
             <div class="summary-section">
                 <div class="section-title">
                     <i class="fa-solid fa-receipt"></i> Đơn hàng của bạn
@@ -498,13 +451,6 @@ border-radius: 8px;
                     <span>Tổng cộng:</span>
                     <span id="totalAmount">0₫</span>
                 </div>
-
-              <button type="submit" id="btnCheckout" class="btn-checkout">
-  <i class="fa-solid fa-check-circle"></i> Đặt hàng
-</button>
-                <button type="button" class="btn-back" onclick="window.location.href='Gio_Hang.html'">
-                    <i class="fa-solid fa-arrow-left"></i> Quay lại giỏ hàng
-                </button>
             </div>
         </div>
     </main>
@@ -517,10 +463,9 @@ border-radius: 8px;
             <p><i class="fa-solid fa-phone"></i> Hotline: 0329127111</p>
             <p><i class="fa-solid fa-envelope"></i> Email: Doaducthiendeptrai@gmail.com</p>
         </div>
-
         <div class="lien_ket">
             <a href="https://www.facebook.com/thien.uc.609096"><i class="fa-brands fa-facebook"></i></a>
-<a href="https://www.instagram.com/qanh1010/"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.instagram.com/qanh1010/"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://www.youtube.com/@quyenanh8600"><i class="fa-brands fa-youtube"></i></a>
         </div>
     </footer>
@@ -543,7 +488,6 @@ border-radius: 8px;
             loginLi.style.display = "none";
             logoutLi.style.display = "block";
 
-            // Tự động điền thông tin
             document.getElementById('email').value = userData.Email || '';
             document.getElementById('fullName').value = userData.TenDangNhap || '';
         } else {
@@ -568,48 +512,60 @@ border-radius: 8px;
                 this.querySelector('input[type="radio"]').checked = true;
 
                 const bankInfo = document.getElementById('bankInfo');
-                if (this.dataset.method === 'bank') {
-                    bankInfo.style.display = 'block';
-                } else {
-                    bankInfo.style.display = 'none';
-                }
+                bankInfo.style.display = this.dataset.method === 'bank' ? 'block' : 'none';
             });
         });
 
-        // ======================= TẢI ĐỞN HÀNG =======================
+        // ======================= TẢI ĐƠN HÀNG TỪ MONGODB =======================
         async function loadOrderSummary() {
             const userData = JSON.parse(localStorage.getItem('user'));
             if (!userData || !userData.MaTK) return;
 
             try {
                 const res = await fetch(`/api/giohang/${userData.MaTK}`);
+                
+                if (!res.ok) {
+                    throw new Error('Không thể tải giỏ hàng');
+                }
+                
                 const cart = await res.json();
-if (!cart || cart.length === 0) {
-                    document.getElementById('orderSummary').innerHTML = '<p class="text-muted">Giỏ hàng trống</p>';
+
+                if (!cart || cart.length === 0) {
+                    document.getElementById('orderSummary').innerHTML = `
+                        <div class="text-center text-muted">
+                            <i class="fa-solid fa-cart-shopping fa-2x mb-2"></i>
+                            <p>Giỏ hàng trống</p>
+                            <a href="Trang_chu.html" class="btn btn-primary btn-sm">Tiếp tục mua sắm</a>
+                        </div>
+                    `;
+                    document.querySelector('.btn-checkout').disabled = true;
                     return;
                 }
 
                 let subtotal = 0;
                 const orderHTML = cart.map(item => {
                     const sp = item.MaSanPham;
-                    if (!sp) return '';
+                    if (!sp || !sp._id) return '';
 
                     const itemTotal = sp.gia * item.SoLuong;
                     subtotal += itemTotal;
 
                     return `
-            <div class="product-item">
-              <img src="${sp.hinhAnh || '/images/default.jpg'}" alt="${sp.ten}" class="product-img">
-              <div class="product-info">
-                <div class="product-name">${sp.ten}</div>
-                <div class="product-details">
-                  Size: ${item.Size} | SL: ${item.SoLuong}
-                </div>
-                <div class="product-price">${itemTotal.toLocaleString()}₫</div>
-              </div>
-            </div>
-          `;
-                }).join('');
+                        <div class="product-item">
+                            <img src="${sp.hinhAnh || '/images/default.jpg'}" 
+                                 alt="${sp.ten}" 
+                                 class="product-img"
+                                 onerror="this.src='/images/default.jpg'">
+                            <div class="product-info">
+                                <div class="product-name">${sp.ten}</div>
+                                <div class="product-details">
+                                    Size: ${item.Size} | SL: ${item.SoLuong}
+                                </div>
+                                <div class="product-price">${itemTotal.toLocaleString()}₫</div>
+                            </div>
+                        </div>
+                    `;
+                }).filter(html => html).join('');
 
                 document.getElementById('orderSummary').innerHTML = orderHTML;
                 document.getElementById('subtotal').textContent = subtotal.toLocaleString() + '₫';
@@ -618,9 +574,20 @@ if (!cart || cart.length === 0) {
                 const total = subtotal + shippingFee;
                 document.getElementById('totalAmount').textContent = total.toLocaleString() + '₫';
 
+                console.log('✅ Đã tải thành công', cart.length, 'sản phẩm từ MongoDB');
+
             } catch (err) {
-                console.error('Lỗi:', err);
-                document.getElementById('orderSummary').innerHTML = '<p class="text-danger">Lỗi khi tải đơn hàng</p>';
+                console.error('❌ Lỗi:', err);
+                document.getElementById('orderSummary').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        Lỗi khi tải đơn hàng: ${err.message}
+                        <br>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="loadOrderSummary()">
+                            Thử lại
+                        </button>
+                    </div>
+                `;
             }
         }
 
@@ -633,7 +600,7 @@ if (!cart || cart.length === 0) {
             const email = document.getElementById('email').value.trim();
             const address = document.getElementById('address').value.trim();
             const city = document.getElementById('city').value;
-            const district = document.getElementById('district').value;
+            const district = document.getElementById('district').value.trim();
             const notes = document.getElementById('notes').value.trim();
             const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
@@ -648,9 +615,14 @@ if (!cart || cart.length === 0) {
             }
 
             const userData = JSON.parse(localStorage.getItem('user'));
-try {
-                // Lấy giỏ hàng
+
+            try {
                 const cartRes = await fetch(`/api/giohang/${userData.MaTK}`);
+                
+                if (!cartRes.ok) {
+                    throw new Error('Không thể lấy giỏ hàng');
+                }
+                
                 const cart = await cartRes.json();
 
                 if (!cart || cart.length === 0) {
@@ -663,7 +635,6 @@ try {
                     return;
                 }
 
-                // Tính tổng tiền
                 let subtotal = 0;
                 cart.forEach(item => {
                     if (item.MaSanPham) {
@@ -674,19 +645,18 @@ try {
                 const shippingFee = 30000;
                 const total = subtotal + shippingFee;
 
-                // Hiển thị xác nhận
                 const result = await Swal.fire({
                     icon: 'question',
                     title: 'Xác nhận đặt hàng',
                     html: `
-            <div style="text-align: left;">
-              <p><strong>Người nhận:</strong> ${fullName}</p>
-              <p><strong>Số điện thoại:</strong> ${phone}</p>
-              <p><strong>Địa chỉ:</strong> ${address}, ${district}, ${city}</p>
-              <p><strong>Tổng tiền:</strong> <span style="color: #dc3545; font-weight: bold;">${total.toLocaleString()}₫</span></p>
-              <p><strong>Thanh toán:</strong> ${paymentMethod === 'cod' ? 'COD' : paymentMethod === 'bank' ? 'Chuyển khoản' : 'MoMo'}</p>
-            </div>
-          `,
+                        <div style="text-align: left;">
+                            <p><strong>Người nhận:</strong> ${fullName}</p>
+                            <p><strong>Số điện thoại:</strong> ${phone}</p>
+                            <p><strong>Địa chỉ:</strong> ${address}, ${district}, ${city}</p>
+                            <p><strong>Tổng tiền:</strong> <span style="color: #dc3545; font-weight: bold;">${total.toLocaleString()}₫</span></p>
+                            <p><strong>Thanh toán:</strong> ${paymentMethod === 'cod' ? 'COD' : paymentMethod === 'bank' ? 'Chuyển khoản' : 'MoMo'}</p>
+                        </div>
+                    `,
                     showCancelButton: true,
                     confirmButtonText: 'Xác nhận đặt hàng',
                     cancelButtonText: 'Hủy',
@@ -696,21 +666,19 @@ try {
                 if (!result.isConfirmed) return;
 
                 // TODO: Gọi API tạo đơn hàng ở đây
-                // await fetch('/api/donhang', { method: 'POST', ... });
+                // await fetch('/api/donhang', { method: 'POST', body: JSON.stringify({...}) });
 
-                // Xóa giỏ hàng
                 for (const item of cart) {
                     await fetch(`/api/giohang/${item._id}`, { method: 'DELETE' });
                 }
 
-                // Thành công
                 await Swal.fire({
                     icon: 'success',
                     title: 'Đặt hàng thành công!',
                     html: `
-            <p>Cảm ơn bạn đã mua hàng tại SportZoneVN!</p>
-            <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
-          `,
+                        <p>Cảm ơn bạn đã mua hàng tại SportZoneVN!</p>
+                        <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+                    `,
                     confirmButtonText: 'Về trang chủ',
                     confirmButtonColor: '#28a745'
                 });
@@ -718,31 +686,18 @@ try {
                 window.location.href = 'Trang_chu.html';
 
             } catch (err) {
-                console.error('Lỗi:', err);
+                console.error('❌ Lỗi:', err);
                 Swal.fire({
-icon: 'error',
+                    icon: 'error',
                     title: 'Lỗi khi đặt hàng!',
                     text: 'Có lỗi xảy ra. Vui lòng thử lại!',
                     confirmButtonText: 'OK'
                 });
             }
         });
-        document.getElementById("btnCheckout").addEventListener("click", function() {
-    // Lấy dữ liệu giỏ hàng
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    if (cart.length > 0) {
-      alert("✅ Đặt hàng thành công!");
-      // có thể chuyển hướng sang trang cảm ơn, ví dụ:
-      // window.location.href = "thankyou.html";
-    } else {
-      alert("❌ Không có sản phẩm trong giỏ hàng!");
-    }
-  });
 
         // ======================= KHỞI CHẠY =======================
         loadOrderSummary();
     </script>
 </body>
-
 </html>
