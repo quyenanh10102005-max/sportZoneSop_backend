@@ -368,9 +368,9 @@ window.location.href = 'Thanh_Toan.html';
     // await fetch('/api/donhang', { method: 'POST', ... });
 
     // Xóa tất cả sản phẩm trong giỏ
-    for (const item of cart) {
-      await fetch(`/api/giohang/${item._id}`, { method: 'DELETE' });
-    }
+   // for (const item of cart) {
+   // await fetch(`/api/giohang/${item._id}`, { method: 'DELETE' });
+   // }
 
     renderCart();
     updateCartCount();
