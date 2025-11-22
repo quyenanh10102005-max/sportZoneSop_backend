@@ -12,4 +12,4 @@ const danhGiaSchema = new mongoose.Schema({
   SoSao: { type: Number, min: 1, max: 5, required: true }
 });
 
-module.exports = mongoose.model('DanhGia', danhGiaSchema);
+module.exports = mongoose.models.DanhGia || mongoose.model('DanhGia', danhGiaSchema);
