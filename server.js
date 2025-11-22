@@ -6,6 +6,7 @@ const connectDB = require('./db');
 const sanPhamRoutes = require('./routes/sanpham');
 const danhGiaRoutes = require('./routes/danhgia');
 const gioHangRoutes = require('./routes/giohang');
+const adminRoutes = require('./routes/admin');
 
 
 dotenv.config();
@@ -32,6 +33,7 @@ app.use('/api/sanpham', sanPhamRoutes)
 app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
 app.use('/api/giohang', require('./routes/giohang'));
+app.use('/api/admin', adminRoutes);
 
 // Serve HTML files
 app.get('/', (req, res) => {
