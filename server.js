@@ -16,7 +16,7 @@ const cors = require('cors');
 // ========== CORS FIX ==========
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://sportzonesop.onrender.com'
+  'https://sportzoneshop.onrender.com'
 ];
 
 app.use(cors({
