@@ -126,9 +126,9 @@
             }
 
             try {
-         const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000' 
-    : 'https://sportzoneshop.onrender.com';
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:3000' 
+                    : 'https://sportzoneshop.onrender.com';
 
                 const res = await fetch(API_BASE_URL + "/api/auth/login", {
                     method: "POST",
