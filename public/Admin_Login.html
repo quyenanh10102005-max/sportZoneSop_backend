@@ -127,8 +127,8 @@
 
             try {
                 const API_BASE_URL = window.location.hostname === 'localhost' 
-                    ? 'http://localhost:3000' 
-                    : 'https://sportzonesop.onrender.com';
+    ? 'http://localhost:3000' 
+    : window.location.origin;
 
                 const res = await fetch(API_BASE_URL + "/api/auth/login", {
                     method: "POST",

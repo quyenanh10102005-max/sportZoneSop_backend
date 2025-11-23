@@ -427,9 +427,9 @@ if (token) {
 }
 console.log('==================');
 
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3000' 
-            : 'https://sportzonesop.onrender.com';
+            const API_BASE_URL = window.location.hostname === 'localhost' 
+                ? 'http://localhost:3000' 
+            : window.location.origin;
 
         let currentEditId = null;
 
