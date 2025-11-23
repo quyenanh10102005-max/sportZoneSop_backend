@@ -52,6 +52,13 @@ app.get('/gio-hang', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Gio_hang.html'));
 });
 
+app.get('/admin-login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Admin_Login.html'));
+});
+
+app.get('/admin-dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Admin_Dashboard.html'));
+});
 
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
