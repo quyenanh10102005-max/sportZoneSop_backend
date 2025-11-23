@@ -7,13 +7,21 @@ const DonHang = require('../models/DonHang');
 const GioHang = require('../models/GioHang');
 const DanhGia = require('../models/DanhGia');
 
-// Tất cả routes admin đều cần xác thực và kiểm tra quyền admin
-router.use(verifyToken, isAdmin);
+// ========== MIDDLEWARE XÁC THỰC ==========
+// Áp dụng cho TẤT CẢ routes admin
+router.use((req, res, next) => {
+  console.log('🔐 Admin route accessed:', req.method, req.path);
+  console.log('📝 Headers:', req.headers);
+  next();
+});
 
-// ============= THỐNG KÊ (ĐẶT LÊN ĐẦU) =============
+router.use(verifyToken);
+router.use(isAdmin);
+
+// ========== THỐNG KÊ (ĐẶT LÊANH ĐẦU) ==========
 router.get('/stats', async (req, res) => {
   try {
-    console.log('📊 Admin stats được gọi');
+    console.log('📊 Loading admin stats...');
     
     const totalUsers = await User.countDocuments();
     const totalProducts = await SanPham.countDocuments();
@@ -34,10 +42,10 @@ router.get('/stats', async (req, res) => {
       totalRevenue: totalRevenue[0]?.total || 0
     };
 
-    console.log('✅ Stats:', stats);
+    console.log('✅ Stats loaded:', stats);
     res.json(stats);
   } catch (err) {
-    console.error('❌ Lỗi stats:', err);
+    console.error('❌ Error loading stats:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -45,9 +53,12 @@ router.get('/stats', async (req, res) => {
 // ============= QUẢN LÝ NGƯỜI DÙNG =============
 router.get('/users', async (req, res) => {
   try {
+    console.log('👥 Loading users...');
     const users = await User.find().select('-MatKhau').sort({ NgayTao: -1 });
+    console.log(`✅ Found ${users.length} users`);
     res.json(users);
   } catch (err) {
+    console.error('❌ Error loading users:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -85,9 +96,12 @@ router.patch('/users/:id/role', async (req, res) => {
 // ============= QUẢN LÝ SẢN PHẨM =============
 router.get('/sanpham', async (req, res) => {
   try {
+    console.log('📦 Loading products...');
     const sanPhams = await SanPham.find().sort({ createdAt: -1 });
+    console.log(`✅ Found ${sanPhams.length} products`);
     res.json(sanPhams);
   } catch (err) {
+    console.error('❌ Error loading products:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -146,11 +160,14 @@ router.delete('/sanpham/:id', async (req, res) => {
 // ============= QUẢN LÝ GIỎ HÀNG =============
 router.get('/giohang', async (req, res) => {
   try {
+    console.log('🛒 Loading carts...');
     const gioHangs = await GioHang.find()
       .populate('MaSanPham')
       .sort({ NgayTao: -1 });
+    console.log(`✅ Found ${gioHangs.length} cart items`);
     res.json(gioHangs);
   } catch (err) {
+    console.error('❌ Error loading carts:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -167,12 +184,15 @@ router.delete('/giohang/:id', async (req, res) => {
   }
 });
 
-// ============= QUẢN LÝ ĐƠN HÀNG =============
+// ============= QUẢN LÝ ĐỚN HÀNG =============
 router.get('/donhang', async (req, res) => {
   try {
+    console.log('📋 Loading orders...');
     const donHangs = await DonHang.find().sort({ ngayDat: -1 });
+    console.log(`✅ Found ${donHangs.length} orders`);
     res.json(donHangs);
   } catch (err) {
+    console.error('❌ Error loading orders:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -204,9 +224,12 @@ router.delete('/donhang/:id', async (req, res) => {
 // ============= QUẢN LÝ ĐÁNH GIÁ =============
 router.get('/danhgia', async (req, res) => {
   try {
+    console.log('⭐ Loading reviews...');
     const danhGias = await DanhGia.find().sort({ NgayTao: -1 });
+    console.log(`✅ Found ${danhGias.length} reviews`);
     res.json(danhGias);
   } catch (err) {
+    console.error('❌ Error loading reviews:', err);
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
@@ -239,6 +262,15 @@ router.patch('/danhgia/:id/status', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
+});
+
+// ============= ERROR HANDLER =============
+router.use((err, req, res, next) => {
+  console.error('❌ Admin route error:', err);
+  res.status(500).json({ 
+    message: 'Lỗi server', 
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
 });
 
 module.exports = router;
