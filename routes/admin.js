@@ -10,8 +10,39 @@ const DanhGia = require('../models/DanhGia');
 // Tất cả routes admin đều cần xác thực và kiểm tra quyền admin
 router.use(verifyToken, isAdmin);
 
+// ============= THỐNG KÊ (ĐẶT LÊN ĐẦU) =============
+router.get('/stats', async (req, res) => {
+  try {
+    console.log('📊 Admin stats được gọi');
+    
+    const totalUsers = await User.countDocuments();
+    const totalProducts = await SanPham.countDocuments();
+    const totalOrders = await DonHang.countDocuments();
+    const totalCart = await GioHang.countDocuments();
+    const totalReviews = await DanhGia.countDocuments();
+    
+    const totalRevenue = await DonHang.aggregate([
+      { $group: { _id: null, total: { $sum: '$tongTien' } } }
+    ]);
+
+    const stats = {
+      totalUsers,
+      totalProducts,
+      totalOrders,
+      totalCart,
+      totalReviews,
+      totalRevenue: totalRevenue[0]?.total || 0
+    };
+
+    console.log('✅ Stats:', stats);
+    res.json(stats);
+  } catch (err) {
+    console.error('❌ Lỗi stats:', err);
+    res.status(500).json({ message: 'Lỗi server', error: err.message });
+  }
+});
+
 // ============= QUẢN LÝ NGƯỜI DÙNG =============
-// Lấy danh sách tất cả người dùng
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find().select('-MatKhau').sort({ NgayTao: -1 });
@@ -21,7 +52,6 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Xóa người dùng
 router.delete('/users/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -34,7 +64,6 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-// Cập nhật vai trò người dùng
 router.patch('/users/:id/role', async (req, res) => {
   try {
     const { MaVaiTro } = req.body;
@@ -54,7 +83,6 @@ router.patch('/users/:id/role', async (req, res) => {
 });
 
 // ============= QUẢN LÝ SẢN PHẨM =============
-// Lấy tất cả sản phẩm
 router.get('/sanpham', async (req, res) => {
   try {
     const sanPhams = await SanPham.find().sort({ createdAt: -1 });
@@ -64,7 +92,6 @@ router.get('/sanpham', async (req, res) => {
   }
 });
 
-// Lấy chi tiết 1 sản phẩm
 router.get('/sanpham/:id', async (req, res) => {
   try {
     const sanPham = await SanPham.findById(req.params.id);
@@ -77,7 +104,6 @@ router.get('/sanpham/:id', async (req, res) => {
   }
 });
 
-// Thêm sản phẩm mới
 router.post('/sanpham', async (req, res) => {
   try {
     const sanPham = new SanPham(req.body);
@@ -88,7 +114,6 @@ router.post('/sanpham', async (req, res) => {
   }
 });
 
-// Cập nhật sản phẩm
 router.put('/sanpham/:id', async (req, res) => {
   try {
     const sanPham = await SanPham.findByIdAndUpdate(
@@ -106,7 +131,6 @@ router.put('/sanpham/:id', async (req, res) => {
   }
 });
 
-// Xóa sản phẩm
 router.delete('/sanpham/:id', async (req, res) => {
   try {
     const sanPham = await SanPham.findByIdAndDelete(req.params.id);
@@ -120,7 +144,6 @@ router.delete('/sanpham/:id', async (req, res) => {
 });
 
 // ============= QUẢN LÝ GIỎ HÀNG =============
-// Lấy tất cả giỏ hàng
 router.get('/giohang', async (req, res) => {
   try {
     const gioHangs = await GioHang.find()
@@ -132,7 +155,6 @@ router.get('/giohang', async (req, res) => {
   }
 });
 
-// Xóa giỏ hàng
 router.delete('/giohang/:id', async (req, res) => {
   try {
     const gioHang = await GioHang.findByIdAndDelete(req.params.id);
@@ -146,7 +168,6 @@ router.delete('/giohang/:id', async (req, res) => {
 });
 
 // ============= QUẢN LÝ ĐƠN HÀNG =============
-// Lấy tất cả đơn hàng
 router.get('/donhang', async (req, res) => {
   try {
     const donHangs = await DonHang.find().sort({ ngayDat: -1 });
@@ -156,7 +177,6 @@ router.get('/donhang', async (req, res) => {
   }
 });
 
-// Lấy chi tiết đơn hàng
 router.get('/donhang/:id', async (req, res) => {
   try {
     const donHang = await DonHang.findById(req.params.id);
@@ -169,7 +189,6 @@ router.get('/donhang/:id', async (req, res) => {
   }
 });
 
-// Xóa đơn hàng
 router.delete('/donhang/:id', async (req, res) => {
   try {
     const donHang = await DonHang.findByIdAndDelete(req.params.id);
@@ -183,7 +202,6 @@ router.delete('/donhang/:id', async (req, res) => {
 });
 
 // ============= QUẢN LÝ ĐÁNH GIÁ =============
-// Lấy tất cả đánh giá
 router.get('/danhgia', async (req, res) => {
   try {
     const danhGias = await DanhGia.find().sort({ NgayTao: -1 });
@@ -193,7 +211,6 @@ router.get('/danhgia', async (req, res) => {
   }
 });
 
-// Xóa đánh giá
 router.delete('/danhgia/:id', async (req, res) => {
   try {
     const danhGia = await DanhGia.findByIdAndDelete(req.params.id);
@@ -206,7 +223,6 @@ router.delete('/danhgia/:id', async (req, res) => {
   }
 });
 
-// Cập nhật trạng thái đánh giá
 router.patch('/danhgia/:id/status', async (req, res) => {
   try {
     const { TrangThai } = req.body;
@@ -220,32 +236,6 @@ router.patch('/danhgia/:id/status', async (req, res) => {
       return res.status(404).json({ message: 'Không tìm thấy đánh giá' });
     }
     res.json({ message: 'Cập nhật trạng thái thành công', danhGia });
-  } catch (err) {
-    res.status(500).json({ message: 'Lỗi server', error: err.message });
-  }
-});
-
-// ============= THỐNG KÊ =============
-router.get('/stats', async (req, res) => {
-  try {
-    const totalUsers = await User.countDocuments();
-    const totalProducts = await SanPham.countDocuments();
-    const totalOrders = await DonHang.countDocuments();
-    const totalCart = await GioHang.countDocuments();
-    const totalReviews = await DanhGia.countDocuments();
-    
-    const totalRevenue = await DonHang.aggregate([
-      { $group: { _id: null, total: { $sum: '$tongTien' } } }
-    ]);
-
-    res.json({
-      totalUsers,
-      totalProducts,
-      totalOrders,
-      totalCart,
-      totalReviews,
-      totalRevenue: totalRevenue[0]?.total || 0
-    });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi server', error: err.message });
   }

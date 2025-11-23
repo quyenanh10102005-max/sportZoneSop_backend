@@ -28,12 +28,13 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 connectDB();
 
 // Routes
+app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/sanpham', sanPhamRoutes)
 app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
 app.use('/api/giohang', require('./routes/giohang'));
-app.use('/api/admin', adminRoutes);
+
 
 // Serve HTML files
 app.get('/', (req, res) => {
