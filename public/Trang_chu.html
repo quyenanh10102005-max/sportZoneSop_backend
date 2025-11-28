@@ -14,9 +14,8 @@
     <div class="welcome">Chào mừng đến với SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
 
 
-    <header>
-<!-- #Phần header : logo,tìm kiếm, Người dùng , giỏ hàng -->
-    <div class="header-logo"><img src="/images/Logo_.png" alt=""></div>
+    <header id="mainHeader">
+<div class="header-logo"><img src="/images/Logo_.png" alt="SportZoneVN Logo"></div>
    <div class="header-search">
     <i class="fa-solid fa-magnifying-glass"></i>
      <input  type="text" placeholder="Tìm kiếm sản phẩm ...">
@@ -24,16 +23,16 @@
 
   <div class="header_menu">
        <i class="fa-solid fa-user" id="userIcon"></i>
-    <span id="userName" style="margin-left: 8px; font-weight: bold;"></span>
-    <ul class="header_main_menu" id="menuList">
+    <span id="userName" style="margin-left: 8px; font-weight: bold; display:none;"></span> <ul class="header_main_menu" id="menuList">
+        <li id="welcomeMessage" style="padding: 10px 15px; font-weight: bold; display: none;">Xin chào, <span id="welcomeUserName"></span></li>
         <li id="registerLi"><a href="./Dang_ky.html">Đăng ký</a></li>
         <li id="loginLi"><a href="./Dang_nhap.html">Đăng nhập</a></li>
-        <li id="logoutLi"><a href="./Dang_nhap.html">Đăng xuất</a></li>
+        <li id="logoutLi"><a href="#" style="color: #dc3545;">Đăng xuất</a></li>
     </ul>
   </div>
  <div class="header_gio_hang">
   <a href="Gio_Hang.html">
-    <i class="fa-solid fa-cart-shopping"></i>
+    <i class="fa-solid fa-cart-shopping" data-count="0"></i>
   </a>
 </div>
     </header>
@@ -74,41 +73,40 @@
 
     <main>
 
-      <!-- #Ảnh slide chạy đầu menu -->
       <div class="carousel slide" id="productCarousel" data-bs-ride="carousel" data-bs-interval="3000">
 
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img src="/images/brand_banner_1.jpg" class="d-block w-100" alt=" ảnh 1">
+            <img src="/images/brand_banner_1.jpg" class="d-block w-100" alt="Banner giày Nike">
           </div>
 
           <div class="carousel-item ">
-            <img src="/images/brand_banner_2.jpg" class="d-block w-100" alt=" ảnh 2">
+            <img src="/images/brand_banner_2.jpg" class="d-block w-100" alt="Banner giày Adidas">
           </div>
 
           <div class="carousel-item ">
-            <img src="/images/index_banner_6.jpg" class="d-block w-100" alt=" ảnh 3">
+            <img src="/images/index_banner_6.jpg" class="d-block w-100" alt="Banner khuyến mãi">
           </div>
 
           <div class="carousel-item ">
-            <img src="/images/index_banner_7.jpg" class="d-block w-100" alt=" ảnh 4">
+            <img src="/images/index_banner_7.jpg" class="d-block w-100" alt="Banner giày mới">
           </div>
         </div>
       
-      <!-- #Mũi tên trái phải slide -->
-          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
+      <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
       </button>
       <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
       </button>
 
-      <!-- #Mấy dấu chấm ở bên dưới slide -->
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active"></button>
-          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1"></button>
-          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2"></button>
-          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="3"></button>
+      <div class="carousel-indicators">
+          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
         </div>
 
         </div>
@@ -117,7 +115,7 @@
 
     <div>
            <section class="container mt-5">
-  <h2 class="mb-4 text-center">SẢN PHẨM MỚI NHẤT</h2>
+  <h2 class="mb-4 text-center" style="color:#333; font-weight: 700; border-bottom: 2px solid #667eea; display: inline-block; padding-bottom: 5px;">SẢN PHẨM MỚI NHẤT</h2>
   <div class="row" id="ds-sanpham"></div>
 </section>
     </div>
@@ -128,29 +126,42 @@
 
 
     <footer>
-      <div class="hotline">
+      <div class="footer-section footer-info">
         <h2>THÔNG TIN LIÊN HỆ</h2>
-        <h1>SportZoneVN - Giày bóng đá</h1>
+        <p style="font-weight: bold; color: #ffffff;">SportZoneVN - Giày bóng đá chính hãng</p>
         <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
-        <p><i class="fa-solid fa-phone"></i> Hotline:0329127111</p>
-        <p><i class="fa-solid fa-envelope"></i> Email:Doaducthiendeptrai@gmail.com</p>
+        <p><i class="fa-solid fa-phone"></i> Hotline: 0329127111</p>
+        <p><i class="fa-solid fa-envelope"></i> Email: Doaducthiendeptrai@gmail.com</p>
       </div>
 
-      <div class="lien_ket">
-         <a href="https://www.facebook.com/thien.uc.609096">
-          <i class="fa-brands fa-facebook"></i>
+      <div class="footer-section footer-links">
+        <h2>HỖ TRỢ KHÁCH HÀNG</h2>
+        <ul>
+          <li><a href="#">Hướng dẫn đặt hàng</a></li>
+          <li><a href="#">Chính sách bảo mật</a></li>
+          <li><a href="#">Chính sách đổi trả</a></li>
+          <li><a href="#">FAQ - Câu hỏi thường gặp</a></li>
+        </ul>
+      </div>
+
+       <div class="footer-section footer-social">
+        <h2>KẾT NỐI VỚI CHÚNG TÔI</h2>
+        <div class="lien_ket">
+         <a href="https://www.facebook.com/thien.uc.609096" target="_blank" aria-label="Facebook">
+          <i class="fa-brands fa-square-facebook"></i>
          </a>
 
-         <a href="https://www.instagram.com/qanh1010/">
-          <i class="fa-brands fa-instagram"></i>
+         <a href="https://www.instagram.com/qanh1010/" target="_blank" aria-label="Instagram">
+          <i class="fa-brands fa-square-instagram"></i>
          </a>
 
-         <a href="https://www.youtube.com/@quyenanh8600">
+         <a href="https://www.youtube.com/@quyenanh8600" target="_blank" aria-label="Youtube">
           <i class="fa-brands fa-youtube"></i>
          </a>
+        </div>
       </div>
     </footer>
-     <div class="gb">SportZoneVn - Giày bóng đá chính hãng Việt Nam</div>
+     <div class="gb">© 2025 SportZoneVn - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.</div>
 
 
     
@@ -159,10 +170,12 @@
 
 
      <script>
- 
+ // ======================= CHỈNH SỬA XỬ LÝ ĐĂNG NHẬP/ĐĂNG XUẤT =======================
   const user = localStorage.getItem("user");
 
   const userNameSpan = document.getElementById("userName");
+  const welcomeMessageLi = document.getElementById("welcomeMessage");
+  const welcomeUserNameSpan = document.getElementById("welcomeUserName");
   const registerLi = document.getElementById("registerLi");
   const loginLi = document.getElementById("loginLi");
   const logoutLi = document.getElementById("logoutLi");
@@ -170,7 +183,11 @@
   if (user) {
     // Nếu đã đăng nhập
     const userData = JSON.parse(user);
-    userNameSpan.textContent = userData.TenDangNhap;
+    const displayUsername = userData.TenDangNhap.length > 15 ? userData.TenDangNhap.substring(0, 15) + '...' : userData.TenDangNhap;
+
+    // userNameSpan.textContent = displayUsername; // Giữ lại nếu muốn hiện tên cạnh icon
+    welcomeUserNameSpan.textContent = displayUsername;
+    welcomeMessageLi.style.display = "block";
 
     registerLi.style.display = "none";
     loginLi.style.display = "none";
@@ -178,6 +195,7 @@
   } else {
     // Nếu chưa đăng nhập
     userNameSpan.textContent = "";
+    welcomeMessageLi.style.display = "none";
     registerLi.style.display = "block";
     loginLi.style.display = "block";
     logoutLi.style.display = "none";
@@ -190,13 +208,25 @@
     localStorage.removeItem('user');
     window.location.href = "Dang_nhap.html";
   });
+  
+ // ======================= HIỆU ỨNG STICKY HEADER =======================
+const header = document.getElementById('mainHeader');
+const sticky = header.offsetTop;
+
+function stickyHeader() {
+  if (window.scrollY > 0) {
+    header.classList.add("header-scrolled");
+  } else {
+    header.classList.remove("header-scrolled");
+  }
+}
+window.onscroll = stickyHeader;
 </script>
 
 
 
 
-  <!-- Lấy thopon=tin sản phẩm -->
-<script>
+  <script>
 // ======================= TÌM KIẾM TỪ HEADER =======================
 const searchInput = document.querySelector('.header-search input');
 
@@ -235,20 +265,33 @@ fetch('/api/sanpham')
       const brandName = detectBrand(sp.ten);
       
       return `
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 shadow-sm" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer;">
+        <div class="col-6 col-md-4 col-lg-3 mb-4"> <div class="card h-100 shadow-sm product-card" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer; border: none; transition: transform 0.3s, box-shadow 0.3s;">
+             <div style="position: absolute; top: 10px; left: 10px; background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; z-index: 10;">NEW</div>
             <img src="${sp.hinhAnh ? sp.hinhAnh : '/images/default-shoe.jpg'}" 
                  class="card-img-top" 
                  alt="${sp.ten}"
-                 style="height: 200px; object-fit: cover;">
+                 style="height: 180px; object-fit: cover; border-radius: 8px 8px 0 0;">
             <div class="card-body text-center">
-              <h5 class="card-title">${sp.ten}</h5>
-              <p class="text-danger fw-bold mt-2">${Number(sp.gia).toLocaleString()}₫</p>
+              <p class="text-muted" style="font-size: 12px; margin-bottom: 5px;">${brandName || 'Chưa rõ thương hiệu'}</p>
+              <h6 class="card-title" style="font-weight: 600; font-size: 15px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${sp.ten}</h6>
+              <p class="text-danger fw-bold mt-2" style="font-size: 18px;">${Number(sp.gia).toLocaleString()}₫</p>
             </div>
           </div>
         </div>
       `;
     }).join('');
+    
+    // Thêm hiệu ứng hover cho card sản phẩm
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.1)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        });
+    });
   })
   .catch(err => {
     console.error('Lỗi khi tải sản phẩm:', err);
@@ -272,7 +315,12 @@ function detectBrand(productName) {
 // ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
 async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.MaTK) return;
+  const cartIcon = document.querySelector('.header_gio_hang i');
+
+  if (!user || !user.MaTK) {
+      if(cartIcon) cartIcon.setAttribute('data-count', 0);
+      return;
+  }
 
   try {
     const res = await fetch(`/api/giohang/${user.MaTK}`);
@@ -282,41 +330,13 @@ async function updateCartCount() {
     const count = cart.length || 0;
 
     // Hiển thị badge số lượng
-    const cartIcon = document.querySelector('.header_gio_hang i');
     if (cartIcon) {
       cartIcon.setAttribute('data-count', count);
-      
-      // Thêm CSS cho badge (chỉ thêm 1 lần)
-      if (!document.getElementById('cart-badge-style')) {
-        const style = document.createElement('style');
-        style.id = 'cart-badge-style';
-        style.textContent = `
-          .header_gio_hang {
-            position: relative;
-          }
-          .header_gio_hang i[data-count]:after {
-            content: attr(data-count);
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 11px;
-            font-weight: bold;
-            min-width: 18px;
-            text-align: center;
-          }
-          .header_gio_hang i[data-count="0"]:after {
-            display: none;
-          }
-        `;
-        document.head.appendChild(style);
-      }
     }
+    
   } catch (err) {
     console.error('Lỗi cập nhật giỏ hàng:', err);
+     if(cartIcon) cartIcon.setAttribute('data-count', 0);
   }
 }
 
