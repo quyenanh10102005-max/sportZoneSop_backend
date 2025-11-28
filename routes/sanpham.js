@@ -2,59 +2,121 @@ const express = require('express');
 const router = express.Router();
 const SanPham = require('../models/SanPham');
 
-
-
-//Tìm kiếm
+// =================== TÌM KIẾM VÀ LỌC SẢN PHẨM ===================
+// GET /api/sanpham/search
+// Query params supported:
+// q, thuongHieu (comma separated), loai, size, minPrice, maxPrice, page, limit, sort
 router.get('/search', async (req, res) => {
   try {
-    const { q, thuongHieu, loai, minPrice, maxPrice } = req.query;
-    
-    let query = {};
+    const {
+      q,
+      thuongHieu,
+      loai,
+      size,
+      minPrice,
+      maxPrice,
+      page = 1,
+      limit = 24,
+      sort
+    } = req.query;
 
-    // Tìm kiếm theo tên
+    const andClauses = [];
+
+    // 1) Tìm kiếm toàn văn trên tên / mô tả / thương hiệu
     if (q) {
-      query.ten = { $regex: q, $options: 'i' };
-    }
-
-    // Lọc theo thương hiệu - TÌM TRONG TÊN
-    if (thuongHieu) {
-      query.ten = { $regex: thuongHieu, $options: 'i' };
-    }
-
-    // Lọc theo loại - TÌM TRONG TÊN HOẶC MÔ TẢ
-    if (loai) {
-      const loaiKeywords = {
-        'Sân cỏ nhân tạo': ['TF', 'turf', 'nhân tạo', 'AG'],
-        'Sân cỏ tự nhiên': ['FG', 'firm ground', 'tự nhiên'],
-        'Sân Futsal': ['IC', 'futsal', 'indoor']
-      };
-      
-      const keywords = loaiKeywords[loai] || [loai];
-      // Tìm nếu TÊN hoặc MÔ TẢ chứa BẤT KỲ từ khóa nào
-      query.$or = keywords.map(keyword => ({
+      const qRegex = { $regex: q, $options: 'i' };
+      andClauses.push({
         $or: [
-          { ten: { $regex: keyword, $options: 'i' } },
-          { moTa: { $regex: keyword, $options: 'i' } }
+          { ten: qRegex },
+          { moTa: qRegex },
+          { thuongHieu: qRegex }
+        ]
+      });
+    }
+
+    // 2) Lọc theo thương hiệu (thuongHieu có thể là danh sách phân tách bởi dấu phẩy)
+    if (thuongHieu) {
+      const brands = thuongHieu.split(',').map(b => b.trim()).filter(Boolean);
+      if (brands.length) {
+        // Nếu model có field thuongHieu, dùng match trực tiếp để tận dụng index
+        andClauses.push({ thuongHieu: { $in: brands } });
+      }
+    }
+
+    // 3) Lọc theo loại (loai có thể là tên đầy đủ hoặc key -> chuyển sang tìm trong tên/mô tả)
+    if (loai) {
+      // Map từ loại sang các từ khóa có thể xuất hiện trong tên/mô tả
+      const loaiKeywords = {
+        'Sân cỏ nhân tạo': ['TF', 'turf', 'nhân tạo', 'AG', 'sân cỏ nhân tạo'],
+        'Sân cỏ tự nhiên': ['FG', 'firm ground', 'tự nhiên', 'sân cỏ tự nhiên'],
+        'Sân Futsal': ['IC', 'futsal', 'indoor', 'sân futsal'],
+        'Khác': []
+      };
+
+      const keywords = loaiKeywords[loai] && loaiKeywords[loai].length
+        ? loaiKeywords[loai]
+        : [loai];
+
+      // Tạo clause: (ten có keyword OR moTa có keyword) OR (loai chính xác nếu lưu ở model)
+      const orForLoai = keywords.map(k => ({
+        $or: [
+          { ten: { $regex: k, $options: 'i' } },
+          { moTa: { $regex: k, $options: 'i' } }
         ]
       }));
+
+      if (orForLoai.length) {
+        andClauses.push({ $or: orForLoai });
+      }
     }
 
-    // Lọc theo giá
+    // 4) Lọc theo kích cỡ (size) - nếu model lưu size là mảng string
+    if (size) {
+      // Hỗ trợ nhiều size phân tách bằng dấu phẩy
+      const sizes = size.split(',').map(s => s.trim()).filter(Boolean);
+      if (sizes.length) {
+        andClauses.push({ size: { $in: sizes } });
+      }
+    }
+
+    // 5) Lọc theo khoảng giá
     if (minPrice || maxPrice) {
-      query.gia = {};
-      if (minPrice) query.gia.$gte = Number(minPrice);
-      if (maxPrice) query.gia.$lte = Number(maxPrice);
+      const giaClause = {};
+      if (minPrice) giaClause.$gte = Number(minPrice);
+      if (maxPrice) giaClause.$lte = Number(maxPrice);
+      andClauses.push({ gia: giaClause });
     }
 
-    console.log('Search query:', JSON.stringify(query, null, 2));
-    
-    const sanPhams = await SanPham.find(query).sort({ createdAt: -1 });
-    
-    console.log(`✅ Tìm thấy ${sanPhams.length} sản phẩm`);
-    
-    res.json(sanPhams);
+    // Kết hợp các điều kiện
+    const finalQuery = andClauses.length ? { $and: andClauses } : {};
+
+    // Phân trang & sắp xếp
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.min(100, Math.max(1, Number(limit)));
+    const skip = (pageNum - 1) * limitNum;
+
+    let sortOption = { createdAt: -1 }; // default newest
+    if (sort === 'price_asc') sortOption = { gia: 1 };
+    else if (sort === 'price_desc') sortOption = { gia: -1 };
+    else if (sort === 'newest') sortOption = { createdAt: -1 };
+
+    // Lấy tổng và dữ liệu
+    const [total, sanPhams] = await Promise.all([
+      SanPham.countDocuments(finalQuery),
+      SanPham.find(finalQuery)
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limitNum)
+    ]);
+
+    res.json({
+      data: sanPhams,
+      total,
+      page: pageNum,
+      limit: limitNum
+    });
   } catch (err) {
-    console.error('❌ Lỗi tìm kiếm:', err);
+    console.error('❌ Lỗi tìm kiếm/filter sản phẩm:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -71,7 +133,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-//  Lấy danh sách sản phẩm
+//  Lấy danh sách sản phẩm (fallback, trả tất cả nếu cần)
 router.get('/', async (req, res) => {
   try {
     const sanPhams = await SanPham.find();
@@ -108,7 +170,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
 //  Xóa sản phẩm theo ID
 router.delete('/:id', async (req, res) => {
   try {
@@ -122,11 +183,5 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;
