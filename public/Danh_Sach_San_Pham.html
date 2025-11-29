@@ -62,77 +62,77 @@
 
 <body>
   <div class="welcome">
-        <i class="fa-solid fa-star" style="margin-right: 8px;"></i>
-        Chào mừng đến với SportZoneVN - Giày bóng đá chính hãng Việt Nam
-        <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
+    <i class="fa-solid fa-star" style="margin-right: 8px;"></i>
+    Chào mừng đến với SportZoneVN - Giày bóng đá chính hãng Việt Nam
+    <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
+  </div>
+
+  <!-- Header -->
+  <header id="mainHeader">
+    <div class="header-logo">
+      <a href="Trang_chu.html">
+        <img src="/images/Logo_.png" alt="SportZoneVN Logo">
+      </a>
     </div>
 
-    <!-- Header -->
-    <header id="mainHeader">
-        <div class="header-logo">
-            <a href="Trang_chu.html">
-                <img src="/images/Logo_.png" alt="SportZoneVN Logo">
-            </a>
-        </div>
+    <div class="header-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm ..." aria-label="Tìm kiếm sản phẩm">
+    </div> 
 
-        <div class="header-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Tìm kiếm sản phẩm ..." aria-label="Tìm kiếm sản phẩm">
-        </div> 
+    <div class="header_menu">
+      <i class="fa-solid fa-user" id="userIcon" aria-label="Menu người dùng"></i>
+      <span id="userName"></span>
+      <ul class="header_main_menu" id="menuList">
+        <li id="welcomeMessage" style="display: none; padding: 12px 20px; font-weight: 600; color: #667eea; border-bottom: 1px solid #eee;">
+          Xin chào, <span id="welcomeUserName"></span>
+        </li>
+        <li id="registerLi"><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Đăng ký</a></li>
+        <li id="loginLi"><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Đăng nhập</a></li>
+        <li id="logoutLi" style="display: none;"><a href="#"><i class="fa-solid fa-right-from-bracket" style="margin-right: 8px;"></i>Đăng xuất</a></li>
+      </ul>
+    </div>
 
-        <div class="header_menu">
-            <i class="fa-solid fa-user" id="userIcon" aria-label="Menu người dùng"></i>
-            <span id="userName"></span>
-            <ul class="header_main_menu" id="menuList">
-                <li id="welcomeMessage" style="display: none; padding: 12px 20px; font-weight: 600; color: #667eea; border-bottom: 1px solid #eee;">
-                    Xin chào, <span id="welcomeUserName"></span>
-                </li>
-                <li id="registerLi"><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Đăng ký</a></li>
-                <li id="loginLi"><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Đăng nhập</a></li>
-                <li id="logoutLi" style="display: none;"><a href="#"><i class="fa-solid fa-right-from-bracket" style="margin-right: 8px;"></i>Đăng xuất</a></li>
-            </ul>
-        </div>
+    <div class="header_gio_hang">
+      <a href="Gio_Hang.html" aria-label="Giỏ hàng">
+        <i class="fa-solid fa-cart-shopping" data-count="0"></i>
+      </a>
+    </div>
+  </header>
 
-        <div class="header_gio_hang">
-            <a href="Gio_Hang.html" aria-label="Giỏ hàng">
-                <i class="fa-solid fa-cart-shopping" data-count="0"></i>
-            </a>
-        </div>
-    </header>
+  <!-- Navigation -->
+  <nav>
+    <ul class="main_menu">
+      <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
 
-    <!-- Navigation -->
-    <nav>
-        <ul class="main_menu">
-            <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
-
-            <li class="submenu">
-                <a href="#"><i class="fa-solid fa-futbol" style="margin-right: 5px;"></i>Giày bóng đá</a>
-                <ul class="has_submenu">
-                    <li><a href="Danh_Sach_San_Pham.html">Tất cả sản phẩm</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ nhân tạo">Giày sân cỏ nhân tạo</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ tự nhiên">Giày sân cỏ tự nhiên</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?loai=Sân Futsal">Giày sân Futsal</a></li>
-                </ul>
-            </li>
-
-            <li class="submenu">
-                <a href="#"><i class="fa-solid fa-tag" style="margin-right: 5px;"></i>Thương hiệu</a>
-                <ul class="has_submenu">
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Nike">Nike</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Adidas">Adidas</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Puma">Puma</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Mizuno">Mizuno</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Kamito">Kamito</a></li>
-                    <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Zocker">Zocker</a></li>
-                </ul>
-            </li>
-
-            <li><a href="Phu_Kien.html"><i class="fa-solid fa-shirt" style="margin-right: 5px;"></i>Phụ kiện</a></li>
-            <li><a href="Tin_Tuc_Giay.html"><i class="fa-solid fa-newspaper" style="margin-right: 5px;"></i>Tin tức giày</a></li>
-            <li><a href="Khuyen_Mai.html"><i class="fa-solid fa-percent" style="margin-right: 5px;"></i>Khuyến mãi</a></li>
-            <li><a href="Ve_chung_toi.html"><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>Về chúng tôi</a></li>
+      <li class="submenu">
+        <a href="#"><i class="fa-solid fa-futbol" style="margin-right: 5px;"></i>Giày bóng đá</a>
+        <ul class="has_submenu">
+          <li><a href="Danh_Sach_San_Pham.html">Tất cả sản phẩm</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ nhân tạo">Giày sân cỏ nhân tạo</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ tự nhiên">Giày sân cỏ tự nhiên</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?loai=Sân Futsal">Giày sân Futsal</a></li>
         </ul>
-    </nav>
+      </li>
+
+      <li class="submenu">
+        <a href="#"><i class="fa-solid fa-tag" style="margin-right: 5px;"></i>Thương hiệu</a>
+        <ul class="has_submenu">
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Nike">Nike</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Adidas">Adidas</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Puma">Puma</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Mizuno">Mizuno</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Kamito">Kamito</a></li>
+          <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Zocker">Zocker</a></li>
+        </ul>
+      </li>
+
+      <li><a href="Phu_Kien.html"><i class="fa-solid fa-shirt" style="margin-right: 5px;"></i>Phụ kiện</a></li>
+      <li><a href="Tin_Tuc_Giay.html"><i class="fa-solid fa-newspaper" style="margin-right: 5px;"></i>Tin tức giày</a></li>
+      <li><a href="Khuyen_Mai.html"><i class="fa-solid fa-percent" style="margin-right: 5px;"></i>Khuyến mãi</a></li>
+      <li><a href="Ve_chung_toi.html"><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>Về chúng tôi</a></li>
+    </ul>
+  </nav>
 
   <main class="container my-5">
     <div class="row">
@@ -185,77 +185,91 @@
       <!-- Danh sách sản phẩm -->
       <div class="col-md-9">
         <div class="search-info" id="searchInfo"></div>
-        <div id="productList" class="product-grid"></div>
+        <div id="productList" class="product-grid">
+          <div class="text-center" style="width: 100%; padding: 40px;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Đang tải...</span>
+            </div>
+            <p class="text-muted mt-3">Đang tải sản phẩm...</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 
   <footer>
-        <div class="footer-section footer-info">
-            <h2>THÔNG TIN LIÊN HỆ</h2>
-            <h1 style="font-size: 24px; margin: 15px 0; color: #fff; font-weight: 700;">SportZoneVN</h1>
-            <p style="font-size: 15px; margin-bottom: 15px; font-weight: 500;">Giày bóng đá chính hãng Việt Nam</p>
-            <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
-            <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111" style="color: #ecf0f1; text-decoration: none;">0329127111</a></p>
-            <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com" style="color: #ecf0f1; text-decoration: none;">contact@sportzonevn.com</a></p>
-        </div>
-
-        <div class="footer-section footer-links">
-            <h2>HỖ TRỢ KHÁCH HÀNG</h2>
-            <ul>
-                <li><a href="#"><i class="fa-solid fa-circle-question" style="margin-right: 5px;"></i>Hướng dẫn đặt hàng</a></li>
-                <li><a href="#"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>Chính sách bảo mật</a></li>
-                <li><a href="#"><i class="fa-solid fa-rotate" style="margin-right: 5px;"></i>Chính sách đổi trả</a></li>
-                <li><a href="#"><i class="fa-solid fa-comments" style="margin-right: 5px;"></i>FAQ - Câu hỏi thường gặp</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-section footer-social">
-            <h2>KẾT NỐI VỚI CHÚNG TÔI</h2>
-            <div class="lien_ket">
-                <a href="https://www.facebook.com/thien.uc.609096" target="_blank" aria-label="Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-                <a href="https://www.instagram.com/qanh1010/" target="_blank" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="https://www.youtube.com/@quyenanh8600" target="_blank" aria-label="YouTube">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-            </div>
-            <div style="margin-top: 25px;">
-                <p style="font-size: 14px; margin-bottom: 10px;">Phương thức thanh toán:</p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <i class="fa-brands fa-cc-visa" style="font-size: 32px; color: #ecf0f1;"></i>
-                    <i class="fa-brands fa-cc-mastercard" style="font-size: 32px; color: #ecf0f1;"></i>
-                    <i class="fa-solid fa-money-bill-wave" style="font-size: 32px; color: #ecf0f1;"></i>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bottom Bar -->
-    <div class="gb">
-        <i class="fa-regular fa-copyright" style="margin-right: 5px;"></i>
-        2025 SportZoneVN - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.
+    <div class="footer-section footer-info">
+      <h2>THÔNG TIN LIÊN HỆ</h2>
+      <h1 style="font-size: 24px; margin: 15px 0; color: #fff; font-weight: 700;">SportZoneVN</h1>
+      <p style="font-size: 15px; margin-bottom: 15px; font-weight: 500;">Giày bóng đá chính hãng Việt Nam</p>
+      <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
+      <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111" style="color: #ecf0f1; text-decoration: none;">0329127111</a></p>
+      <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com" style="color: #ecf0f1; text-decoration: none;">contact@sportzonevn.com</a></p>
     </div>
+
+    <div class="footer-section footer-links">
+      <h2>HỖ TRỢ KHÁCH HÀNG</h2>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-circle-question" style="margin-right: 5px;"></i>Hướng dẫn đặt hàng</a></li>
+        <li><a href="#"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>Chính sách bảo mật</a></li>
+        <li><a href="#"><i class="fa-solid fa-rotate" style="margin-right: 5px;"></i>Chính sách đổi trả</a></li>
+        <li><a href="#"><i class="fa-solid fa-comments" style="margin-right: 5px;"></i>FAQ - Câu hỏi thường gặp</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section footer-social">
+      <h2>KẾT NỐI VỚI CHÚNG TÔI</h2>
+      <div class="lien_ket">
+        <a href="https://www.facebook.com/thien.uc.609096" target="_blank" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/qanh1010/" target="_blank" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/@quyenanh8600" target="_blank" aria-label="YouTube">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+      </div>
+      <div style="margin-top: 25px;">
+        <p style="font-size: 14px; margin-bottom: 10px;">Phương thức thanh toán:</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <i class="fa-brands fa-cc-visa" style="font-size: 32px; color: #ecf0f1;"></i>
+          <i class="fa-brands fa-cc-mastercard" style="font-size: 32px; color: #ecf0f1;"></i>
+          <i class="fa-solid fa-money-bill-wave" style="font-size: 32px; color: #ecf0f1;"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="gb">
+    <i class="fa-regular fa-copyright" style="margin-right: 5px;"></i>
+    2025 SportZoneVN - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.
+  </div>
 
   <script>
     // ======================= XỬ LÝ NGƯỜI DÙNG =======================
     const user = localStorage.getItem("user");
     const userNameSpan = document.getElementById("userName");
+    const welcomeMessageLi = document.getElementById("welcomeMessage");
+    const welcomeUserNameSpan = document.getElementById("welcomeUserName");
     const registerLi = document.getElementById("registerLi");
     const loginLi = document.getElementById("loginLi");
     const logoutLi = document.getElementById("logoutLi");
 
     if (user) {
       const userData = JSON.parse(user);
-      userNameSpan.textContent = userData.TenDangNhap || userData.email || 'User';
+      const displayUsername = userData.TenDangNhap?.length > 15 
+        ? userData.TenDangNhap.substring(0, 15) + '...' 
+        : userData.TenDangNhap || userData.email || 'User';
+      
+      welcomeUserNameSpan.textContent = displayUsername;
+      welcomeMessageLi.style.display = "block";
       registerLi.style.display = "none";
       loginLi.style.display = "none";
       logoutLi.style.display = "block";
     } else {
       userNameSpan.textContent = "";
+      welcomeMessageLi.style.display = "none";
       registerLi.style.display = "block";
       loginLi.style.display = "block";
       logoutLi.style.display = "none";
@@ -278,10 +292,27 @@
       const type = urlParams.get('loai') || '';
 
       // Xây dựng query string
-      let query = '/api/sanpham/search?';
-      if (searchQuery) query += `q=${encodeURIComponent(searchQuery)}&`;
-      if (brand) query += `thuongHieu=${encodeURIComponent(brand)}&`;
-      if (type) query += `loai=${encodeURIComponent(type)}&`;
+      let query = '/api/sanpham';
+      
+      // Nếu có bất kỳ bộ lọc nào, dùng endpoint /search
+      if (searchQuery || brand || type) {
+        query += '/search?';
+        if (searchQuery) query += `q=${encodeURIComponent(searchQuery)}&`;
+        if (brand) query += `thuongHieu=${encodeURIComponent(brand)}&`;
+        if (type) query += `loai=${encodeURIComponent(type)}&`;
+      }
+
+      // Đánh dấu checkbox tương ứng
+      if (brand) {
+        document.querySelectorAll('input[name="brand"]').forEach(cb => {
+          if (cb.value === brand) cb.checked = true;
+        });
+      }
+      if (type) {
+        document.querySelectorAll('input[name="type"]').forEach(cb => {
+          if (cb.value === type) cb.checked = true;
+        });
+      }
 
       try {
         const res = await fetch(query);
@@ -301,7 +332,7 @@
 
       if (products.length === 0) {
         container.innerHTML = `
-          <div class="text-center text-muted">
+          <div class="text-center text-muted" style="grid-column: 1/-1;">
             <i class="fa-solid fa-box-open fa-3x mb-3"></i>
             <p>Không tìm thấy sản phẩm nào phù hợp</p>
             <a href="Danh_Sach_San_Pham.html" class="btn btn-primary">Xem tất cả</a>
@@ -310,37 +341,19 @@
         return;
       }
 
-      container.innerHTML = products.map(sp => {
-        //  Tự động nhận diện thương hiệu từ tên sản phẩm
-        const brandName = detectBrand(sp.ten);
-        
-        return `
-          <div class="card h-100 shadow-sm" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer;">
-            <img src="${sp.hinhAnh || '/images/default.jpg'}" 
-                 class="card-img-top" 
-                 alt="${sp.ten}"
-                 style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <h5 class="card-title" style="font-size: 0.95rem;">${sp.ten}</h5>
-              ${brandName ? `<span class="badge bg-secondary mb-2">${brandName}</span>` : ''}
-              <p class="text-danger fw-bold">${Number(sp.gia).toLocaleString()}₫</p>
-            </div>
+      container.innerHTML = products.map(sp => `
+        <div class="card h-100 shadow-sm" onclick="window.location.href='San_Pham.html?id=${sp._id}'" style="cursor:pointer;">
+          <img src="${sp.hinhAnh || '/images/default.jpg'}" 
+               class="card-img-top" 
+               alt="${sp.ten}"
+               style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title" style="font-size: 0.95rem;">${sp.ten}</h5>
+            <span class="badge bg-secondary mb-2">${sp.thuongHieu || 'Khác'}</span>
+            <p class="text-danger fw-bold">${Number(sp.gia).toLocaleString()}₫</p>
           </div>
-        `;
-      }).join('');
-    }
-
-    //  Hàm nhận diện thương hiệu từ tên
-    function detectBrand(productName) {
-      const brands = ['Nike', 'Adidas', 'Puma', 'Mizuno', 'Kamito', 'Zocker'];
-      const nameLower = productName.toLowerCase();
-      
-      for (const brand of brands) {
-        if (nameLower.includes(brand.toLowerCase())) {
-          return brand;
-        }
-      }
-      return null;
+        </div>
+      `).join('');
     }
 
     function updateSearchInfo(query, brand, type, count) {
@@ -351,37 +364,63 @@
       if (brand) text += `Thương hiệu: <strong>${brand}</strong> `;
       if (type) text += `Loại: <strong>${type}</strong> `;
       
+      if (!query && !brand && !type) {
+        text = 'Tất cả sản phẩm ';
+      }
+      
       text += `<span class="badge bg-primary ms-2">${count} sản phẩm</span>`;
       
       info.innerHTML = text;
     }
 
     // ======================= TÌM KIẾM TỪ HEADER =======================
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    const searchInput = document.getElementById('searchInput');
+    const searchIcon = document.querySelector('.header-search i');
+
+    searchInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        const query = this.value.trim();
-        if (query) {
-          window.location.href = `Danh_Sach_San_Pham.html?q=${encodeURIComponent(query)}`;
-        }
+        performSearch();
       }
     });
+
+    searchIcon.addEventListener('click', performSearch);
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `Danh_Sach_San_Pham.html?q=${encodeURIComponent(query)}`;
+      }
+    }
 
     // ======================= ÁP DỤNG BỘ LỌC =======================
     function applyFilters() {
       const urlParams = new URLSearchParams(window.location.search);
       const searchQuery = urlParams.get('q') || '';
       
+      // Lấy TẤT CẢ thương hiệu được chọn
       const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked'))
         .map(cb => cb.value);
+      
+      // Lấy TẤT CẢ loại sân được chọn
       const selectedTypes = Array.from(document.querySelectorAll('input[name="type"]:checked'))
         .map(cb => cb.value);
+      
       const minPrice = document.getElementById('minPrice').value;
       const maxPrice = document.getElementById('maxPrice').value;
 
       let query = '/api/sanpham/search?';
       if (searchQuery) query += `q=${encodeURIComponent(searchQuery)}&`;
-      if (selectedBrands.length > 0) query += `thuongHieu=${selectedBrands[0]}&`;
-      if (selectedTypes.length > 0) query += `loai=${selectedTypes[0]}&`;
+      
+      // Gửi nhiều thương hiệu cách nhau bằng dấu phẩy
+      if (selectedBrands.length > 0) {
+        query += `thuongHieu=${selectedBrands.join(',')}&`;
+      }
+      
+      // Gửi nhiều loại sân cách nhau bằng dấu phẩy
+      if (selectedTypes.length > 0) {
+        query += `loai=${selectedTypes.join(',')}&`;
+      }
+      
       if (minPrice) query += `minPrice=${minPrice}&`;
       if (maxPrice) query += `maxPrice=${maxPrice}&`;
 
@@ -389,7 +428,16 @@
         .then(res => res.json())
         .then(products => {
           displayProducts(products);
-          updateSearchInfo(searchQuery, selectedBrands[0], selectedTypes[0], products.length);
+          
+          // Cập nhật thông tin tìm kiếm
+          let brandText = selectedBrands.length > 0 ? selectedBrands.join(', ') : '';
+          let typeText = selectedTypes.length > 0 ? selectedTypes.join(', ') : '';
+          updateSearchInfo(searchQuery, brandText, typeText, products.length);
+        })
+        .catch(err => {
+          console.error('Lỗi áp dụng bộ lọc:', err);
+          document.getElementById('productList').innerHTML = 
+            '<p class="text-danger text-center">Lỗi khi lọc sản phẩm</p>';
         });
     }
 
@@ -403,18 +451,30 @@
     // ======================= CẬP NHẬT GIỎ HÀNG =======================
     async function updateCartCount() {
       const user = JSON.parse(localStorage.getItem('user'));
-      if (!user || !user._id) return;
+      const cartIcon = document.querySelector('.header_gio_hang i');
+      
+      if (!user || !user.MaTK) {
+        if(cartIcon) cartIcon.setAttribute('data-count', 0);
+        return;
+      }
 
       try {
-        const res = await fetch(`/api/giohang/${user._id}`);
+        const res = await fetch(`/api/giohang/${user.MaTK}`);
+        if (!res.ok) throw new Error('Không thể lấy giỏ hàng');
+        
         const cart = await res.json();
-        document.querySelector('.header_gio_hang i').setAttribute('data-count', cart.length || 0);
+        const count = cart.length || 0;
+
+        if (cartIcon) {
+          cartIcon.setAttribute('data-count', count);
+        }
       } catch (err) {
-        console.error('Lỗi:', err);
+        console.error('Lỗi cập nhật giỏ hàng:', err);
+        if(cartIcon) cartIcon.setAttribute('data-count', 0);
       }
     }
 
-    // ======================= KHỞI CHẠY =======================
+    
     loadProducts();
     updateCartCount();
   </script>
