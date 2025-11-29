@@ -145,7 +145,7 @@
                     // Kiểm tra xem có phải admin không (MaVaiTro = 0)
                     const decoded = JSON.parse(atob(result.token.split('.')[1]));
                     
-                    if (decoded.role !== 0) {
+                    if (decoded.MaVaiTro !== 0) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Truy cập bị từ chối!',
