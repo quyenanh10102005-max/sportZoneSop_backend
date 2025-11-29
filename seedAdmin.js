@@ -13,12 +13,10 @@ const createAdmin = async () => {
     
     // Kiểm tra xem admin đã tồn tại chưa
     const adminExists = await User.findOne({ MaVaiTro: 0 });
-    if (adminExists) {
-      console.log(' Tài khoản admin đã tồn tại!');
-      console.log(' Username:', adminExists.TenDangNhap);
-      console.log(' Email:', adminExists.Email);
-      await mongoose.connection.close();
-      process.exit(0);
+   if (adminExists) {
+      console.log(`⚠️  Phát hiện tài khoản admin cũ (${adminExists.TenDangNhap}). Đang xóa...`);
+      await User.deleteOne({ _id: adminExists._id });
+      console.log('✅ Xóa tài khoản admin cũ thành công.');
     }
 
     // Tạo tài khoản admin mới
@@ -28,7 +26,7 @@ const createAdmin = async () => {
       Email: 'admin@sportzone.vn',
       MatKhau: 'admin123',
       MaVaiTro: 0,  
-      isVerified: true 
+      isVerified: true
     });
 
     await admin.save();
