@@ -137,7 +137,7 @@ exports.login = async (req, res) => {
     }
 
     // Kiểm tra đã xác thực email chưa
-    if (!user.isVerified) {
+    if (user.MaVaiTro === 1 && !user.isVerified) {
       return res.status(401).json({ 
         message: 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email!' 
       });
