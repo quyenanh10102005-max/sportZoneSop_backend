@@ -4,30 +4,31 @@ const User = require('./models/User');
 
 const createAdmin = async () => {
   try {
-    console.log('🔄 Đang kết nối tới MongoDB...');
+    console.log(' Đang kết nối tới MongoDB...');
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('✅ Kết nối MongoDB thành công!');
+    console.log(' Kết nối MongoDB thành công!');
     
     // Kiểm tra xem admin đã tồn tại chưa
     const adminExists = await User.findOne({ MaVaiTro: 0 });
     if (adminExists) {
-      console.log('⚠️  Tài khoản admin đã tồn tại!');
-      console.log('📝 Username:', adminExists.TenDangNhap);
-      console.log('📧 Email:', adminExists.Email);
+      console.log(' Tài khoản admin đã tồn tại!');
+      console.log(' Username:', adminExists.TenDangNhap);
+      console.log(' Email:', adminExists.Email);
       await mongoose.connection.close();
       process.exit(0);
     }
 
     // Tạo tài khoản admin mới
-    console.log('🔄 Đang tạo tài khoản admin...');
-    const admin = new User({
+    console.log(' Đang tạo tài khoản admin...');
+   const admin = new User({
       TenDangNhap: 'admin',
       Email: 'admin@sportzone.vn',
-      MatKhau: 'admin123', // Mật khẩu sẽ tự động được hash bởi pre-save hook
-      MaVaiTro: 0  // 0 = Admin, 1 = Khách hàng
+      MatKhau: 'admin123',
+      MaVaiTro: 0,  
+      isVerified: true 
     });
 
     await admin.save();
