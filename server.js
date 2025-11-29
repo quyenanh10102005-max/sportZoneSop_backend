@@ -1,5 +1,6 @@
+require('dotenv').config(); // ✅ PHẢI Ở DÒNG ĐẦU TIÊN
+
 const express = require('express');
-const dotenv = require('dotenv');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const connectDB = require('./db');
@@ -7,11 +8,14 @@ const sanPhamRoutes = require('./routes/sanpham');
 const danhGiaRoutes = require('./routes/danhgia');
 const gioHangRoutes = require('./routes/giohang');
 const adminRoutes = require('./routes/admin');
+const cors = require('cors');
 
-dotenv.config();
+// ✅ Test .env loading
+console.log('📧 EMAIL CONFIG CHECK:');
+console.log('  EMAIL_USER:', process.env.EMAIL_USER);
+console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ NOT SET');
 
 const app = express();
-const cors = require('cors');
 
 // ========== CORS FIX ==========
 const allowedOrigins = [
@@ -21,7 +25,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function(origin, callback) {
-    
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) !== -1) {
@@ -86,7 +89,8 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Server is running',
-    env: process.env.NODE_ENV || 'development'
+    env: process.env.NODE_ENV || 'development',
+    emailConfigured: !!process.env.EMAIL_USER
   });
 });
 

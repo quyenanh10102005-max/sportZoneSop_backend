@@ -1,11 +1,27 @@
 const nodemailer = require('nodemailer');
 
+// Kiểm tra biến môi trường
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+  console.error('❌ CRITICAL: EMAIL_USER hoặc EMAIL_PASSWORD chưa được cấu hình trong .env');
+  console.log('EMAIL_USER:', process.env.EMAIL_USER);
+  console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'Set' : 'NOT SET');
+}
+
 // Cấu hình transporter để gửi email
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // hoặc 'outlook', 'yahoo', etc.
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Email của bạn
-    pass: process.env.EMAIL_PASSWORD// Mật khẩu ứng dụng (App Password)
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
+  }
+});
+
+// Test kết nối khi khởi động
+transporter.verify(function(error, success) {
+  if (error) {
+    console.error('❌ Email transporter verification failed:', error.message);
+  } else {
+    console.log('✅ Email server is ready to send messages');
   }
 });
 

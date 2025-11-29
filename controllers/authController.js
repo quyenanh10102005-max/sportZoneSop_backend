@@ -13,9 +13,12 @@ exports.sendVerificationCode = async (req, res) => {
   try {
     const { Email, TenDangNhap } = req.body;
 
-    console.log('📧 Send verification to:', Email);
+    console.log('📧 Received registration request for:', Email);
+    console.log('📧 Email Config Check:');
+    console.log('  - EMAIL_USER:', process.env.EMAIL_USER);
+    console.log('  - EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ NOT SET');
 
-    // ✅ Validate email
+    // Validate input
     if (!Email || !TenDangNhap) {
       return res.status(400).json({ 
         message: 'Email và tên đăng nhập là bắt buộc!' 
@@ -28,7 +31,7 @@ exports.sendVerificationCode = async (req, res) => {
     });
     
     if (existingUser && existingUser.isVerified) {
-      console.log('❌ Email already exists:', Email);
+      console.log('❌ User already exists:', Email);
       return res.status(400).json({ 
         message: 'Email hoặc tên đăng nhập đã được sử dụng!' 
       });
@@ -37,13 +40,14 @@ exports.sendVerificationCode = async (req, res) => {
     // Xóa user chưa xác thực cũ (nếu có)
     if (existingUser && !existingUser.isVerified) {
       await User.deleteOne({ _id: existingUser._id });
+      console.log('🗑️ Deleted old unverified user');
     }
 
     // Tạo mã xác thực
     const verificationCode = generateVerificationCode();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    console.log('🔐 Generated code:', verificationCode);
+    console.log('🔢 Generated verification code:', verificationCode);
 
     // Tạo tạm user
     const tempUser = new User({
@@ -56,20 +60,25 @@ exports.sendVerificationCode = async (req, res) => {
     });
 
     await tempUser.save();
-    console.log('💾 Temp user saved');
+    console.log('💾 Temp user saved to database');
 
-    // ✅ Gửi email với xử lý lỗi
+    // Gửi email với xử lý lỗi chi tiết
     try {
+      console.log('📨 Attempting to send email...');
       await sendVerificationEmail(Email, verificationCode, TenDangNhap);
       console.log('✅ Email sent successfully to:', Email);
     } catch (emailError) {
-      console.error('❌ Email sending failed:', emailError.message);
+      console.error('❌ Email sending failed:');
+      console.error('  - Error message:', emailError.message);
+      console.error('  - Error code:', emailError.code);
+      console.error('  - Full error:', emailError);
+      
       // Xóa user tạm nếu gửi email thất bại
       await User.deleteOne({ _id: tempUser._id });
       
       return res.status(500).json({ 
-        message: 'Không thể gửi email. Kiểm tra cấu hình email server!',
-        error: process.env.NODE_ENV === 'development' ? emailError.message : undefined
+        message: 'Không thể gửi email. Vui lòng kiểm tra cấu hình email server!',
+        error: process.env.NODE_ENV === 'development' ? emailError.message : 'Email configuration error'
       });
     }
 
@@ -80,14 +89,17 @@ exports.sendVerificationCode = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error in sendVerificationCode:', error);
+    console.error('❌ Error in sendVerificationCode:');
+    console.error('  - Message:', error.message);
+    console.error('  - Stack:', error.stack);
+    
     res.status(500).json({ 
       message: 'Không thể gửi mã xác thực. Vui lòng thử lại!',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
-  
+
 // ======================= ĐĂNG KÝ - BƯỚC 2: XÁC THỰC VÀ HOÀN TẤT =======================
 exports.verifyAndRegister = async (req, res) => {
   try {
@@ -171,7 +183,7 @@ exports.login = async (req, res) => {
     }
 
     // Kiểm tra đã xác thực email chưa
-    if (user.MaVaiTro === 1 && !user.isVerified) {
+    if (!user.isVerified) {
       return res.status(401).json({ 
         message: 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email!' 
       });
