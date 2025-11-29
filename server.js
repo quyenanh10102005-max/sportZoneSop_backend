@@ -1,4 +1,4 @@
-require('dotenv').config(); // ✅ PHẢI Ở DÒNG ĐẦU TIÊN
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
@@ -7,10 +7,10 @@ const connectDB = require('./db');
 const sanPhamRoutes = require('./routes/sanpham');
 const danhGiaRoutes = require('./routes/danhgia');
 const gioHangRoutes = require('./routes/giohang');
+const donHangRoutes = require('./routes/donhang'); 
 const adminRoutes = require('./routes/admin');
 const cors = require('cors');
 
-// ✅ Test .env loading
 console.log('📧 EMAIL CONFIG CHECK:');
 console.log('  EMAIL_USER:', process.env.EMAIL_USER);
 console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ NOT SET');
@@ -59,6 +59,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sanpham', sanPhamRoutes);
 app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
+app.use('/api/donhang', donHangRoutes); 
 
 // Serve HTML files
 app.get('/', (req, res) => {

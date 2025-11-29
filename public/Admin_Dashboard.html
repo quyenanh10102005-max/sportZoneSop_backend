@@ -222,13 +222,7 @@
                     <h3 id="totalReviews">0</h3>
                     <p>Đánh giá</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3 id="totalRevenue">0đ</h3>
-                    <p>Doanh thu</p>
-                </div>
+                
             </div>
         </div>
 
@@ -299,23 +293,25 @@
         </div>
 
         <!-- Orders Section -->
-        <div id="orders" class="content-section">
-            <h3 class="mb-4">Quản lý đơn hàng</h3>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Mã đơn</th>
-                            <th>Khách hàng</th>
-                            <th>Ngày đặt</th>
-                            <th>Tổng tiền</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTable"></tbody>
-                </table>
-            </div>
-        </div>
+       <div id="orders" class="content-section">
+    <h3 class="mb-4">Quản lý đơn hàng</h3>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+        </table>
+    </div>
+</div>
 
         <!-- Reviews Section -->
         <div id="reviews" class="content-section">
@@ -803,99 +799,201 @@ console.log('==================');
             }
         }
 
-        // ========== ĐƠN HÀNG ==========
-        async function loadOrders() {
-            try {
-                const res = await fetch(API_BASE_URL + '/api/admin/donhang', {
-                    headers: getHeaders()
-                });
+        // ========== ĐƠN HÀNG (CẬP NHẬT) ==========
+async function loadOrders() {
+    try {
+        const res = await fetch(API_BASE_URL + '/api/admin/donhang', {
+            headers: getHeaders()
+        });
 
-                if (res.ok) {
-                    const orders = await res.json();
-                    const tbody = document.getElementById('ordersTable');
-                    
-                    if (orders.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Chưa có đơn hàng nào</td></tr>';
-                        return;
-                    }
-                    
-                    tbody.innerHTML = orders.map(order => `
-                        <tr>
-                            <td><code>${order._id.substring(0, 8)}...</code></td>
-                            <td>${order.khachHang || 'N/A'}</td>
-                            <td>${order.ngayDat ? new Date(order.ngayDat).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                            <td><strong class="text-success">${Number(order.tongTien || 0).toLocaleString()}đ</strong></td>
-                            <td class="table-actions">
-                                <button class="btn btn-sm btn-info" onclick="viewOrder('${order._id}')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order._id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
-            } catch (err) {
-                console.error('Lỗi tải đơn hàng:', err);
+        if (res.ok) {
+            const orders = await res.json();
+            const tbody = document.getElementById('ordersTable');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Chưa có đơn hàng nào</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = orders.map(order => {
+                // Tính tổng số lượng sản phẩm
+                const totalItems = order.SanPham?.reduce((sum, sp) => sum + sp.SoLuong, 0) || 0;
+                
+                // Badge màu theo trạng thái
+                const statusColor = {
+                    'Chờ xác nhận': 'warning',
+                    'Đã xác nhận': 'info',
+                    'Đang giao': 'primary',
+                    'Đã giao': 'success',
+                    'Đã hủy': 'danger'
+                };
+
+                const paymentStatusColor = order.TrangThaiThanhToan === 'Đã thanh toán' ? 'success' : 'warning';
+
+                return `
+                    <tr>
+                        <td><code>${order._id.substring(0, 8)}...</code></td>
+                        <td>
+                            <strong>${order.TenKhachHang}</strong><br>
+                            <small class="text-muted">${order.SoDienThoai}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-${statusColor[order.TrangThaiDonHang] || 'secondary'}">
+                                ${order.TrangThaiDonHang}
+                            </span><br>
+                            <span class="badge bg-${paymentStatusColor} mt-1">
+                                ${order.TrangThaiThanhToan}
+                            </span>
+                        </td>
+                        <td>
+                            ${totalItems} sản phẩm<br>
+                            <small class="text-muted">${order.PhuongThucThanhToan?.toUpperCase() || 'COD'}</small>
+                        </td>
+                        <td>
+                            ${order.NgayDat ? new Date(order.NgayDat).toLocaleDateString('vi-VN') : 'N/A'}<br>
+                            <small class="text-muted">${order.NgayDat ? new Date(order.NgayDat).toLocaleTimeString('vi-VN') : ''}</small>
+                        </td>
+                        <td><strong class="text-success">${Number(order.TongTien || 0).toLocaleString()}₫</strong></td>
+                        <td class="table-actions">
+                            <button class="btn btn-sm btn-info" onclick="viewOrder('${order._id}')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="updateOrderStatus('${order._id}')" title="Cập nhật trạng thái">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order._id}')" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    } catch (err) {
+        console.error('Lỗi tải đơn hàng:', err);
+    }
+}
+
+async function viewOrder(id) {
+    try {
+        const res = await fetch(API_BASE_URL + `/api/donhang/${id}`);
+
+        if (res.ok) {
+            const order = await res.json();
+            
+            // Tạo danh sách sản phẩm
+            const productsHTML = order.SanPham?.map(sp => `
+                <div style="display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #eee;">
+                    <img src="${sp.HinhAnh || '/images/default.jpg'}" 
+                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                    <div style="flex: 1;">
+                        <strong>${sp.TenSanPham}</strong><br>
+                        <small>Size: ${sp.Size} | SL: ${sp.SoLuong}</small><br>
+                        <span style="color: #dc3545; font-weight: bold;">${Number(sp.ThanhTien).toLocaleString()}₫</span>
+                    </div>
+                </div>
+            `).join('') || '<p>Không có sản phẩm</p>';
+
+            Swal.fire({
+                title: 'Chi tiết đơn hàng',
+                html: `
+                    <div class="text-start" style="max-height: 500px; overflow-y: auto;">
+                        <h5 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px;">
+                            <i class="fas fa-shopping-bag"></i> Thông tin đơn hàng
+                        </h5>
+                        <p><strong>Mã đơn:</strong> <code>${order._id}</code></p>
+                        <p><strong>Ngày đặt:</strong> ${order.NgayDat ? new Date(order.NgayDat).toLocaleString('vi-VN') : 'N/A'}</p>
+                        <p><strong>Trạng thái:</strong> 
+                            <span class="badge bg-info">${order.TrangThaiDonHang}</span>
+                            <span class="badge bg-warning">${order.TrangThaiThanhToan}</span>
+                        </p>
+
+                        <h5 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin: 20px 0 15px 0;">
+                            <i class="fas fa-user"></i> Thông tin khách hàng
+                        </h5>
+                        <p><strong>Họ tên:</strong> ${order.TenKhachHang}</p>
+                        <p><strong>Email:</strong> ${order.Email}</p>
+                        <p><strong>Số điện thoại:</strong> ${order.SoDienThoai}</p>
+                        <p><strong>Địa chỉ:</strong> ${order.DiaChiGiaoHang}, ${order.Quan}, ${order.Tinh}</p>
+                        ${order.GhiChu ? `<p><strong>Ghi chú:</strong> ${order.GhiChu}</p>` : ''}
+
+                        <h5 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin: 20px 0 15px 0;">
+                            <i class="fas fa-box"></i> Sản phẩm
+                        </h5>
+                        ${productsHTML}
+
+                        <h5 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin: 20px 0 15px 0;">
+                            <i class="fas fa-dollar-sign"></i> Thanh toán
+                        </h5>
+                        <p><strong>Phương thức:</strong> ${order.PhuongThucThanhToan?.toUpperCase() || 'COD'}</p>
+                        <p><strong>Phí vận chuyển:</strong> ${Number(order.PhiVanChuyen || 0).toLocaleString()}₫</p>
+                        <p><strong>Tổng cộng:</strong> <span style="color: #dc3545; font-size: 1.2em; font-weight: bold;">${Number(order.TongTien || 0).toLocaleString()}₫</span></p>
+                    </div>
+                `,
+                confirmButtonColor: '#667eea',
+                width: '700px',
+                confirmButtonText: 'Đóng'
+            });
+        }
+    } catch (err) {
+        Swal.fire('Lỗi!', 'Không thể tải chi tiết đơn hàng', 'error');
+    }
+}
+
+async function updateOrderStatus(id) {
+    const { value: formValues } = await Swal.fire({
+        title: 'Cập nhật trạng thái đơn hàng',
+        html: `
+            <div class="text-start">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Trạng thái đơn hàng:</strong></label>
+                    <select id="orderStatus" class="form-select">
+                        <option value="Chờ xác nhận">Chờ xác nhận</option>
+                        <option value="Đã xác nhận">Đã xác nhận</option>
+                        <option value="Đang giao">Đang giao</option>
+                        <option value="Đã giao">Đã giao</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Trạng thái thanh toán:</strong></label>
+                    <select id="paymentStatus" class="form-select">
+                        <option value="Chưa thanh toán">Chưa thanh toán</option>
+                        <option value="Đã thanh toán">Đã thanh toán</option>
+                    </select>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Cập nhật',
+        cancelButtonText: 'Hủy',
+        preConfirm: () => {
+            return {
+                TrangThaiDonHang: document.getElementById('orderStatus').value,
+                TrangThaiThanhToan: document.getElementById('paymentStatus').value
             }
         }
+    });
 
-        async function viewOrder(id) {
-            try {
-                const res = await fetch(API_BASE_URL + `/api/admin/donhang/${id}`, {
-                    headers: getHeaders()
-                });
-
-                if (res.ok) {
-                    const order = await res.json();
-                    Swal.fire({
-                        title: 'Chi tiết đơn hàng',
-                        html: `
-                            <div class="text-start">
-                                <p><strong>Mã đơn:</strong> <code>${order._id}</code></p>
-                                <p><strong>Khách hàng:</strong> ${order.khachHang || 'N/A'}</p>
-                                <p><strong>Ngày đặt:</strong> ${order.ngayDat ? new Date(order.ngayDat).toLocaleString('vi-VN') : 'N/A'}</p>
-                                <p><strong>Tổng tiền:</strong> <span class="text-success fw-bold">${Number(order.tongTien || 0).toLocaleString()}đ</span></p>
-                            </div>
-                        `,
-                        confirmButtonColor: '#667eea',
-                        width: '600px'
-                    });
-                }
-            } catch (err) {
-                Swal.fire('Lỗi!', 'Không thể tải chi tiết đơn hàng', 'error');
-            }
-        }
-
-        async function deleteOrder(id) {
-            const result = await Swal.fire({
-                title: 'Xác nhận xóa?',
-                text: 'Bạn có chắc muốn xóa đơn hàng này?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Xóa',
-                cancelButtonText: 'Hủy',
-                confirmButtonColor: '#e74c3c'
+    if (formValues) {
+        try {
+            const res = await fetch(API_BASE_URL + `/api/donhang/${id}/status`, {
+                method: 'PATCH',
+                headers: getHeaders(),
+                body: JSON.stringify(formValues)
             });
 
-            if (result.isConfirmed) {
-                try {
-                    const res = await fetch(API_BASE_URL + `/api/admin/donhang/${id}`, {
-                        method: 'DELETE',
-                        headers: getHeaders()
-                    });
-
-                    if (res.ok) {
-                        Swal.fire('Thành công!', 'Đã xóa đơn hàng', 'success');
-                        loadOrders();
-                        loadStats();
-                    }
-                } catch (err) {
-                    Swal.fire('Lỗi!', 'Không thể xóa đơn hàng', 'error');
-                }
+            if (res.ok) {
+                Swal.fire('Thành công!', 'Đã cập nhật trạng thái đơn hàng', 'success');
+                loadOrders();
+                loadStats();
             }
+        } catch (err) {
+            Swal.fire('Lỗi!', 'Không thể cập nhật trạng thái', 'error');
         }
+    }
+}
 
         // ========== ĐÁNH GIÁ ==========
         async function loadReviews() {

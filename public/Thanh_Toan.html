@@ -643,111 +643,167 @@
             }
         }
 
-        // ======================= XỬ LÝ THANH TOÁN =======================
-        document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        // ======================= Xử lý THANH TOÁN (CẬP NHẬT) =======================
+document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-            const fullName = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const city = document.getElementById('city').value;
-            const district = document.getElementById('district').value.trim();
-            const notes = document.getElementById('notes').value.trim();
-            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value;
+    const district = document.getElementById('district').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-            if (!fullName || !phone || !email || !address || !city || !district) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Thiếu thông tin',
-                    text: 'Vui lòng điền đầy đủ thông tin bắt buộc!',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
+    if (!fullName || !phone || !email || !address || !city || !district) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Thiếu thông tin',
+            text: 'Vui lòng điền đầy đủ thông tin bắt buộc!',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
 
-            const userData = JSON.parse(localStorage.getItem('user'));
+    const userData = JSON.parse(localStorage.getItem('user'));
 
-            try {
-                const cartRes = await fetch(`/api/giohang/${userData.MaTK}`);
-                
-                if (!cartRes.ok) {
-                    throw new Error('Không thể lấy giỏ hàng');
-                }
-                
-                const cart = await cartRes.json();
+    try {
+        // 1️⃣ Lấy giỏ hàng từ MongoDB
+        const cartRes = await fetch(`/api/giohang/${userData.MaTK}`);
+        
+        if (!cartRes.ok) {
+            throw new Error('Không thể lấy giỏ hàng');
+        }
+        
+        const cart = await cartRes.json();
 
-                if (!cart || cart.length === 0) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Giỏ hàng trống',
-                        text: 'Không có sản phẩm để thanh toán!',
-                        confirmButtonText: 'OK'
-                    });
-                    return;
-                }
+        if (!cart || cart.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Giỏ hàng trống',
+                text: 'Không có sản phẩm để thanh toán!',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
 
-                let subtotal = 0;
-                cart.forEach(item => {
-                    if (item.MaSanPham) {
-                        subtotal += item.MaSanPham.gia * item.SoLuong;
-                    }
-                });
+        // 2️⃣ Tính toán tổng tiền
+        let subtotal = 0;
+        const sanPhamDonHang = cart.map(item => {
+            const sp = item.MaSanPham;
+            const thanhTien = sp.gia * item.SoLuong;
+            subtotal += thanhTien;
 
-                const shippingFee = 30000;
-                const total = subtotal + shippingFee;
-
-                const result = await Swal.fire({
-                    icon: 'question',
-                    title: 'Xác nhận đặt hàng',
-                    html: `
-                        <div style="text-align: left;">
-                            <p><strong>Người nhận:</strong> ${fullName}</p>
-                            <p><strong>Số điện thoại:</strong> ${phone}</p>
-                            <p><strong>Địa chỉ:</strong> ${address}, ${district}, ${city}</p>
-                            <p><strong>Tổng tiền:</strong> <span style="color: #dc3545; font-weight: bold;">${total.toLocaleString()}₫</span></p>
-                            <p><strong>Thanh toán:</strong> ${paymentMethod === 'cod' ? 'COD' : paymentMethod === 'bank' ? 'Chuyển khoản' : 'MoMo'}</p>
-                        </div>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Xác nhận đặt hàng',
-                    cancelButtonText: 'Hủy',
-                    confirmButtonColor: '#28a745'
-                });
-
-                if (!result.isConfirmed) return;
-
-                // TODO: Gọi API tạo đơn hàng ở đây
-                // await fetch('/api/donhang', { method: 'POST', body: JSON.stringify({...}) });
-
-                for (const item of cart) {
-                    await fetch(`/api/giohang/${item._id}`, { method: 'DELETE' });
-                }
-
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Đặt hàng thành công!',
-                    html: `
-                        <p>Cảm ơn bạn đã mua hàng tại SportZoneVN!</p>
-                        <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
-                    `,
-                    confirmButtonText: 'Về trang chủ',
-                    confirmButtonColor: '#28a745'
-                });
-
-                window.location.href = 'Trang_chu.html';
-
-            } catch (err) {
-                console.error('❌ Lỗi:', err);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi khi đặt hàng!',
-                    text: 'Có lỗi xảy ra. Vui lòng thử lại!',
-                    confirmButtonText: 'OK'
-                });
-            }
+            return {
+                MaSanPham: sp._id,
+                TenSanPham: sp.ten,
+                HinhAnh: sp.hinhAnh,
+                Gia: sp.gia,
+                SoLuong: item.SoLuong,
+                Size: item.Size,
+                ThanhTien: thanhTien
+            };
         });
 
+        const shippingFee = 30000;
+        const total = subtotal + shippingFee;
+
+        // 3️⃣ Hiển thị xác nhận
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Xác nhận đặt hàng',
+            html: `
+                <div style="text-align: left;">
+                    <p><strong>Người nhận:</strong> ${fullName}</p>
+                    <p><strong>Số điện thoại:</strong> ${phone}</p>
+                    <p><strong>Địa chỉ:</strong> ${address}, ${district}, ${city}</p>
+                    <p><strong>Số sản phẩm:</strong> ${cart.length}</p>
+                    <p><strong>Tổng tiền:</strong> <span style="color: #dc3545; font-weight: bold;">${total.toLocaleString()}₫</span></p>
+                    <p><strong>Thanh toán:</strong> ${paymentMethod === 'cod' ? 'Thanh toán khi nhận hàng (COD)' : paymentMethod === 'bank' ? 'Chuyển khoản ngân hàng' : 'Ví MoMo'}</p>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận đặt hàng',
+            cancelButtonText: 'Hủy',
+            confirmButtonColor: '#28a745'
+        });
+
+        if (!result.isConfirmed) return;
+
+        // 4️⃣ Tạo đơn hàng
+        const donHangData = {
+            MaKhachHang: userData.MaTK,
+            TenKhachHang: fullName,
+            Email: email,
+            SoDienThoai: phone,
+            DiaChiGiaoHang: address,
+            Tinh: city,
+            Quan: district,
+            GhiChu: notes,
+            SanPham: sanPhamDonHang,
+            TongTien: total,
+            PhiVanChuyen: shippingFee,
+            PhuongThucThanhToan: paymentMethod
+        };
+
+        console.log('📦 Đang tạo đơn hàng:', donHangData);
+
+        const orderRes = await fetch('/api/donhang', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(donHangData)
+        });
+
+        if (!orderRes.ok) {
+            const errorData = await orderRes.json();
+            throw new Error(errorData.message || 'Không thể tạo đơn hàng');
+        }
+
+        const orderResult = await orderRes.json();
+        console.log('✅ Đã tạo đơn hàng:', orderResult);
+
+        // 5️⃣ Thông báo thành công
+        await Swal.fire({
+            icon: 'success',
+            title: 'Đặt hàng thành công!',
+            html: `
+                <div style="text-align: center;">
+                    <p><strong>Mã đơn hàng:</strong> <code>${orderResult.donHang._id}</code></p>
+                    <p>Cảm ơn bạn đã mua hàng tại SportZoneVN!</p>
+                    <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+                    ${paymentMethod === 'bank' ? `
+                        <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <p><strong>Thông tin chuyển khoản:</strong></p>
+                            <p>Ngân hàng: MB Bank</p>
+                            <p>Số TK: 54567892005</p>
+                            <p>Chủ TK: Nguyễn Tùng Lâm</p>
+                            <p>Nội dung: ${phone} - ${fullName}</p>
+                            <p style="color: #dc3545;"><strong>Số tiền: ${total.toLocaleString()}₫</strong></p>
+                        </div>
+                    ` : ''}
+                </div>
+            `,
+            confirmButtonText: 'Về trang chủ',
+            confirmButtonColor: '#28a745',
+            allowOutsideClick: false
+        });
+
+        // 6️⃣ Chuyển về trang chủ
+        window.location.href = 'Trang_chu.html';
+
+    } catch (err) {
+        console.error('❌ Lỗi:', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi khi đặt hàng!',
+            text: err.message || 'Có lỗi xảy ra. Vui lòng thử lại!',
+            confirmButtonText: 'OK'
+        });
+    }
+});
         // ======================= KHỞI CHẠY =======================
         loadOrderSummary();
     </script>
