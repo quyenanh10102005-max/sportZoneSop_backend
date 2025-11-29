@@ -9,39 +9,86 @@
     <link rel="stylesheet" href="Trang_chu.css">
     <style>
         .verification-step {
-            display: none;
-        }
-        .verification-step.active {
-            display: block;
-        }
-        .code-input-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .code-input {
-            width: 50px;
-            height: 60px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-        }
-        .code-input:focus {
-            border-color: #667eea;
-            outline: none;
-        }
-        .countdown {
-            text-align: center;
-            margin: 15px 0;
-            color: #666;
-            font-size: 14px;
-        }
-        .countdown.expired {
-            color: #dc3545;
-        }
+        display: none;
+    }
+    .verification-step.active {
+        display: block;
+    }
+    .code-input-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    .code-input {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+    }
+    .code-input:focus {
+        border-color: #667eea;
+        outline: none;
+    }
+    .countdown {
+        text-align: center;
+        margin: 15px 0;
+        color: #666;
+        font-size: 14px;
+    }
+    .countdown.expired {
+        color: #dc3545;
+    }
+
+    /* === STYLE MỚI THEO DANG_NHAP.HTML === */
+    .register-box .form-group {
+        position: relative;
+        margin-bottom: 15px;
+    }
+    .register-box .form-group input {
+        width: 100%;
+        padding: 15px 20px 15px 50px; /* Tăng padding để làm ô lớn hơn */
+        border: 1px solid #e0e0e0;
+        border-radius: 12px; /* Bo góc lớn hơn */
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    .register-box .form-group input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .register-box .form-group i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 18px;
+        pointer-events: none; /* Icon không chặn click */
+    }
+    .register-box .form-row {
+        display: flex;
+        gap: 15px;
+    }
+    .register-box .form-row .form-group {
+        flex: 1;
+    }
+    .register-box .btn-register {
+        /* Đảm bảo nút này có style đồng bộ với nút đăng nhập */
+        background: linear-gradient(to right, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        width: 100%;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
     </style>
 </head>
 <body>
@@ -51,35 +98,46 @@
         <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
     </div>
 
+    <!-- Header -->
     <header id="mainHeader">
         <div class="header-logo">
             <a href="Trang_chu.html">
                 <img src="/images/Logo_.png" alt="SportZoneVN Logo">
             </a>
         </div>
+
         <div class="header-search">
-            <i class="fa-solid fa-magnifying-glass" id="searchIcon"></i>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm ...">
-        </div>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Tìm kiếm sản phẩm ..." aria-label="Tìm kiếm sản phẩm">
+        </div> 
+
         <div class="header_menu">
-            <i class="fa-solid fa-user"></i>
-            <ul class="header_main_menu">
-                <li><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus"></i>Đăng ký</a></li>
-                <li><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket"></i>Đăng nhập</a></li>
+            <i class="fa-solid fa-user" id="userIcon" aria-label="Menu người dùng"></i>
+            <span id="userName"></span>
+            <ul class="header_main_menu" id="menuList">
+                <li id="welcomeMessage" style="display: none; padding: 12px 20px; font-weight: 600; color: #667eea; border-bottom: 1px solid #eee;">
+                    Xin chào, <span id="welcomeUserName"></span>
+                </li>
+                <li id="registerLi"><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Đăng ký</a></li>
+                <li id="loginLi"><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Đăng nhập</a></li>
+                <li id="logoutLi" style="display: none;"><a href="#"><i class="fa-solid fa-right-from-bracket" style="margin-right: 8px;"></i>Đăng xuất</a></li>
             </ul>
         </div>
+
         <div class="header_gio_hang">
-            <a href="Gio_Hang.html">
+            <a href="Gio_Hang.html" aria-label="Giỏ hàng">
                 <i class="fa-solid fa-cart-shopping" data-count="0"></i>
             </a>
         </div>
     </header>
 
+    <!-- Navigation -->
     <nav>
         <ul class="main_menu">
-            <li><a href="Trang_chu.html"><i class="fa-solid fa-house"></i>Trang chủ</a></li>
+            <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
+
             <li class="submenu">
-                <a href="#"><i class="fa-solid fa-futbol"></i>Giày bóng đá</a>
+                <a href="#"><i class="fa-solid fa-futbol" style="margin-right: 5px;"></i>Giày bóng đá</a>
                 <ul class="has_submenu">
                     <li><a href="Danh_Sach_San_Pham.html">Tất cả sản phẩm</a></li>
                     <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ nhân tạo">Giày sân cỏ nhân tạo</a></li>
@@ -87,8 +145,9 @@
                     <li><a href="Danh_Sach_San_Pham.html?loai=Sân Futsal">Giày sân Futsal</a></li>
                 </ul>
             </li>
+
             <li class="submenu">
-                <a href="#"><i class="fa-solid fa-tag"></i>Thương hiệu</a>
+                <a href="#"><i class="fa-solid fa-tag" style="margin-right: 5px;"></i>Thương hiệu</a>
                 <ul class="has_submenu">
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Nike">Nike</a></li>
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Adidas">Adidas</a></li>
@@ -98,6 +157,11 @@
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Zocker">Zocker</a></li>
                 </ul>
             </li>
+
+            <li><a href="Phu_Kien.html"><i class="fa-solid fa-shirt" style="margin-right: 5px;"></i>Phụ kiện</a></li>
+            <li><a href="Tin_Tuc_Giay.html"><i class="fa-solid fa-newspaper" style="margin-right: 5px;"></i>Tin tức giày</a></li>
+            <li><a href="Khuyen_Mai.html"><i class="fa-solid fa-percent" style="margin-right: 5px;"></i>Khuyến mãi</a></li>
+            <li><a href="Ve_chung_toi.html"><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>Về chúng tôi</a></li>
         </ul>
     </nav>
 
@@ -196,14 +260,47 @@
         </div>
     </div>
 
-    <footer>
+     <footer>
         <div class="footer-section footer-info">
             <h2>THÔNG TIN LIÊN HỆ</h2>
-            <h1>SportZoneVN</h1>
-            <p>Giày bóng đá chính hãng Việt Nam</p>
-            <p><i class="fa-solid fa-location-dot"></i> Đông Yên - Đông Sơn - Thanh Hóa</p>
-            <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111">0329127111</a></p>
-            <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com">contact@sportzonevn.com</a></p>
+            <h1 style="font-size: 24px; margin: 15px 0; color: #fff; font-weight: 700;">SportZoneVN</h1>
+            <p style="font-size: 15px; margin-bottom: 15px; font-weight: 500;">Giày bóng đá chính hãng Việt Nam</p>
+            <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
+            <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111" style="color: #ecf0f1; text-decoration: none;">0329127111</a></p>
+            <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com" style="color: #ecf0f1; text-decoration: none;">contact@sportzonevn.com</a></p>
+        </div>
+
+        <div class="footer-section footer-links">
+            <h2>HỖ TRỢ KHÁCH HÀNG</h2>
+            <ul>
+                <li><a href="#"><i class="fa-solid fa-circle-question" style="margin-right: 5px;"></i>Hướng dẫn đặt hàng</a></li>
+                <li><a href="#"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>Chính sách bảo mật</a></li>
+                <li><a href="#"><i class="fa-solid fa-rotate" style="margin-right: 5px;"></i>Chính sách đổi trả</a></li>
+                <li><a href="#"><i class="fa-solid fa-comments" style="margin-right: 5px;"></i>FAQ - Câu hỏi thường gặp</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section footer-social">
+            <h2>KẾT NỐI VỚI CHÚNG TÔI</h2>
+            <div class="lien_ket">
+                <a href="https://www.facebook.com/thien.uc.609096" target="_blank" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/qanh1010/" target="_blank" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.youtube.com/@quyenanh8600" target="_blank" aria-label="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+            </div>
+            <div style="margin-top: 25px;">
+                <p style="font-size: 14px; margin-bottom: 10px;">Phương thức thanh toán:</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <i class="fa-brands fa-cc-visa" style="font-size: 32px; color: #ecf0f1;"></i>
+                    <i class="fa-brands fa-cc-mastercard" style="font-size: 32px; color: #ecf0f1;"></i>
+                    <i class="fa-solid fa-money-bill-wave" style="font-size: 32px; color: #ecf0f1;"></i>
+                </div>
+            </div>
         </div>
     </footer>
 
