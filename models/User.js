@@ -25,6 +25,28 @@ const userSchema = new mongoose.Schema({
   NgayTao: {
     type: Date,
     default: Date.now
+  },
+  //  Thêm các field cho xác thực
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  verificationCode: {
+    type: String,
+    default: null
+  },
+  verificationCodeExpires: {
+    type: Date,
+    default: null
+  },
+  //  Field cho đặt lại mật khẩu
+  resetPasswordCode: {
+    type: String,
+    default: null
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: null
   }
 });
 

@@ -1,63 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportZoneVN</title>
+    <title>Đăng ký - SportZoneVN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Trang_chu.css">
-    
+    <style>
+        .verification-step {
+            display: none;
+        }
+        .verification-step.active {
+            display: block;
+        }
+        .code-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .code-input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .countdown {
+            text-align: center;
+            margin: 15px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .countdown.expired {
+            color: #dc3545;
+        }
+    </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <body>
-   <div class="welcome">
+    <div class="welcome">
         <i class="fa-solid fa-star" style="margin-right: 8px;"></i>
         Chào mừng đến với SportZoneVN - Giày bóng đá chính hãng Việt Nam
         <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
     </div>
 
-    <!-- Header -->
     <header id="mainHeader">
         <div class="header-logo">
             <a href="Trang_chu.html">
                 <img src="/images/Logo_.png" alt="SportZoneVN Logo">
             </a>
         </div>
-
         <div class="header-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Tìm kiếm sản phẩm ..." aria-label="Tìm kiếm sản phẩm">
-        </div> 
-
+            <i class="fa-solid fa-magnifying-glass" id="searchIcon"></i>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm ...">
+        </div>
         <div class="header_menu">
-            <i class="fa-solid fa-user" id="userIcon" aria-label="Menu người dùng"></i>
-            <span id="userName"></span>
-            <ul class="header_main_menu" id="menuList">
-                <li id="welcomeMessage" style="display: none; padding: 12px 20px; font-weight: 600; color: #667eea; border-bottom: 1px solid #eee;">
-                    Xin chào, <span id="welcomeUserName"></span>
-                </li>
-                <li id="registerLi"><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Đăng ký</a></li>
-                <li id="loginLi"><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Đăng nhập</a></li>
-                <li id="logoutLi" style="display: none;"><a href="#"><i class="fa-solid fa-right-from-bracket" style="margin-right: 8px;"></i>Đăng xuất</a></li>
+            <i class="fa-solid fa-user"></i>
+            <ul class="header_main_menu">
+                <li><a href="./Dang_ky.html"><i class="fa-solid fa-user-plus"></i>Đăng ký</a></li>
+                <li><a href="./Dang_nhap.html"><i class="fa-solid fa-right-to-bracket"></i>Đăng nhập</a></li>
             </ul>
         </div>
-
         <div class="header_gio_hang">
-            <a href="Gio_Hang.html" aria-label="Giỏ hàng">
+            <a href="Gio_Hang.html">
                 <i class="fa-solid fa-cart-shopping" data-count="0"></i>
             </a>
         </div>
     </header>
 
-    <!-- Navigation -->
     <nav>
         <ul class="main_menu">
-            <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
-
+            <li><a href="Trang_chu.html"><i class="fa-solid fa-house"></i>Trang chủ</a></li>
             <li class="submenu">
-                <a href="#"><i class="fa-solid fa-futbol" style="margin-right: 5px;"></i>Giày bóng đá</a>
+                <a href="#"><i class="fa-solid fa-futbol"></i>Giày bóng đá</a>
                 <ul class="has_submenu">
                     <li><a href="Danh_Sach_San_Pham.html">Tất cả sản phẩm</a></li>
                     <li><a href="Danh_Sach_San_Pham.html?loai=Sân cỏ nhân tạo">Giày sân cỏ nhân tạo</a></li>
@@ -65,9 +87,8 @@
                     <li><a href="Danh_Sach_San_Pham.html?loai=Sân Futsal">Giày sân Futsal</a></li>
                 </ul>
             </li>
-
             <li class="submenu">
-                <a href="#"><i class="fa-solid fa-tag" style="margin-right: 5px;"></i>Thương hiệu</a>
+                <a href="#"><i class="fa-solid fa-tag"></i>Thương hiệu</a>
                 <ul class="has_submenu">
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Nike">Nike</a></li>
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Adidas">Adidas</a></li>
@@ -77,255 +98,371 @@
                     <li><a href="Danh_Sach_San_Pham.html?thuongHieu=Zocker">Zocker</a></li>
                 </ul>
             </li>
-
-            <li><a href="Phu_Kien.html"><i class="fa-solid fa-shirt" style="margin-right: 5px;"></i>Phụ kiện</a></li>
-            <li><a href="Tin_Tuc_Giay.html"><i class="fa-solid fa-newspaper" style="margin-right: 5px;"></i>Tin tức giày</a></li>
-            <li><a href="Khuyen_Mai.html"><i class="fa-solid fa-percent" style="margin-right: 5px;"></i>Khuyến mãi</a></li>
-            <li><a href="Ve_chung_toi.html"><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>Về chúng tôi</a></li>
         </ul>
     </nav>
 
     <div class="register-container">
         <div class="register-box">
-            <div class="register-header">
-                <h2>Đăng ký tài khoản</h2>
-                <p>Tạo tài khoản mới để trải nghiệm mua sắm tại SportZoneVN</p>
-            </div>
-
-            <div id="alertMessage" style="display: none;"></div>
-
-            <form id="registerForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <i class="fa-solid fa-user"></i>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="firstName" 
-                            placeholder="Họ" 
-                            required
-                        >
-                        <div class="error-message" id="firstNameError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <i class="fa-solid fa-user"></i>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="lastName" 
-                            placeholder="Tên" 
-                            required
-                        >
-                        <div class="error-message" id="lastNameError"></div>
-                    </div>
+            <!-- BƯỚC 1: NHẬP THÔNG TIN -->
+            <div id="step1" class="verification-step active">
+                <div class="register-header">
+                    <h2>Đăng ký tài khoản</h2>
+                    <p>Tạo tài khoản mới để trải nghiệm mua sắm tại SportZoneVN</p>
                 </div>
 
-                <div class="form-group">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input 
-                        type="email" 
-                        class="form-control" 
-                        id="email" 
-                        placeholder="Địa chỉ email" 
-                        required
-                    >
-                    <div class="error-message" id="emailError"></div>
-                </div>
-
-                <div class="form-group">
-                    <i class="fa-solid fa-phone"></i>
-                    <input 
-                        type="tel" 
-                        class="form-control" 
-                        id="phone" 
-                        placeholder="Số điện thoại" 
-                        required
-                    >
-                    <div class="error-message" id="phoneError"></div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input 
-                        type="password" 
-                        class="form-control" 
-                        id="password" 
-                        placeholder="Mật khẩu" 
-                        required
-                    >
-                    <div class="password-strength" id="passwordStrength">
-                        <div class="strength-bar">
-                            <div class="strength-fill"></div>
+                <form id="registerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="firstName" placeholder="Họ" required>
                         </div>
-                        <span class="strength-text"></span>
+                        <div class="form-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="lastName" placeholder="Tên" required>
+                        </div>
                     </div>
-                    <div class="error-message" id="passwordError"></div>
+
+                    <div class="form-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Địa chỉ email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="phone" placeholder="Số điện thoại" required>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Mật khẩu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu" required>
+                    </div>
+
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">
+                            Tôi đồng ý với <a href="#">Điều khoản sử dụng</a> và <a href="#">Chính sách bảo mật</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-register">
+                        <i class="fa-solid fa-paper-plane"></i> Gửi mã xác thực
+                    </button>
+                </form>
+
+                <div class="divider"><span>hoặc</span></div>
+                <div class="login-link">
+                    Đã có tài khoản? <a href="./Dang_nhap.html">Đăng nhập ngay</a>
                 </div>
-
-                <div class="form-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input 
-                        type="password" 
-                        class="form-control" 
-                        id="confirmPassword" 
-                        placeholder="Xác nhận mật khẩu" 
-                        required
-                    >
-                    <div class="error-message" id="confirmPasswordError"></div>
-                </div>
-
-                <div class="terms-checkbox">
-                    <input type="checkbox" id="agreeTerms" required>
-                    <label for="agreeTerms">
-                        Tôi đồng ý với <a href="#" target="_blank">Điều khoản sử dụng</a> 
-                        và <a href="#" target="_blank">Chính sách bảo mật</a> của SportZoneVN
-                    </label>
-                </div>
-
-                <button type="submit" class="btn-register" id="registerBtn">
-                    <i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>
-                    Đăng ký tài khoản
-                </button>
-            </form>
-
-            <div class="divider">
-                <span>hoặc</span>
             </div>
 
-            <div class="login-link">
-                Đã có tài khoản? <a href="./Dang_nhap.html">Đăng nhập ngay</a>
+            <!-- BƯỚC 2: XÁC THỰC EMAIL -->
+            <div id="step2" class="verification-step">
+                <div class="register-header">
+                    <h2><i class="fa-solid fa-envelope-circle-check"></i> Xác thực Email</h2>
+                    <p>Vui lòng nhập mã 6 số đã được gửi đến email <strong id="emailDisplay"></strong></p>
+                </div>
+
+                <div class="code-input-group">
+                    <input type="text" maxlength="1" class="code-input" data-index="0">
+                    <input type="text" maxlength="1" class="code-input" data-index="1">
+                    <input type="text" maxlength="1" class="code-input" data-index="2">
+                    <input type="text" maxlength="1" class="code-input" data-index="3">
+                    <input type="text" maxlength="1" class="code-input" data-index="4">
+                    <input type="text" maxlength="1" class="code-input" data-index="5">
+                </div>
+
+                <div class="countdown" id="countdown">
+                    Mã có hiệu lực trong: <strong id="timer">10:00</strong>
+                </div>
+
+                <button id="verifyBtn" class="btn-register">
+                    <i class="fa-solid fa-check-circle"></i> Xác thực
+                </button>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button id="resendBtn" class="btn btn-outline-secondary">
+                        <i class="fa-solid fa-rotate-right"></i> Gửi lại mã
+                    </button>
+                    <button id="backBtn" class="btn btn-outline-secondary ms-2">
+                        <i class="fa-solid fa-arrow-left"></i> Quay lại
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-
-   <footer>
+    <footer>
         <div class="footer-section footer-info">
             <h2>THÔNG TIN LIÊN HỆ</h2>
-            <h1 style="font-size: 24px; margin: 15px 0; color: #fff; font-weight: 700;">SportZoneVN</h1>
-            <p style="font-size: 15px; margin-bottom: 15px; font-weight: 500;">Giày bóng đá chính hãng Việt Nam</p>
-            <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Đông Yên - Đông Sơn - Thanh Hóa</p>
-            <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111" style="color: #ecf0f1; text-decoration: none;">0329127111</a></p>
-            <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com" style="color: #ecf0f1; text-decoration: none;">contact@sportzonevn.com</a></p>
-        </div>
-
-        <div class="footer-section footer-links">
-            <h2>HỖ TRỢ KHÁCH HÀNG</h2>
-            <ul>
-                <li><a href="#"><i class="fa-solid fa-circle-question" style="margin-right: 5px;"></i>Hướng dẫn đặt hàng</a></li>
-                <li><a href="#"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>Chính sách bảo mật</a></li>
-                <li><a href="#"><i class="fa-solid fa-rotate" style="margin-right: 5px;"></i>Chính sách đổi trả</a></li>
-                <li><a href="#"><i class="fa-solid fa-comments" style="margin-right: 5px;"></i>FAQ - Câu hỏi thường gặp</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-section footer-social">
-            <h2>KẾT NỐI VỚI CHÚNG TÔI</h2>
-            <div class="lien_ket">
-                <a href="https://www.facebook.com/thien.uc.609096" target="_blank" aria-label="Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-                <a href="https://www.instagram.com/qanh1010/" target="_blank" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="https://www.youtube.com/@quyenanh8600" target="_blank" aria-label="YouTube">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-            </div>
-            <div style="margin-top: 25px;">
-                <p style="font-size: 14px; margin-bottom: 10px;">Phương thức thanh toán:</p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <i class="fa-brands fa-cc-visa" style="font-size: 32px; color: #ecf0f1;"></i>
-                    <i class="fa-brands fa-cc-mastercard" style="font-size: 32px; color: #ecf0f1;"></i>
-                    <i class="fa-solid fa-money-bill-wave" style="font-size: 32px; color: #ecf0f1;"></i>
-                </div>
-            </div>
+            <h1>SportZoneVN</h1>
+            <p>Giày bóng đá chính hãng Việt Nam</p>
+            <p><i class="fa-solid fa-location-dot"></i> Đông Yên - Đông Sơn - Thanh Hóa</p>
+            <p><i class="fa-solid fa-phone"></i> Hotline: <a href="tel:0329127111">0329127111</a></p>
+            <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:contact@sportzonevn.com">contact@sportzonevn.com</a></p>
         </div>
     </footer>
 
-    <!-- Bottom Bar -->
     <div class="gb">
-        <i class="fa-regular fa-copyright" style="margin-right: 5px;"></i>
+        <i class="fa-regular fa-copyright"></i>
         2025 SportZoneVN - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000' 
+            : 'https://sportzonesop.onrender.com';
 
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <script>
-  document.getElementById("registerForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
+        let userEmail = '';
+        let userPassword = '';
+        let userName = '';
+        let countdownInterval;
 
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+        // ======================= BƯỚC 1: GỬI MÃ XÁC THỰC =======================
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-  if (password !== confirmPassword) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Mật khẩu không khớp',
-      text: 'Vui lòng kiểm tra lại mật khẩu xác nhận!',
-      confirmButtonText: 'OK'
-    });
-    return;
-  }
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-  const data = {
-    TenDangNhap: firstName + lastName, 
-    MatKhau: password,
-    Email: email,
-    MaVaiTro: 1
-  };
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mật khẩu không khớp',
+                    text: 'Vui lòng kiểm tra lại mật khẩu xác nhận!'
+                });
+                return;
+            }
 
-  try {
-    const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3000' 
-  : 'https://sportzonesop.onrender.com';
+            if (!document.getElementById('agreeTerms').checked) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Chưa đồng ý điều khoản',
+                    text: 'Vui lòng đồng ý với điều khoản sử dụng!'
+                });
+                return;
+            }
 
-const res = await fetch(API_BASE_URL + "/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+            userName = firstName + ' ' + lastName;
+            userEmail = email;
+            userPassword = password;
 
-    const result = await res.json();
+            try {
+                Swal.fire({
+                    title: 'Đang gửi mã xác thực...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
 
-    if (res.ok) {
-      await Swal.fire({
-        icon: 'success',
-        title: 'Đăng ký thành công!',
-        text: 'Bạn có thể đăng nhập ngay.',
-        confirmButtonText: 'Đăng nhập'
-      });
-      window.location.href = "Dang_nhap.html"; 
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Đăng ký thất bại',
-        text: result.message || "Có lỗi xảy ra. Vui lòng thử lại!",
-        confirmButtonText: 'OK'
-      });
-    }
-  } catch (err) {
-    console.error(err);
-    Swal.fire({
-      icon: 'error',
-      title: 'Lỗi kết nối!',
-      text: 'Không thể kết nối tới máy chủ.',
-      confirmButtonText: 'OK'
-    });
-  }
-});
+                const res = await fetch(API_BASE_URL + '/api/auth/send-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        TenDangNhap: firstName + lastName,
+                        Email: email
+                    })
+                });
 
+                const result = await res.json();
 
+                if (res.ok) {
+                    Swal.close();
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
+                    document.getElementById('emailDisplay').textContent = email;
+                    
+                    startCountdown(600); // 10 phút
+                    document.querySelector('.code-input').focus();
 
-</script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã gửi mã!',
+                        text: 'Vui lòng kiểm tra email của bạn.',
+                        timer: 3000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: result.message || 'Không thể gửi mã xác thực!'
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi kết nối!',
+                    text: 'Không thể kết nối tới máy chủ.'
+                });
+            }
+        });
+
+        // ======================= XỬ LÝ NHẬP MÃ =======================
+        const codeInputs = document.querySelectorAll('.code-input');
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                if (e.target.value.length === 1 && index < 5) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, 6);
+                pastedData.split('').forEach((char, i) => {
+                    if (codeInputs[i]) codeInputs[i].value = char;
+                });
+                if (pastedData.length === 6) {
+                    codeInputs[5].focus();
+                }
+            });
+        });
+
+        // ======================= XÁC THỰC MÃ =======================
+        document.getElementById('verifyBtn').addEventListener('click', async function() {
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+
+            if (code.length !== 6) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Thiếu mã',
+                    text: 'Vui lòng nhập đủ 6 số!'
+                });
+                return;
+            }
+
+            try {
+                Swal.fire({
+                    title: 'Đang xác thực...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+
+                const res = await fetch(API_BASE_URL + '/api/auth/verify-register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        Email: userEmail,
+                        verificationCode: code,
+                        MatKhau: userPassword
+                    })
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    clearInterval(countdownInterval);
+                    
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Đăng ký thành công!',
+                        text: 'Chào mừng bạn đến với SportZoneVN!',
+                        confirmButtonText: 'Đăng nhập ngay'
+                    });
+
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    window.location.href = 'Trang_chu.html';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Xác thực thất bại!',
+                        text: result.message || 'Mã xác thực không đúng!'
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Không thể xác thực. Vui lòng thử lại!'
+                });
+            }
+        });
+
+        // ======================= GỬI LẠI MÃ =======================
+        document.getElementById('resendBtn').addEventListener('click', async function() {
+            try {
+                const res = await fetch(API_BASE_URL + '/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Email: userEmail })
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    clearInterval(countdownInterval);
+                    startCountdown(600);
+                    codeInputs.forEach(input => input.value = '');
+                    codeInputs[0].focus();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã gửi lại!',
+                        text: 'Mã xác thực mới đã được gửi đến email.',
+                        timer: 3000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: result.message
+                    });
+                }
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi kết nối!',
+                    text: 'Không thể gửi lại mã.'
+                });
+            }
+        });
+
+        // ======================= QUAY LẠI =======================
+        document.getElementById('backBtn').addEventListener('click', function() {
+            clearInterval(countdownInterval);
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+        });
+
+        // ======================= ĐẾM NGƯỢC =======================
+        function startCountdown(seconds) {
+            let remaining = seconds;
+            const timerEl = document.getElementById('timer');
+            const countdownEl = document.getElementById('countdown');
+
+            countdownInterval = setInterval(() => {
+                const minutes = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                timerEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownEl.classList.add('expired');
+                    timerEl.textContent = 'Hết hạn';
+                    document.getElementById('verifyBtn').disabled = true;
+                }
+
+                remaining--;
+            }, 1000);
+        }
+    </script>
 </body>
-
-
-
 </html>
