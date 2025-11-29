@@ -22,8 +22,11 @@ exports.verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log('✅ Token verified:', { userId: decoded.userId, role: decoded.role });
-    req.user = decoded;
+    console.log('✅ Token verified:', { 
+      userId: decoded.MaTK,      
+      tenDangNhap: decoded.TenDangNhap,
+      maVaiTro: decoded.MaVaiTro });
+      req.user = decoded;
     next();
   } catch (err) {
     console.log('❌ Token verification failed:', err.message);
@@ -34,14 +37,14 @@ exports.verifyToken = (req, res, next) => {
 // Middleware kiểm tra quyền admin
 exports.isAdmin = (req, res, next) => {
   console.log('👮 Checking admin role...');
-  console.log('User role:', req.user?.role);
+  console.log('User MaVaiTro:', req.user?.MaVaiTro);
   
   if (!req.user) {
     console.log('❌ No user in request');
     return res.status(401).json({ message: 'Chưa xác thực' });
   }
   
-  if (req.user.role !== 0) {
+  if (req.user.MaVaiTro !== 0) {
     console.log('❌ User is not admin. Role:', req.user.role);
     return res.status(403).json({ message: 'Bạn không có quyền truy cập' });
   }
