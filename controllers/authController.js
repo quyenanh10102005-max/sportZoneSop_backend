@@ -10,48 +10,234 @@ const generateVerificationCode = () => {
 
 // ======================= ĐĂNG KÝ - BƯỚC 1: GỬI MÃ XÁC THỰC =======================
 exports.sendVerificationCode = async (req, res) => {
-  try {
+ try {
     const { Email, TenDangNhap } = req.body;
 
+    console.log('📧 Send verification to:', Email);
+
+    // ✅ Validate email
+    if (!Email || !TenDangNhap) {
+      return res.status(400).json({ 
+        message: 'Email và tên đăng nhập là bắt buộc!' 
+      });
+    }
+
     // Kiểm tra email đã tồn tại chưa
-    const existingUser = await User.findOne({ $or: [{ Email }, { TenDangNhap }] });
-    if (existingUser) {
+    const existingUser = await User.findOne({ 
+      $or: [{ Email }, { TenDangNhap }] 
+    });
+    
+    if (existingUser && existingUser.isVerified) {
+      console.log('❌ Email already exists:', Email);
       return res.status(400).json({ 
         message: 'Email hoặc tên đăng nhập đã được sử dụng!' 
       });
+    }
+
+    // Xóa user chưa xác thực cũ (nếu có)
+    if (existingUser && !existingUser.isVerified) {
+      await User.deleteOne({ _id: existingUser._id });
     }
 
     // Tạo mã xác thực
     const verificationCode = generateVerificationCode();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
 
-    // Lưu tạm thông tin vào session hoặc cache (ở đây dùng temporary user)
+    console.log('🔐 Generated code:', verificationCode);
+
+    // Tạo tạm user
     const tempUser = new User({
       TenDangNhap,
       Email,
-      MatKhau: 'temp_password', // Sẽ được thay thế sau
+      MatKhau: 'temp_password_' + Date.now(),
       verificationCode,
       verificationCodeExpires: expiresAt,
       isVerified: false
     });
 
     await tempUser.save();
+    console.log('💾 Temp user saved');
 
-    // Gửi email
-    await sendVerificationEmail(Email, verificationCode, TenDangNhap);
+    // ✅ Gửi email với xử lý lỗi
+    try {
+      await sendVerificationEmail(Email, verificationCode, TenDangNhap);
+      console.log('✅ Email sent successfully to:', Email);
+    } catch (emailError) {
+      console.error('❌ Email sending failed:', emailError.message);
+      // Xóa user tạm nếu gửi email thất bại
+      await User.deleteOne({ _id: tempUser._id });
+      
+      return res.status(500).json({ 
+        message: 'Không thể gửi email. Kiểm tra cấu hình email server!',
+        error: process.env.NODE_ENV === 'development' ? emailError.message : undefined
+      });
+    }
 
     res.json({ 
       message: 'Mã xác thực đã được gửi đến email của bạn!',
       email: Email,
-      expiresIn: 600 // 10 phút (giây)
+      expiresIn: 600
     });
 
   } catch (error) {
-    console.error('❌ Lỗi gửi mã xác thực:', error);
+    console.error('❌ Error in sendVerificationCode:', error);
     res.status(500).json({ 
-      message: 'Không thể gửi mã xác thực. Vui lòng thử lại!' 
+      message: 'Không thể gửi mã xác thực. Vui lòng thử lại!',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
+};
+
+// ===== Sửa emailConfig.js =====
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
+  }
+});
+
+// ✅ Test connection khi khởi động
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('❌ Email config error:', error);
+  } else {
+    console.log('✅ Email server ready!');
+  }
+});
+
+const sendVerificationEmail = async (toEmail, verificationCode, userName) => {
+  try {
+    console.log('📧 Sending verification email to:', toEmail);
+    
+    const mailOptions = {
+      from: `"SportZoneVN" <${process.env.EMAIL_USER}>`,
+      to: toEmail,
+      subject: 'Mã xác thực đăng ký tài khoản - SportZoneVN',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { font-family: Arial, sans-serif; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+            .content { background: #f9f9f9; padding: 30px; }
+            .code-box { background: white; border: 2px dashed #667eea; padding: 20px; text-align: center; margin: 20px 0; }
+            .code { font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 5px; }
+            .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+            .footer { background: #333; color: white; padding: 20px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>SportZoneVN</h1>
+              <p>Giày bóng đá chính hãng Việt Nam</p>
+            </div>
+            
+            <div class="content">
+              <h2>Xin chào ${userName}!</h2>
+              <p>Cảm ơn bạn đã đăng ký tài khoản. Để hoàn tất, vui lòng sử dụng mã xác thực:</p>
+              
+              <div class="code-box">
+                <div class="code">${verificationCode}</div>
+                <p style="margin: 10px 0 0 0; color: #666;">Mã có hiệu lực trong 10 phút</p>
+              </div>
+              
+              <div class="warning">
+                <strong>⚠️ Lưu ý:</strong>
+                <ul>
+                  <li>Không chia sẻ mã này với ai</li>
+                  <li>Mã sẽ hết hạn trong 10 phút</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="footer">
+              <p>&copy; 2025 SportZoneVN</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully:', result.response);
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Email sending error:', error);
+    throw new Error(`Gửi email thất bại: ${error.message}`);
+  }
+};
+
+const sendPasswordResetEmail = async (toEmail, resetCode, userName) => {
+  try {
+    console.log('📧 Sending password reset email to:', toEmail);
+    
+    const mailOptions = {
+      from: `"SportZoneVN" <${process.env.EMAIL_USER}>`,
+      to: toEmail,
+      subject: 'Đặt lại mật khẩu - SportZoneVN',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { font-family: Arial, sans-serif; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+            .content { background: #f9f9f9; padding: 30px; }
+            .code-box { background: white; border: 2px dashed #dc3545; padding: 20px; text-align: center; margin: 20px 0; }
+            .code { font-size: 32px; font-weight: bold; color: #dc3545; letter-spacing: 5px; }
+            .footer { background: #333; color: white; padding: 20px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🔐 Đặt lại mật khẩu</h1>
+            </div>
+            
+            <div class="content">
+              <h2>Xin chào ${userName}!</h2>
+              <p>Sử dụng mã này để đặt lại mật khẩu của bạn:</p>
+              
+              <div class="code-box">
+                <div class="code">${resetCode}</div>
+              </div>
+              
+              <p>Mã có hiệu lực trong 10 phút.</p>
+            </div>
+            
+            <div class="footer">
+              <p>&copy; 2025 SportZoneVN</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('✅ Reset email sent successfully:', result.response);
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Email sending error:', error);
+    throw new Error(`Gửi email thất bại: ${error.message}`);
+  }
+};
+
+module.exports = {
+  sendVerificationEmail,
+  sendPasswordResetEmail
 };
 
 // ======================= ĐĂNG KÝ - BƯỚC 2: XÁC THỰC VÀ HOÀN TẤT =======================
