@@ -1,8 +1,18 @@
 const nodemailer = require('nodemailer');
 
+console.log('🔍 Environment Check:');
+console.log('  NODE_ENV:', process.env.NODE_ENV);
+console.log('  EMAIL_USER:', process.env.EMAIL_USER);
+console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : ' MISSING');
+
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+  console.error(' CRITICAL: Email credentials not configured!');
+  console.error('Please set EMAIL_USER and EMAIL_PASSWORD in Render environment variables');
+}
+
 // Kiểm tra biến môi trường
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-  console.error('❌ CRITICAL: EMAIL_USER hoặc EMAIL_PASSWORD chưa được cấu hình trong .env');
+  console.error(' CRITICAL: EMAIL_USER hoặc EMAIL_PASSWORD chưa được cấu hình trong .env');
   console.log('EMAIL_USER:', process.env.EMAIL_USER);
   console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'Set' : 'NOT SET');
 }
@@ -19,9 +29,9 @@ const transporter = nodemailer.createTransport({
 // Test kết nối khi khởi động
 transporter.verify(function(error, success) {
   if (error) {
-    console.error('❌ Email transporter verification failed:', error.message);
+    console.error(' Email transporter verification failed:', error.message);
   } else {
-    console.log('✅ Email server is ready to send messages');
+    console.log(' Email server is ready to send messages');
   }
 });
 
@@ -104,7 +114,7 @@ const sendVerificationEmail = async (toEmail, verificationCode, userName) => {
             </div>
             
             <div class="warning">
-              <strong>⚠️ Lưu ý:</strong>
+              <strong> Lưu ý:</strong>
               <ul style="margin: 10px 0;">
                 <li>Không chia sẻ mã này với bất kỳ ai</li>
                 <li>SportZoneVN sẽ không bao giờ yêu cầu mã xác thực qua điện thoại</li>
@@ -129,10 +139,10 @@ const sendVerificationEmail = async (toEmail, verificationCode, userName) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log('✅ Đã gửi email xác thực đến:', toEmail);
+    console.log(' Đã gửi email xác thực đến:', toEmail);
     return true;
   } catch (error) {
-    console.error('❌ Lỗi gửi email:', error);
+    console.error(' Lỗi gửi email:', error);
     throw error;
   }
 };
@@ -202,7 +212,7 @@ const sendPasswordResetEmail = async (toEmail, resetCode, userName) => {
         </head>
         <body>
           <div class="header">
-            <h1>🔐 Đặt lại mật khẩu</h1>
+            <h1> Đặt lại mật khẩu</h1>
             <p>SportZoneVN</p>
           </div>
           
@@ -216,7 +226,7 @@ const sendPasswordResetEmail = async (toEmail, resetCode, userName) => {
             </div>
             
             <div class="warning">
-              <strong>⚠️ Cảnh báo bảo mật:</strong>
+              <strong> Cảnh báo bảo mật:</strong>
               <ul style="margin: 10px 0;">
                 <li>Nếu bạn KHÔNG yêu cầu đặt lại mật khẩu, hãy bỏ qua email này</li>
                 <li>Không chia sẻ mã này với bất kỳ ai</li>
@@ -240,10 +250,10 @@ const sendPasswordResetEmail = async (toEmail, resetCode, userName) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log('✅ Đã gửi email đặt lại mật khẩu đến:', toEmail);
+    console.log(' Đã gửi email đặt lại mật khẩu đến:', toEmail);
     return true;
   } catch (error) {
-    console.error('❌ Lỗi gửi email:', error);
+    console.error(' Lỗi gửi email:', error);
     throw error;
   }
 };
