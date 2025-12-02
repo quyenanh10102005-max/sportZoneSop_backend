@@ -144,7 +144,7 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
+   
     <div class="sidebar">
         <div class="sidebar-logo">
             <i class="fas fa-user-shield"></i>
@@ -429,9 +429,9 @@ console.log('==================');
 
         let currentEditId = null;
 
-        // ========== KIỂM TRA ĐĂNG NHẬP ==========
+        //  KIỂM TRA ĐĂNG NHẬP 
         function checkAuth() {
-             console.log('🔐 Checking authentication...');
+             console.log(' Checking authentication...');
     
     const token = localStorage.getItem('adminToken');
     const admin = JSON.parse(localStorage.getItem('admin') || '{}');
@@ -445,17 +445,17 @@ console.log('==================');
     //  Verify token validity
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log('✅ Token valid. Payload:', payload);
+        console.log(' Token valid. Payload:', payload);
         
         //  Double-check MaVaiTro
         if (payload.MaVaiTro !== 0) {
-            console.log('❌ Not an admin. MaVaiTro:', payload.MaVaiTro);
+            console.log(' Not an admin. MaVaiTro:', payload.MaVaiTro);
             localStorage.clear();
             window.location.href = 'Admin_Login.html';
             return;
         }
     } catch (e) {
-        console.error('❌ Token decode failed:', e);
+        console.error(' Token decode failed:', e);
         localStorage.clear();
         window.location.href = 'Admin_Login.html';
         return;
@@ -468,10 +468,10 @@ console.log('==================');
     document.getElementById('adminName').textContent = adminName;
     document.getElementById('adminWelcome').textContent = adminName;
     
-    console.log('✅ Authentication check passed!');
+    console.log(' Authentication check passed!');
         }
 
-        // ========== ĐĂNG XUẤT ==========
+        //  ĐĂNG XUẤT 
         function logout() {
             Swal.fire({
                 title: 'Xác nhận đăng xuất?',
@@ -489,7 +489,7 @@ console.log('==================');
             });
         }
 
-        // ========== HIỂN THỊ SECTION ==========
+        // HIỂN THỊ SECTION 
         function showSection(section) {
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
             document.getElementById(section).classList.add('active');
@@ -504,7 +504,7 @@ console.log('==================');
             if (section === 'reviews') loadReviews();
         }
 
-        // ========== HEADERS VỚI TOKEN ==========
+        //  HEADERS VỚI TOKEN
         function getHeaders() {
             const token = localStorage.getItem('adminToken');
     console.log(' Creating headers with token:', token ? '✅ Present' : '❌ Missing');
@@ -515,21 +515,21 @@ console.log('==================');
     };
         }
 
-        // ========== THỐNG KÊ ==========
+        // THỐNG KÊ 
         async function loadStats() {
            try {
-        console.log('📊 Loading admin stats...');
-        console.log('🌐 API URL:', API_BASE_URL);
+        console.log(' Loading admin stats...');
+        console.log(' API URL:', API_BASE_URL);
         
         const res = await fetch(API_BASE_URL + '/api/admin/stats', {
             headers: getHeaders()
         });
 
-        console.log('📨 Response status:', res.status);
+        console.log(' Response status:', res.status);
 
         if (res.ok) {
             const stats = await res.json();
-            console.log('✅ Stats loaded:', stats);
+            console.log(' Stats loaded:', stats);
                     document.getElementById('totalUsers').textContent = stats.totalUsers;
                     document.getElementById('totalProducts').textContent = stats.totalProducts;
                     document.getElementById('totalOrders').textContent = stats.totalOrders;
@@ -606,7 +606,7 @@ console.log('==================');
             }
         }
 
-        // ========== SẢN PHẨM ==========
+        //  SẢN PHẨM 
         async function loadProducts() {
             try {
                 const res = await fetch(API_BASE_URL + '/api/sanpham');

@@ -142,15 +142,15 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    console.log('✅ Login response received:', result);
+                    console.log(' Login response received:', result);
     
 
     const decoded = JSON.parse(atob(result.token.split('.')[1]));
-    console.log('🔍 Token payload:', decoded);
+    console.log(' Token payload:', decoded);
     
    
     if (decoded.MaVaiTro !== 0) {
-        console.log('❌ Access denied. User role:', decoded.MaVaiTro);
+        console.log(' Access denied. User role:', decoded.MaVaiTro);
         Swal.fire({
             icon: 'error',
             title: 'Truy cập bị từ chối!',
@@ -160,7 +160,7 @@
         return;
     }
 
-    console.log('✅ Admin verification passed!');
+    console.log(' Admin verification passed!');
     
     await Swal.fire({
         icon: 'success',
@@ -170,11 +170,11 @@
     });
 
     //  Lưu token và thông tin user
-    console.log('💾 Saving to localStorage...');
+    console.log(' Saving to localStorage...');
     localStorage.setItem("adminToken", result.token);
     localStorage.setItem("admin", JSON.stringify(result.user));
     
-    console.log('✅ Redirecting to dashboard...');
+    console.log(' Redirecting to dashboard...');
     window.location.href = "Admin_Dashboard.html";
 
                     await Swal.fire({

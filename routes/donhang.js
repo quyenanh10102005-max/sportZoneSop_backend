@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
       PhiVanChuyen
     } = req.body;
 
-    console.log('📥 Nhận yêu cầu tạo đơn hàng:', {
+    console.log(' Nhận yêu cầu tạo đơn hàng:', {
       MaKhachHang,
       TenKhachHang,
       SoSanPham: SanPham?.length
@@ -57,11 +57,11 @@ router.post('/', async (req, res) => {
 
     await donHang.save();
 
-    console.log('✅ Đã tạo đơn hàng:', donHang._id);
+    console.log(' Đã tạo đơn hàng:', donHang._id);
 
     // Xóa giỏ hàng sau khi đặt hàng thành công
     await GioHang.deleteMany({ MaKhachHang });
-    console.log('🗑️ Đã xóa giỏ hàng của khách hàng');
+    console.log(' Đã xóa giỏ hàng của khách hàng');
 
     res.status(201).json({ 
       message: 'Đặt hàng thành công',
@@ -91,7 +91,7 @@ router.get('/khachhang/:MaKhachHang', async (req, res) => {
 
     res.json(donHangs);
   } catch (err) {
-    console.error('❌ Lỗi lấy đơn hàng:', err);
+    console.error(' Lỗi lấy đơn hàng:', err);
     res.status(500).json({ 
       message: 'Lỗi khi lấy đơn hàng', 
       error: err.message 
@@ -111,7 +111,7 @@ router.get('/:id', async (req, res) => {
 
     res.json(donHang);
   } catch (err) {
-    console.error('❌ Lỗi lấy chi tiết đơn hàng:', err);
+    console.error(' Lỗi lấy chi tiết đơn hàng:', err);
     res.status(500).json({ 
       message: 'Lỗi khi lấy chi tiết đơn hàng', 
       error: err.message 
@@ -143,7 +143,7 @@ router.patch('/:id/status', async (req, res) => {
       donHang 
     });
   } catch (err) {
-    console.error('❌ Lỗi cập nhật trạng thái:', err);
+    console.error(' Lỗi cập nhật trạng thái:', err);
     res.status(500).json({ 
       message: 'Lỗi khi cập nhật trạng thái', 
       error: err.message 

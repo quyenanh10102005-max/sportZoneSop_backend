@@ -43,16 +43,16 @@
         color: #dc3545;
     }
 
-    /* === STYLE MỚI THEO DANG_NHAP.HTML === */
+ 
     .register-box .form-group {
         position: relative;
         margin-bottom: 15px;
     }
     .register-box .form-group input {
         width: 100%;
-        padding: 15px 20px 15px 50px; /* Tăng padding để làm ô lớn hơn */
+        padding: 15px 20px 15px 50px; 
         border: 1px solid #e0e0e0;
-        border-radius: 12px; /* Bo góc lớn hơn */
+        border-radius: 12px; 
         font-size: 16px;
         transition: all 0.3s;
     }
@@ -67,7 +67,7 @@
         transform: translateY(-50%);
         color: #999;
         font-size: 18px;
-        pointer-events: none; /* Icon không chặn click */
+        pointer-events: none; 
     }
     .register-box .form-row {
         display: flex;
@@ -77,7 +77,6 @@
         flex: 1;
     }
     .register-box .btn-register {
-        /* Đảm bảo nút này có style đồng bộ với nút đăng nhập */
         background: linear-gradient(to right, #667eea, #764ba2);
         color: white;
         border: none;
@@ -167,7 +166,6 @@
 
     <div class="register-container">
         <div class="register-box">
-            <!-- BƯỚC 1: NHẬP THÔNG TIN -->
             <div id="step1" class="verification-step active">
                 <div class="register-header">
                     <h2>Đăng ký tài khoản</h2>
@@ -224,7 +222,6 @@
                 </div>
             </div>
 
-            <!-- BƯỚC 2: XÁC THỰC EMAIL -->
             <div id="step2" class="verification-step">
                 <div class="register-header">
                     <h2><i class="fa-solid fa-envelope-circle-check"></i> Xác thực Email</h2>
@@ -321,7 +318,7 @@
         let userName = '';
         let countdownInterval;
 
-        // ======================= BƯỚC 1: GỬI MÃ XÁC THỰC =======================
+        // GỬI MÃ XÁC THỰC 
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -378,7 +375,7 @@
                     document.getElementById('step2').classList.add('active');
                     document.getElementById('emailDisplay').textContent = email;
                     
-                    startCountdown(600); // 10 phút
+                    startCountdown(600); 
                     document.querySelector('.code-input').focus();
 
                     Swal.fire({
@@ -404,7 +401,7 @@
             }
         });
 
-        // ======================= XỬ LÝ NHẬP MÃ =======================
+        //  XỬ LÝ NHẬP MÃ
         const codeInputs = document.querySelectorAll('.code-input');
         codeInputs.forEach((input, index) => {
             input.addEventListener('input', function(e) {
@@ -431,7 +428,7 @@
             });
         });
 
-        // ======================= XÁC THỰC MÃ =======================
+        //  XÁC THỰC MÃ 
         document.getElementById('verifyBtn').addEventListener('click', async function() {
             const code = Array.from(codeInputs).map(input => input.value).join('');
 
@@ -493,7 +490,7 @@
             }
         });
 
-        // ======================= GỬI LẠI MÃ =======================
+        // GỬI LẠI MÃ 
         document.getElementById('resendBtn').addEventListener('click', async function() {
             try {
                 const res = await fetch(API_BASE_URL + '/api/auth/resend-verification', {
@@ -532,14 +529,14 @@
             }
         });
 
-        // ======================= QUAY LẠI =======================
+        // QUAY LẠI 
         document.getElementById('backBtn').addEventListener('click', function() {
             clearInterval(countdownInterval);
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step1').classList.add('active');
         });
 
-        // ======================= ĐẾM NGƯỢC =======================
+        //  ĐẾM NGƯỢC 
         function startCountdown(seconds) {
             let remaining = seconds;
             const timerEl = document.getElementById('timer');

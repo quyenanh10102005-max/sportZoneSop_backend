@@ -11,13 +11,13 @@ const donHangRoutes = require('./routes/donhang');
 const adminRoutes = require('./routes/admin');
 const cors = require('cors');
 
-console.log('📧 EMAIL CONFIG CHECK:');
+console.log(' EMAIL CONFIG CHECK:');
 console.log('  EMAIL_USER:', process.env.EMAIL_USER);
-console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ NOT SET');
+console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? ' Set' : ' NOT SET');
 
 const app = express();
 
-// ========== CORS FIX ==========
+
 const allowedOrigins = [
   'http://localhost:3000',
   'https://sportzoneshop.onrender.com'
@@ -43,17 +43,17 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
-// ========== LOGGING MIDDLEWARE ==========
+
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
   console.log('Headers:', req.headers.authorization ? 'Token present' : 'No token');
   next();
 });
 
-// Connect to Database
+// Connect  Database
 connectDB();
 
-// ========== API ROUTES ==========
+
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/sanpham', sanPhamRoutes);
@@ -61,7 +61,7 @@ app.use('/api/danhgia', danhGiaRoutes);
 app.use('/api/giohang', gioHangRoutes);
 app.use('/api/donhang', donHangRoutes); 
 
-// Serve HTML files
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Trang_chu.html'));
 });
@@ -95,7 +95,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// ========== ERROR HANDLING ==========
+
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
   res.status(500).json({ 
@@ -107,7 +107,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("✅ Server đang chạy...");
-  console.log(`✅ PORT: ${PORT}`);
-  console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(" Server đang chạy...");
+  console.log(` PORT: ${PORT}`);
+  console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
 });

@@ -67,7 +67,6 @@
     <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
   </div>
 
-  <!-- Header -->
   <header id="mainHeader">
     <div class="header-logo">
       <a href="Trang_chu.html">
@@ -100,7 +99,6 @@
     </div>
   </header>
 
-  <!-- Navigation -->
   <nav>
     <ul class="main_menu">
       <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
@@ -136,7 +134,7 @@
 
   <main class="container my-5">
     <div class="row">
-      <!-- Sidebar Lọc -->
+
       <div class="col-md-3">
         <div class="filter-sidebar">
           <div class="filter-title">
@@ -247,7 +245,7 @@
   </div>
 
   <script>
-    // ======================= XỬ LÝ NGƯỜI DÙNG =======================
+    // XỬ LÝ NGƯỜI DÙNG
     const user = localStorage.getItem("user");
     const userNameSpan = document.getElementById("userName");
     const welcomeMessageLi = document.getElementById("welcomeMessage");
@@ -284,17 +282,15 @@
       }
     });
 
-    // ======================= TÌM KIẾM & LỌC SẢN PHẨM =======================
+    //  TÌM KIẾM & LỌC SẢN PHẨM 
     async function loadProducts() {
       const urlParams = new URLSearchParams(window.location.search);
       const searchQuery = urlParams.get('q') || '';
       const brand = urlParams.get('thuongHieu') || '';
       const type = urlParams.get('loai') || '';
 
-      // Xây dựng query string
       let query = '/api/sanpham';
       
-      // Nếu có bất kỳ bộ lọc nào, dùng endpoint /search
       if (searchQuery || brand || type) {
         query += '/search?';
         if (searchQuery) query += `q=${encodeURIComponent(searchQuery)}&`;
@@ -302,7 +298,7 @@
         if (type) query += `loai=${encodeURIComponent(type)}&`;
       }
 
-      // Đánh dấu checkbox tương ứng
+
       if (brand) {
         document.querySelectorAll('input[name="brand"]').forEach(cb => {
           if (cb.value === brand) cb.checked = true;
@@ -373,7 +369,7 @@
       info.innerHTML = text;
     }
 
-    // ======================= TÌM KIẾM TỪ HEADER =======================
+    // TÌM KIẾM TỪ HEADER 
     const searchInput = document.getElementById('searchInput');
     const searchIcon = document.querySelector('.header-search i');
 
@@ -392,7 +388,7 @@
       }
     }
 
-    // ======================= ÁP DỤNG BỘ LỌC =======================
+    // ÁP DỤNG BỘ LỌC 
     function applyFilters() {
       const urlParams = new URLSearchParams(window.location.search);
       const searchQuery = urlParams.get('q') || '';
@@ -411,12 +407,12 @@
       let query = '/api/sanpham/search?';
       if (searchQuery) query += `q=${encodeURIComponent(searchQuery)}&`;
       
-      // Gửi nhiều thương hiệu cách nhau bằng dấu phẩy
+      // Gửi nhiều thương hiệu cách nhau 
       if (selectedBrands.length > 0) {
         query += `thuongHieu=${selectedBrands.join(',')}&`;
       }
       
-      // Gửi nhiều loại sân cách nhau bằng dấu phẩy
+      // Gửi nhiều loại sân cách nhau 
       if (selectedTypes.length > 0) {
         query += `loai=${selectedTypes.join(',')}&`;
       }
@@ -448,7 +444,7 @@
       window.location.href = 'Danh_Sach_San_Pham.html';
     }
 
-    // ======================= CẬP NHẬT GIỎ HÀNG =======================
+    // CẬP NHẬT GIỎ HÀNG 
     async function updateCartCount() {
       const user = JSON.parse(localStorage.getItem('user'));
       const cartIcon = document.querySelector('.header_gio_hang i');

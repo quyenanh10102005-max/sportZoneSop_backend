@@ -1,11 +1,7 @@
-/*
- * ========================================
- * 1. KHU VỰC CHUNG VÀ CỐ ĐỊNH
- * ========================================
- */
+
 .welcome
 {
-  background-color:#1a1a1a ; /* Màu đen đậm hơn */
+  background-color:#1a1a1a ; 
   color: #f0f0f0;
   padding: 5px 0;
   text-align: center;
@@ -30,17 +26,7 @@ body{
     margin: 0;
 }
 
-/*
- * ========================================
- * 2. HEADER (LOGO, SEARCH, USER, CART)
- * ========================================
- */
-/*
- * ========================================
- * HEADER - FIXED ALIGNMENT
- * Sửa lỗi lệch logo và các icon
- * ========================================
- */
+
 header {
   background: #ffffff; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
@@ -58,19 +44,19 @@ header {
   min-height: 80px;
 }
 
-/* Hiệu ứng Header khi cuộn */
+
 .header-scrolled {
     padding: 10px 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     min-height: 70px;
 }
 
-/* Logo Container - Căn giữa hoàn hảo */
+
 .header-logo {
     display: flex;
-    align-items: center; /* Căn giữa dọc */
+    align-items: center; 
     justify-content: center;
-    flex-shrink: 0; /* Không cho co lại */
+    flex-shrink: 0; 
 }
 
 header img {
@@ -107,7 +93,7 @@ header img {
   font-size: 18px;
   color: #666;
   margin-right: 10px;
-  flex-shrink: 0; /* Không cho icon co lại */
+  flex-shrink: 0; 
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -127,7 +113,7 @@ header img {
   height: 45px;
 }
 
-/* User Menu và Cart - Căn giữa hoàn hảo */
+
 .header_menu    
 {
     display: flex;
@@ -174,7 +160,7 @@ header img {
   white-space: nowrap; 
 }
 
-/* Dropdown Menu */
+
 .header_main_menu {
   display: none;
   position: absolute;
@@ -225,7 +211,7 @@ header img {
     padding-left: 25px;
 }
 
-/* Cart Badge */
+
 .header_gio_hang {
   position: relative;
 }
@@ -251,11 +237,7 @@ header img {
     display: none;
 }
 
-/*
- * ========================================
- * RESPONSIVE - HEADER MOBILE
- * ========================================
- */
+
 @media (max-width: 992px) {
     header {
         padding: 15px 20px;
@@ -274,7 +256,7 @@ header img {
 
 @media (max-width: 768px) {
     header {
-        flex-wrap: wrap; /* Cho phép xuống hàng trên mobile */
+        flex-wrap: wrap; 
         padding: 12px 15px;
         gap: 10px;
         min-height: auto;
@@ -291,7 +273,7 @@ header img {
 
     .header_menu {
         order: 2;
-        margin-left: auto; /* Đẩy sang phải */
+        margin-left: auto; 
     }
 
     .header_gio_hang {
@@ -370,7 +352,7 @@ header img {
     height: 100%; 
 }
 
-/* Menu Dropdown */
+
 .header_main_menu {
   display: none;
   position: absolute;
@@ -423,7 +405,7 @@ header img {
     transform: translateX(5px);
 }
 
-/* Badge Giỏ hàng */
+
 .header_gio_hang {
   position: relative;
 }
@@ -450,11 +432,7 @@ header img {
 }
 
 
-/*
- * ========================================
- * 3. NAV BAR (MENU CHÍNH)
- * ========================================
- */
+
 nav
 {
     background: #ffffff; 
@@ -531,31 +509,22 @@ nav
     display: block;
 }
 
-/*
- * ========================================
- * 4. SLIDER VÀ NỘI DUNG CHÍNH
- * ========================================
- */
 .carousel-inner img {
   height: 450px; 
   object-fit: cover;   
 }
 
 
-/*
- * ========================================
- * 5. FOOTER (BỐ CỤC 3 CỘT MỚI)
- * ========================================
- */
+
 footer
 {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr; /* Bố cục 3 cột */
+  grid-template-columns: 2fr 1fr 1fr; 
   gap: 40px;
   padding: 40px 60px;
   align-items:flex-start;
-  background: #2c3e50; /* Nền xanh đậm */
-  color: #ecf0f1; /* Chữ trắng nhạt */
+  background: #2c3e50; 
+  color: #ecf0f1; 
   height: fit-content;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -576,7 +545,7 @@ footer
     bottom: 0;
     width: 40px;
     height: 2px;
-    background-color: #667eea; /* Màu nhấn */
+    background-color: #667eea; 
 }
 
 .footer-info p {
@@ -633,11 +602,7 @@ footer
 }
 
 
-/*
- * ========================================
- * 6. ĐĂNG NHẬP & ĐĂNG KÝ (GIỮ NGUYÊN HOẶC TỐI ƯU HÓA)
- * ========================================
- */
+
 
  .login-container, .register-container {
             display: flex;
@@ -682,7 +647,7 @@ footer
         .form-group {
             margin-bottom: 20px;
             position: relative;
-            flex: 1; /* Cho đăng ký */
+            flex: 1; 
         }
         
         .form-row {
@@ -720,7 +685,7 @@ footer
             color: #aaa;
         }
         
-        /* Login specific styles */
+       
         .remember-forgot {
             display: flex;
             justify-content: space-between;
@@ -803,7 +768,7 @@ footer
             font-weight: 600;
         }
         
-        /* Alert styles */
+   
         .alert {
             padding: 12px;
             border-radius: 8px;
@@ -821,7 +786,7 @@ footer
             color: #721c24;
         }
         
-        /* Register specific styles */
+      
         .terms-checkbox {
             display: flex;
             align-items: flex-start;
@@ -830,11 +795,7 @@ footer
         }
 
 
-/*
- * ========================================
- * 7. RESPONSIVE (MEDIA QUERIES)
- * ========================================
- */
+
 @media (max-width: 1024px) {
     .header-search {
         max-width: 400px;
@@ -842,7 +803,6 @@ footer
 }
 
 @media (max-width: 768px) {
-    /* HEADER MOBILE */
     header {
         flex-direction: column;
         align-items: center;
@@ -873,7 +833,6 @@ footer
         margin-left: 10px;
     }
 
-    /* NAVIGATION MOBILE */
     nav {
         padding: 5px 10px;
     }
@@ -888,12 +847,12 @@ footer
         margin: 0 10px;
     }
     
-    /* SLIDER MOBILE */
+   
     .carousel-inner img {
         height: 250px; 
     }
 
-    /* FOOTER MOBILE */
+   
     footer {
         grid-template-columns: 1fr; 
         padding: 30px 20px;
@@ -923,7 +882,7 @@ footer
         font-size: 12px;
     }
 
-    /* REGISTER & LOGIN MOBILE */
+    
     .login-box, .register-box {
         padding: 30px 20px;
         margin: 10px;
@@ -935,7 +894,7 @@ footer
     }
 }
 
-/* ======================= PRODUCT CARDS ======================= */
+
 
 .section-title {
     text-align: center;
@@ -1032,7 +991,7 @@ footer
     margin: 0;
 }
 
-/* ======================= CAROUSEL CONTROLS ======================= */
+
 
 .carousel-control-prev,
 .carousel-control-next {
@@ -1087,7 +1046,7 @@ footer
     background: white;
 }
 
-/* ======================= RESPONSIVE FOR PRODUCTS ======================= */
+
 
 @media (max-width: 768px) {
     .section-title {

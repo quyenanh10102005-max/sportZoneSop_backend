@@ -8,13 +8,13 @@ const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// ======================= ĐĂNG KÝ - BƯỚC 1: GỬI MÃ XÁC THỰC =======================
+//  GỬI MÃ XÁC THỰC 
 exports.sendVerificationCode = async (req, res) => {
   try {
     const { Email, TenDangNhap } = req.body;
 
-    console.log('📧 Received registration request for:', Email);
-    console.log('📧 Email Config Check:');
+    console.log(' Received registration request for:', Email);
+    console.log(' Email Config Check:');
     console.log('  - EMAIL_USER:', process.env.EMAIL_USER);
     console.log('  - EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ NOT SET');
 
@@ -31,23 +31,23 @@ exports.sendVerificationCode = async (req, res) => {
     });
     
     if (existingUser && existingUser.isVerified) {
-      console.log('❌ User already exists:', Email);
+      console.log(' User already exists:', Email);
       return res.status(400).json({ 
         message: 'Email hoặc tên đăng nhập đã được sử dụng!' 
       });
     }
 
-    // Xóa user chưa xác thực cũ (nếu có)
+    // Xóa user chưa xác thực cũ 
     if (existingUser && !existingUser.isVerified) {
       await User.deleteOne({ _id: existingUser._id });
-      console.log('🗑️ Deleted old unverified user');
+      console.log(' Deleted old unverified user');
     }
 
     // Tạo mã xác thực
     const verificationCode = generateVerificationCode();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    console.log('🔢 Generated verification code:', verificationCode);
+    console.log(' Generated verification code:', verificationCode);
 
     // Tạo tạm user
     const tempUser = new User({
@@ -60,15 +60,15 @@ exports.sendVerificationCode = async (req, res) => {
     });
 
     await tempUser.save();
-    console.log('💾 Temp user saved to database');
+    console.log(' Temp user saved to database');
 
     // Gửi email với xử lý lỗi chi tiết
     try {
-      console.log('📨 Attempting to send email...');
+      console.log(' Attempting to send email...');
       await sendVerificationEmail(Email, verificationCode, TenDangNhap);
-      console.log('✅ Email sent successfully to:', Email);
+      console.log(' Email sent successfully to:', Email);
     } catch (emailError) {
-      console.error('❌ Email sending failed:');
+      console.error(' Email sending failed:');
       console.error('  - Error message:', emailError.message);
       console.error('  - Error code:', emailError.code);
       console.error('  - Full error:', emailError);
@@ -89,7 +89,7 @@ exports.sendVerificationCode = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error in sendVerificationCode:');
+    console.error(' Error in sendVerificationCode:');
     console.error('  - Message:', error.message);
     console.error('  - Stack:', error.stack);
     
@@ -100,7 +100,7 @@ exports.sendVerificationCode = async (req, res) => {
   }
 };
 
-// ======================= ĐĂNG KÝ - BƯỚC 2: XÁC THỰC VÀ HOÀN TẤT =======================
+//  XÁC THỰC VÀ HOÀN TẤT 
 exports.verifyAndRegister = async (req, res) => {
   try {
     const { Email, verificationCode, MatKhau } = req.body;
@@ -157,7 +157,7 @@ exports.verifyAndRegister = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi xác thực:', error);
+    console.error(' Lỗi xác thực:', error);
     res.status(500).json({ 
       message: 'Đăng ký thất bại. Vui lòng thử lại!' 
     });
@@ -218,14 +218,14 @@ exports.login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi đăng nhập:', error);
+    console.error(' Lỗi đăng nhập:', error);
     res.status(500).json({ 
       message: 'Đăng nhập thất bại!' 
     });
   }
 };
 
-// ======================= QUÊN MẬT KHẨU - BƯỚC 1: GỬI MÃ =======================
+// QUÊN MẬT KHẨU - GỬI MÃ 
 exports.forgotPassword = async (req, res) => {
   try {
     const { Email } = req.body;
@@ -255,14 +255,14 @@ exports.forgotPassword = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi gửi mã đặt lại mật khẩu:', error);
+    console.error(' Lỗi gửi mã đặt lại mật khẩu:', error);
     res.status(500).json({ 
       message: 'Không thể gửi mã xác thực. Vui lòng thử lại!' 
     });
   }
 };
 
-// ======================= QUÊN MẬT KHẨU - BƯỚC 2: XÁC THỰC VÀ ĐỔI MẬT KHẨU =======================
+//  QUÊN MẬT KHẨU- XÁC THỰC VÀ ĐỔI MẬT KHẨU =======================
 exports.resetPassword = async (req, res) => {
   try {
     const { Email, resetCode, MatKhauMoi } = req.body;
@@ -296,14 +296,14 @@ exports.resetPassword = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi đặt lại mật khẩu:', error);
+    console.error(' Lỗi đặt lại mật khẩu:', error);
     res.status(500).json({ 
       message: 'Không thể đặt lại mật khẩu. Vui lòng thử lại!' 
     });
   }
 };
 
-// ======================= GỬI LẠI MÃ XÁC THỰC =======================
+// GỬI LẠI MÃ XÁC THỰC 
 exports.resendVerificationCode = async (req, res) => {
   try {
     const { Email } = req.body;
@@ -332,7 +332,7 @@ exports.resendVerificationCode = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi gửi lại mã:', error);
+    console.error(' Lỗi gửi lại mã:', error);
     res.status(500).json({ 
       message: 'Không thể gửi lại mã. Vui lòng thử lại!' 
     });

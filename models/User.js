@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  //  Thêm các field cho xác thực
+  
   isVerified: {
     type: Boolean,
     default: false
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
-  //  Field cho đặt lại mật khẩu
+  //  Field đặt lại mật khẩu
   resetPasswordCode: {
     type: String,
     default: null
@@ -63,7 +63,7 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Method so sánh password
+//  so sánh password
 userSchema.methods.comparePassword = async function(MatKhau) {
   return await bcrypt.compare(MatKhau, this.MatKhau);
 };

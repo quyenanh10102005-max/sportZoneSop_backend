@@ -28,7 +28,7 @@ const sanPhamSchema = new mongoose.Schema({
     type: String,
     enum: ['Nike', 'Adidas', 'Puma', 'Mizuno', 'Kamito', 'Zocker', 'Khác'],
     default: 'Khác',
-    index: true // ✅ Tăng tốc tìm kiếm theo thương hiệu
+    index: true 
   },
   loai: {
     type: String,

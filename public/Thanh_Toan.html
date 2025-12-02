@@ -253,7 +253,7 @@
         <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
     </div>
 
-    <!-- Header -->
+
     <header id="mainHeader">
         <div class="header-logo">
             <a href="Trang_chu.html">
@@ -286,7 +286,6 @@
         </div>
     </header>
 
-    <!-- Navigation -->
     <nav>
         <ul class="main_menu">
             <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
@@ -518,7 +517,7 @@
         </div>
     </footer>
 
-    <!-- Bottom Bar -->
+   
     <div class="gb">
         <i class="fa-regular fa-copyright" style="margin-right: 5px;"></i>
         2025 SportZoneVN - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.
@@ -526,7 +525,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ======================= XỬ LÝ NGƯỜI DÙNG =======================
+        // XỬ LÝ NGƯỜI DÙNG
         const user = localStorage.getItem("user");
         const userNameSpan = document.getElementById("userName");
         const registerLi = document.getElementById("registerLi");
@@ -556,7 +555,7 @@
             }
         });
 
-        // ======================= CHỌN PHƯƠNG THỨC THANH TOÁN =======================
+        // CHỌN PHƯƠNG THỨC THANH TOÁN 
         document.querySelectorAll('.payment-method').forEach(method => {
             method.addEventListener('click', function () {
                 document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
@@ -568,7 +567,7 @@
             });
         });
 
-        // ======================= TẢI ĐƠN HÀNG TỪ MONGODB =======================
+        // TẢI ĐƠN HÀNG TỪ MONGODB 
         async function loadOrderSummary() {
             const userData = JSON.parse(localStorage.getItem('user'));
             if (!userData || !userData.MaTK) return;
@@ -626,10 +625,10 @@
                 const total = subtotal + shippingFee;
                 document.getElementById('totalAmount').textContent = total.toLocaleString() + '₫';
 
-                console.log('✅ Đã tải thành công', cart.length, 'sản phẩm từ MongoDB');
+                console.log(' Đã tải thành công', cart.length, 'sản phẩm từ MongoDB');
 
             } catch (err) {
-                console.error('❌ Lỗi:', err);
+                console.error(' Lỗi:', err);
                 document.getElementById('orderSummary').innerHTML = `
                     <div class="alert alert-danger">
                         <i class="fa-solid fa-exclamation-triangle"></i>
@@ -643,7 +642,7 @@
             }
         }
 
-        // ======================= Xử lý THANH TOÁN (CẬP NHẬT) =======================
+        // Xử lý THANH TOÁN 
 document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -669,7 +668,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     const userData = JSON.parse(localStorage.getItem('user'));
 
     try {
-        // 1️⃣ Lấy giỏ hàng từ MongoDB
+        //  Lấy giỏ hàng từ MongoDB
         const cartRes = await fetch(`/api/giohang/${userData.MaTK}`);
         
         if (!cartRes.ok) {
@@ -688,7 +687,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
             return;
         }
 
-        // 2️⃣ Tính toán tổng tiền
+        //  Tính toán tổng tiền
         let subtotal = 0;
         const sanPhamDonHang = cart.map(item => {
             const sp = item.MaSanPham;
@@ -709,7 +708,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
         const shippingFee = 30000;
         const total = subtotal + shippingFee;
 
-        // 3️⃣ Hiển thị xác nhận
+        //  Hiển thị xác nhận
         const result = await Swal.fire({
             icon: 'question',
             title: 'Xác nhận đặt hàng',
@@ -731,7 +730,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
 
         if (!result.isConfirmed) return;
 
-        // 4️⃣ Tạo đơn hàng
+        //  Tạo đơn hàng
         const donHangData = {
             MaKhachHang: userData.MaTK,
             TenKhachHang: fullName,
@@ -763,9 +762,9 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
         }
 
         const orderResult = await orderRes.json();
-        console.log('✅ Đã tạo đơn hàng:', orderResult);
+        console.log(' Đã tạo đơn hàng:', orderResult);
 
-        // 5️⃣ Thông báo thành công
+        // Thông báo thành công
         await Swal.fire({
             icon: 'success',
             title: 'Đặt hàng thành công!',
@@ -791,11 +790,11 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
             allowOutsideClick: false
         });
 
-        // 6️⃣ Chuyển về trang chủ
+        //  Chuyển về trang chủ
         window.location.href = 'Trang_chu.html';
 
     } catch (err) {
-        console.error('❌ Lỗi:', err);
+        console.error(' Lỗi:', err);
         Swal.fire({
             icon: 'error',
             title: 'Lỗi khi đặt hàng!',
@@ -804,7 +803,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
         });
     }
 });
-        // ======================= KHỞI CHẠY =======================
+
         loadOrderSummary();
     </script>
 </body>

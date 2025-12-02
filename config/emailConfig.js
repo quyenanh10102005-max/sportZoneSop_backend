@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 
-console.log('🔍 Environment Check:');
+console.log(' Environment Check:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
 console.log('  EMAIL_USER:', process.env.EMAIL_USER);
-console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : ' MISSING');
+console.log('  EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? ' Set' : ' MISSING');
 
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
   console.error(' CRITICAL: Email credentials not configured!');

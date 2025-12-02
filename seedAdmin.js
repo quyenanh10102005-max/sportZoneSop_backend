@@ -14,9 +14,9 @@ const createAdmin = async () => {
     // Kiểm tra xem admin đã tồn tại chưa
     const adminExists = await User.findOne({ MaVaiTro: 0 });
    if (adminExists) {
-      console.log(`⚠️  Phát hiện tài khoản admin cũ (${adminExists.TenDangNhap}). Đang xóa...`);
+      console.log(`  Phát hiện tài khoản admin cũ (${adminExists.TenDangNhap}). Đang xóa...`);
       await User.deleteOne({ _id: adminExists._id });
-      console.log('✅ Xóa tài khoản admin cũ thành công.');
+      console.log(' Xóa tài khoản admin cũ thành công.');
     }
 
     // Tạo tài khoản admin mới
@@ -31,20 +31,20 @@ const createAdmin = async () => {
 
     await admin.save();
     
-    console.log('\n✅ TẠO TÀI KHOẢN ADMIN THÀNH CÔNG!');
+    console.log('\n TẠO TÀI KHOẢN ADMIN THÀNH CÔNG!');
     console.log('==========================================');
-    console.log('👤 Username: admin');
-    console.log('🔑 Password: admin123');
-    console.log('📧 Email: admin@sportzone.vn');
-    console.log('⚡ Vai trò: Admin (MaVaiTro: 0)');
+    console.log(' Username: admin');
+    console.log(' Password: admin123');
+    console.log(' Email: admin@sportzone.vn');
+    console.log(' Vai trò: Admin (MaVaiTro: 0)');
     console.log('==========================================');
-    console.log('🌐 Đăng nhập tại: http://localhost:3000/Admin_Login.html');
-    console.log('\n⚠️  LƯU Ý: Hãy đổi mật khẩu sau khi đăng nhập lần đầu!\n');
+    console.log(' Đăng nhập tại: http://localhost:3000/Admin_Login.html');
+    console.log('\n  LƯU Ý: Hãy đổi mật khẩu sau khi đăng nhập lần đầu!\n');
     
     await mongoose.connection.close();
     process.exit(0);
   } catch (err) {
-    console.error('❌ Lỗi khi tạo admin:', err.message);
+    console.error(' Lỗi khi tạo admin:', err.message);
     await mongoose.connection.close();
     process.exit(1);
   }

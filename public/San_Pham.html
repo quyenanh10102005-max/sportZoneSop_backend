@@ -53,7 +53,6 @@
         <i class="fa-solid fa-star" style="margin-left: 8px;"></i>
     </div>
 
-    <!-- Header -->
     <header id="mainHeader">
         <div class="header-logo">
             <a href="Trang_chu.html">
@@ -86,7 +85,6 @@
         </div>
     </header>
 
-    <!-- Navigation -->
     <nav>
         <ul class="main_menu">
             <li><a href="Trang_chu.html"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Trang chủ</a></li>
@@ -128,7 +126,6 @@
       <div id="product-detail" class="product-container"></div>
     </div>
 
-    <!-- Phần đánh giá -->
     <div class="container">
       <div class="review-box" id="review-box">
         <h3 class="mb-4"><i class="fa-solid fa-star text-warning"></i> Đánh giá sản phẩm</h3>
@@ -198,7 +195,6 @@
         </div>
     </footer>
 
-    <!-- Bottom Bar -->
     <div class="gb">
         <i class="fa-regular fa-copyright" style="margin-right: 5px;"></i>
         2025 SportZoneVN - Giày bóng đá chính hãng Việt Nam. All Rights Reserved.
@@ -206,7 +202,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    // ======================= XỬ LÝ NGƯỜI DÙNG =======================
+    //  XỬ LÝ NGƯỜI DÙNG
     const user = localStorage.getItem("user");
     const userNameSpan = document.getElementById("userName");
     const welcomeMessageLi = document.getElementById("welcomeMessage");
@@ -243,7 +239,7 @@
       }
     });
 
-    // ======================= TÌM KIẾM =======================
+    //  TÌM KIẾM 
     const searchInput = document.getElementById('searchInput');
     const searchIcon = document.querySelector('.header-search i');
 
@@ -264,7 +260,7 @@
   </script>
 
   <script>
-  // ======================= HIỂN THỊ CHI TIẾT SẢN PHẨM =======================
+  //  HIỂN THỊ CHI TIẾT SẢN PHẨM 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
@@ -283,7 +279,7 @@ if (!id) {
         return;
       }
 
-      // ✅ Hiển thị sản phẩm
+      //  Hiển thị sản phẩm
       document.getElementById('product-detail').innerHTML = `
         <div class="product-image">
           <img src="${sp.hinhAnh || '/images/default.jpg'}" alt="${sp.ten}">
@@ -317,7 +313,7 @@ if (!id) {
         </div>
       `;
 
-      // ======================= CHỌN SIZE =======================
+      // CHỌN SIZE 
       let selectedSize = null;
       document.querySelectorAll('.size-box').forEach(box => {
         box.addEventListener('click', () => {
@@ -327,7 +323,7 @@ if (!id) {
         });
       });
 
-      // ======================= NÚT "MUA NGAY" =======================
+      //  NÚT "MUA NGAY"
       document.querySelector('.btn-buy').addEventListener('click', async () => {
         // Kiểm tra đã chọn size chưa
         if (!selectedSize) {
@@ -361,7 +357,6 @@ if (!id) {
 
         const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
 
-        // ✅ THÊM VÀO GIỎ HÀNG TRƯỚC, SAU ĐÓ CHUYỂN ĐẾN TRANG THANH TOÁN
         try {
           const response = await fetch('/api/giohang', {
             method: 'POST',
@@ -377,7 +372,6 @@ if (!id) {
           const data = await response.json();
 
           if (response.ok) {
-            // ✅ Thêm thành công → Chuyển đến trang thanh toán
             Swal.fire({
               icon: 'success',
               title: 'Đã thêm vào giỏ hàng!',
@@ -409,7 +403,7 @@ if (!id) {
         }
       });
 
-      // ======================= NÚT "THÊM VÀO GIỎ HÀNG" =======================
+      //  NÚT "THÊM VÀO GIỎ HÀNG
       document.querySelector('.btn-cart').addEventListener('click', async () => {
         // Kiểm tra đã chọn size chưa
         if (!selectedSize) {
@@ -443,7 +437,7 @@ if (!id) {
 
         const soLuong = parseInt(document.getElementById('soLuong').value) || 1;
 
-        // ✅ Gửi request lên server
+
         try {
           const response = await fetch('/api/giohang', {
             method: 'POST',
@@ -466,7 +460,7 @@ if (!id) {
               confirmButtonText: 'OK',
               confirmButtonColor: '#28a745'
             });
-            updateCartCount(); // Cập nhật số lượng icon giỏ hàng
+            updateCartCount(); 
           } else {
             Swal.fire({
               icon: 'error',
@@ -486,7 +480,7 @@ if (!id) {
         }
       });
 
-      // Gọi hàm hiển thị đánh giá (nếu có)
+      // Gọi hàm hiển thị đánh giá 
       if (typeof loadDanhGia === 'function') loadDanhGia();
       if (typeof loadTrungBinhSao === 'function') loadTrungBinhSao();
     })
@@ -497,7 +491,7 @@ if (!id) {
     });
 }
 
-// ======================= CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG =======================
+//  CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG
 async function updateCartCount() {
   const user = JSON.parse(localStorage.getItem('user'));
   const cartIcon = document.querySelector('.header_gio_hang i');
@@ -517,7 +511,7 @@ async function updateCartCount() {
     if (cartIcon) {
       cartIcon.setAttribute('data-count', count);
       
-      // Thêm CSS cho badge (chỉ thêm 1 lần)
+      // Thêm CSS cho badge 
       if (!document.getElementById('cart-badge-style')) {
         const style = document.createElement('style');
         style.id = 'cart-badge-style';
@@ -552,10 +546,10 @@ async function updateCartCount() {
   }
 }
 
-// Gọi khi load trang
+
 updateCartCount();
 
-// ------------------- PHẦN ĐÁNH GIÁ -------------------
+//PHẦN ĐÁNH GIÁ 
 let selectedRating = 0;
 document.querySelectorAll('#rating-stars i').forEach(star => {
   star.addEventListener('click', () => {

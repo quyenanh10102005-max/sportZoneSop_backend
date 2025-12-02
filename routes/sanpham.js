@@ -17,7 +17,7 @@ router.get('/search', async (req, res) => {
       });
     }
 
-    // 🏷️ Lọc theo THƯƠNG HIỆU (hỗ trợ nhiều thương hiệu)
+    //  Lọc theo THƯƠNG HIỆU 
     if (thuongHieu) {
       const brands = thuongHieu.split(',').map(b => b.trim());
       andConditions.push({
@@ -33,7 +33,7 @@ router.get('/search', async (req, res) => {
       });
     }
 
-    // 💰 Lọc theo GIÁ
+    //  Lọc theo GIÁ
     if (minPrice || maxPrice) {
       let priceCondition = {};
       if (minPrice) priceCondition.$gte = Number(minPrice);
@@ -46,15 +46,15 @@ router.get('/search', async (req, res) => {
       query.$and = andConditions;
     }
 
-    console.log('🔍 Search query:', JSON.stringify(query, null, 2));
+    console.log(' Search query:', JSON.stringify(query, null, 2));
     
     const sanPhams = await SanPham.find(query).sort({ createdAt: -1 });
     
-    console.log(`✅ Tìm thấy ${sanPhams.length} sản phẩm`);
+    console.log(` Tìm thấy ${sanPhams.length} sản phẩm`);
     
     res.json(sanPhams);
   } catch (err) {
-    console.error('❌ Lỗi tìm kiếm:', err);
+    console.error(' Lỗi tìm kiếm:', err);
     res.status(500).json({ error: err.message });
   }
 });
